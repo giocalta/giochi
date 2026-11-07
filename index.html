@@ -3,29 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Noleggio Giochi da Tavolo - Caltagirone</title>
+  <title>GIOCALTA - Noleggio Giochi da Tavolo Caltagirone</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <!-- HEADER CON NAVIGAZIONE -->
-  <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+  <!-- HEADER CON SFONDO ARANCIONE -->
+  <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-lg sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-      <div class="cursor-pointer text-center sm:text-left" onclick="cambiaSezione('catalogo')">
-        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">🎲 Noleggio Giochi da Tavolo</h1>
-        <p class="text-emerald-400 text-xs">Caltagirone</p>
+      <div class="cursor-pointer text-center sm:text-left flex items-center gap-2.5" onclick="cambiaSezione('catalogo')">
+        <div class="bg-white text-orange-600 p-2 rounded-2xl shadow-md font-black text-xl tracking-wider flex items-center justify-center w-10 h-10">
+          🎲
+        </div>
+        <div>
+          <h1 class="text-2xl font-black tracking-wider uppercase">GIOCALTA</h1>
+          <p class="text-amber-100 text-[11px] font-medium tracking-wide">Noleggio Giochi da Tavolo • Caltagirone</p>
+        </div>
       </div>
 
       <!-- NAVIGAZIONE PAGINE -->
-      <nav class="flex items-center gap-1 bg-slate-800 p-1 rounded-xl text-xs">
-        <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3 py-1.5 rounded-lg font-semibold transition-colors bg-emerald-600 text-white">
+      <nav class="flex items-center gap-1 bg-orange-700/60 p-1 rounded-xl text-xs backdrop-blur-sm border border-orange-500/30">
+        <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3 py-1.5 rounded-lg font-bold transition-colors bg-white text-orange-600 shadow-sm">
           <i class="fa-solid fa-gamepad mr-1"></i> Catalogo
         </button>
-        <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-semibold transition-colors text-slate-300 hover:text-white">
+        <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white">
           <i class="fa-solid fa-circle-info mr-1"></i> Info Noleggio
         </button>
-        <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3 py-1.5 rounded-lg font-semibold transition-colors text-slate-300 hover:text-white">
+        <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white">
           <i class="fa-solid fa-location-dot mr-1"></i> Sede & Contatti
         </button>
       </nav>
@@ -36,23 +41,23 @@
     
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo">
-      <div class="bg-white p-3 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 space-y-3">
+      <div class="bg-white p-3 md:p-6 rounded-2xl shadow-sm border border-amber-200/60 mb-6 space-y-3">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
           
           <div class="relative col-span-2 md:col-span-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
             <input type="text" id="searchInput" placeholder="Cerca un gioco..." 
-                   class="w-full pl-8 md:pl-9 pr-3 py-1.5 md:py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs md:text-sm">
+                   class="w-full pl-8 md:pl-9 pr-3 py-1.5 md:py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
           </div>
 
           <div>
-            <select id="categoryFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs md:text-sm bg-white">
+            <select id="categoryFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white">
               <option value="">Tutti i Tipi</option>
             </select>
           </div>
 
           <div>
-            <select id="statusFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs md:text-sm bg-white">
+            <select id="statusFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white">
               <option value="">Tutti gli Stati</option>
               <option value="disponibile">Solo Disponibili</option>
               <option value="noleggiato">Solo Noleggiati</option>
@@ -60,7 +65,7 @@
           </div>
 
           <div class="col-span-2 md:col-span-1">
-            <select id="sortOrder" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs md:text-sm bg-white font-medium text-emerald-800">
+            <select id="sortOrder" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-semibold text-orange-700">
               <option value="recenti">✨ Ultimi inseriti</option>
               <option value="az">🔤 Ordine A-Z</option>
               <option value="za">🔤 Ordine Z-A</option>
@@ -72,8 +77,8 @@
       </div>
 
       <div id="loading" class="text-center py-10">
-        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-slate-300 border-t-emerald-600 mb-2"></div>
-        <p class="text-slate-500 text-xs md:text-sm">Caricamento catalogo...</p>
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-amber-200 border-t-orange-600 mb-2"></div>
+        <p class="text-slate-500 text-xs md:text-sm">Caricamento catalogo GIOCALTA...</p>
       </div>
 
       <div id="errorMessage" class="hidden text-center py-10 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-4">
@@ -86,38 +91,37 @@
 
     <!-- SEZIONE 2: INFO & COME FUNZIONA -->
     <div id="viewInfo" class="hidden space-y-6">
-      <div class="bg-white rounded-3xl p-6 md:p-10 border border-slate-200 shadow-sm space-y-8">
+      <div class="bg-white rounded-3xl p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
         <div>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">Come funziona il noleggio 🎲</h2>
-          <p class="text-slate-600 text-sm">Servizio di noleggio giochi da tavolo pensato per serate in famiglia, eventi e appassionati a Caltagirone.</p>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">Come funziona GIOCALTA 🎲</h2>
+          <p class="text-slate-600 text-sm">Noleggio giochi da tavolo a Caltagirone per serate in compagnia, eventi e famiglie.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
-            <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold mb-3">1</div>
+          <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-100">
+            <div class="w-10 h-10 bg-orange-600 text-white rounded-xl flex items-center justify-center font-bold mb-3 shadow-sm">1</div>
             <h3 class="font-bold text-slate-800 mb-1">Scegli dal catalogo</h3>
-            <p class="text-xs text-slate-600">Sfoglia i giochi disponibili, controlla la durata, l'età consigliata e guarda il video tutorial.</p>
+            <p class="text-xs text-slate-600">Sfoglia i giochi disponibili, controlla durata, età consigliata e guarda il video tutorial.</p>
           </div>
 
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
-            <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold mb-3">2</div>
+          <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-100">
+            <div class="w-10 h-10 bg-orange-600 text-white rounded-xl flex items-center justify-center font-bold mb-3 shadow-sm">2</div>
             <h3 class="font-bold text-slate-800 mb-1">Prenota via WhatsApp</h3>
-            <p class="text-xs text-slate-600">Clicca su "Prenota su WhatsApp" per confermare la disponibilità e concordare l'orario del ritiro.</p>
+            <p class="text-xs text-slate-600">Clicca su "Prenota su WhatsApp" per verificare la disponibilità e fissare l'orario del ritiro.</p>
           </div>
 
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
-            <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold mb-3">3</div>
+          <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-100">
+            <div class="w-10 h-10 bg-orange-600 text-white rounded-xl flex items-center justify-center font-bold mb-3 shadow-sm">3</div>
             <h3 class="font-bold text-slate-800 mb-1">Gioca e Restituisci</h3>
-            <p class="text-xs text-slate-600">Ritira il gioco completo a Caltagirone, divertiti con gli amici e restituiscilo integro nei tempi concordati.</p>
+            <p class="text-xs text-slate-600">Ritira il gioco completo a Caltagirone, divertiti e restituiscilo integro entro la data stabilita.</p>
           </div>
         </div>
 
         <div class="border-t border-slate-100 pt-6 space-y-4 text-xs md:text-sm text-slate-600">
-          <h3 class="font-bold text-slate-800 text-base">📌 Regole e Trasparenza</h3>
+          <h3 class="font-bold text-slate-800 text-base">📌 Regole del Servizio</h3>
           <ul class="list-disc pl-5 space-y-2">
-            <li><strong>Integrità dei componenti:</strong> Tutti i giochi vengono verificati prima della consegna. Ti chiediamo di far attenzione a carte, fustelle e segnalini.</li>
-            <li><strong>Durata del noleggio:</strong> Il periodo standard va concordato direttamente al momento della prenotazione.</li>
-            <li><strong>Ritiro e Consegna:</strong> Il ritiro avviene di persona presso la sede di Caltagirone previa conferma via messaggio.</li>
+            <li><strong>Cura del gioco:</strong> Chiediamo la massima cura per carte e componenti.</li>
+            <li><strong>Ritiro a Caltagirone:</strong> Consegna e ritiro vengono effettuati di persona previa conferma via messaggio.</li>
           </ul>
         </div>
       </div>
@@ -125,47 +129,46 @@
 
     <!-- SEZIONE 3: CONTATTI E SEDE -->
     <div id="viewContatti" class="hidden space-y-6">
-      <div class="bg-white rounded-3xl p-6 md:p-10 border border-slate-200 shadow-sm">
+      <div class="bg-white rounded-3xl p-6 md:p-10 border border-amber-200/60 shadow-sm">
         <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Contatti & Sede 📍</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div class="space-y-6">
             <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center shrink-0">
+              <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center shrink-0 font-bold">
                 <i class="fa-solid fa-location-dot text-lg"></i>
               </div>
               <div>
-                <h3 class="font-bold text-slate-800 text-sm">Dove Siamo</h3>
+                <h3 class="font-bold text-slate-800 text-sm">Sede Ritiro</h3>
                 <p class="text-xs text-slate-600 mt-1">Caltagirone (CT) - Sicilia</p>
-                <p class="text-[11px] text-slate-400">Punto di ritiro e riconsegna giochi previo appuntamento.</p>
+                <p class="text-[11px] text-slate-400">Punto ritiro e riconsegna su appuntamento.</p>
               </div>
             </div>
 
             <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center shrink-0">
+              <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center shrink-0 font-bold">
                 <i class="fa-brands fa-whatsapp text-lg"></i>
               </div>
               <div>
-                <h3 class="font-bold text-slate-800 text-sm">WhatsApp & Telefono</h3>
+                <h3 class="font-bold text-slate-800 text-sm">WhatsApp Direct</h3>
                 <p class="text-xs text-slate-600 mt-1">+39 333 345 5179</p>
-                <a href="https://wa.me/393333455179" target="_blank" rel="noopener noreferrer" class="inline-block mt-2 text-xs text-emerald-600 font-bold hover:underline">
+                <a href="https://wa.me/393333455179" target="_blank" rel="noopener noreferrer" class="inline-block mt-2 text-xs text-orange-600 font-bold hover:underline">
                   Invia un messaggio diretto <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i>
                 </a>
               </div>
             </div>
 
             <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center shrink-0">
+              <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center shrink-0 font-bold">
                 <i class="fa-solid fa-clock text-lg"></i>
               </div>
               <div>
-                <h3 class="font-bold text-slate-800 text-sm">Orari di Ritiro</h3>
-                <p class="text-xs text-slate-600 mt-1">Su appuntamento dal Lunedì alla Domenica.</p>
+                <h3 class="font-bold text-slate-800 text-sm">Disponibilità</h3>
+                <p class="text-xs text-slate-600 mt-1">Ritiro e consegna su appuntamento dal Lunedì alla Domenica.</p>
               </div>
             </div>
           </div>
 
-          <!-- MAPPA INTEGRATA DI CALTAGIRONE -->
           <div class="rounded-2xl overflow-hidden border border-slate-200 h-64 md:h-auto min-h-[250px]">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25438.455648834615!2d14.500000000000002!3d37.23333333333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x131102e3b8b1a45d%3A0x400b047c2096ee0!2s95041%20Caltagirone%20CT!5e0!3m2!1sit!2sit!4v1680000000000!5m2!1sit!2sit" 
@@ -188,7 +191,7 @@
   </main>
 
   <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-    <p>© Noleggio Giochi da Tavolo - Caltagirone. Dati sincronizzati in tempo reale.</p>
+    <p>© <strong>GIOCALTA</strong> - Noleggio Giochi da Tavolo Caltagirone.</p>
   </footer>
 
   <script>
@@ -203,27 +206,26 @@
       document.getElementById('viewContatti').classList.add('hidden');
       document.getElementById('viewGioco').classList.add('hidden');
 
-      // Reset stili pulsanti nav
       ['catalogo', 'info', 'contatti'].forEach(s => {
         const btn = document.getElementById('nav-' + s);
-        btn.classList.remove('bg-emerald-600', 'text-white');
-        btn.classList.add('text-slate-300');
+        btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
+        btn.classList.add('text-amber-100');
       });
 
       if (nomeSezione === 'catalogo') {
         history.pushState("", document.title, window.location.pathname + window.location.search);
         document.getElementById('viewCatalogo').classList.remove('hidden');
-        document.getElementById('nav-catalogo').classList.add('bg-emerald-600', 'text-white');
-        document.getElementById('nav-catalogo').classList.remove('text-slate-300');
+        document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
+        document.getElementById('nav-catalogo').classList.remove('text-amber-100');
         applicaFiltri();
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
-        document.getElementById('nav-info').classList.add('bg-emerald-600', 'text-white');
-        document.getElementById('nav-info').classList.remove('text-slate-300');
+        document.getElementById('nav-info').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
+        document.getElementById('nav-info').classList.remove('text-amber-100');
       } else if (nomeSezione === 'contatti') {
         document.getElementById('viewContatti').classList.remove('hidden');
-        document.getElementById('nav-contatti').classList.add('bg-emerald-600', 'text-white');
-        document.getElementById('nav-contatti').classList.remove('text-slate-300');
+        document.getElementById('nav-contatti').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
+        document.getElementById('nav-contatti').classList.remove('text-amber-100');
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -382,7 +384,7 @@
         let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded font-bold">⭐ ' + g.voto + '</div>' : '';
 
         const card = document.createElement('div');
-        card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0";
+        card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0";
         card.onclick = function() { mostraDettaglioGioco(g.id); };
         
         card.innerHTML = 
@@ -395,17 +397,17 @@
           '<div class="flex-grow min-w-0 flex flex-col justify-between h-full md:h-auto p-0 md:p-4 py-0.5 md:py-4 pr-1 md:pr-4">' +
             '<div>' +
               '<div class="flex items-center justify-between gap-1 mb-0.5 md:mb-1">' +
-                '<span class="text-[9px] md:text-xs font-semibold text-emerald-600 uppercase tracking-tight truncate">' + g.tipo + '</span>' +
+                '<span class="text-[9px] md:text-xs font-bold text-orange-600 uppercase tracking-tight truncate">' + g.tipo + '</span>' +
                 '<div class="md:hidden">' + statusBadge + '</div>' +
               '</div>' +
-              '<h3 class="text-xs md:text-base font-bold text-slate-800 leading-tight group-hover:text-emerald-600 transition-colors truncate md:whitespace-normal">' + g.titolo + badgeVotoMobile + '</h3>' +
+              '<h3 class="text-xs md:text-base font-bold text-slate-800 leading-tight group-hover:text-orange-600 transition-colors truncate md:whitespace-normal">' + g.titolo + badgeVotoMobile + '</h3>' +
             '</div>' +
             '<div class="flex items-center justify-between text-[10px] md:text-xs text-slate-500 pt-1 md:pt-3 border-t border-slate-100 md:mt-3">' +
               '<div class="flex items-center gap-2.5">' +
                 '<span><i class="fa-solid fa-users mr-1 text-slate-400"></i>' + g.persone + '</span>' +
                 '<span><i class="fa-solid fa-clock mr-1 text-slate-400"></i>' + g.tempo + '</span>' +
               '</div>' +
-              '<span class="text-[10px] md:text-xs font-semibold text-emerald-600 group-hover:underline flex items-center">Dettagli <i class="fa-solid fa-chevron-right text-[8px] md:text-xs ml-0.5"></i></span>' +
+              '<span class="text-[10px] md:text-xs font-bold text-orange-600 group-hover:underline flex items-center">Dettagli <i class="fa-solid fa-chevron-right text-[8px] md:text-xs ml-0.5"></i></span>' +
             '</div>' +
           '</div>';
         gridEl.appendChild(card);
@@ -443,9 +445,9 @@
         ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors"><i class="fa-brands fa-youtube text-lg text-red-600"></i> Guarda Tutorial Su YouTube</a>'
         : '';
 
-      let infoEta = gioco.eta ? '<div class="bg-slate-50 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Età cons.</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-child text-emerald-600 mr-1"></i>' + gioco.eta + '+ anni</span></div>' : '';
-      let infoDiff = gioco.difficolta ? '<div class="bg-slate-50 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Difficoltà</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-brain text-emerald-600 mr-1"></i>' + gioco.difficolta + '</span></div>' : '';
-      let infoVoto = gioco.voto ? '<div class="bg-slate-50 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Voto</span><span class="font-bold text-slate-800 text-xs md:text-sm">⭐ ' + gioco.voto + ' / 10</span></div>' : '';
+      let infoEta = gioco.eta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Età cons.</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-child text-orange-600 mr-1"></i>' + gioco.eta + '+ anni</span></div>' : '';
+      let infoDiff = gioco.difficolta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Difficoltà</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-brain text-orange-600 mr-1"></i>' + gioco.difficolta + '</span></div>' : '';
+      let infoVoto = gioco.voto ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Voto</span><span class="font-bold text-slate-800 text-xs md:text-sm">⭐ ' + gioco.voto + ' / 10</span></div>' : '';
 
       container.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
@@ -455,19 +457,19 @@
           <div class="md:col-span-7 p-5 md:p-8 flex flex-col justify-between space-y-5">
             <div>
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <span class="text-xs font-bold tracking-wider uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg">${gioco.tipo}</span>
+                <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3 py-1 rounded-lg">${gioco.tipo}</span>
                 ${statusBadge}
               </div>
               <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4 leading-tight">${gioco.titolo}</h2>
 
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center mb-5">
-                <div class="bg-slate-50 p-2.5 rounded-xl">
+                <div class="bg-amber-50/60 p-2.5 rounded-xl">
                   <span class="text-[10px] text-slate-400 block mb-0.5">Giocatori</span>
-                  <span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-users text-emerald-600 mr-1"></i>${gioco.persone}</span>
+                  <span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-users text-orange-600 mr-1"></i>${gioco.persone}</span>
                 </div>
-                <div class="bg-slate-50 p-2.5 rounded-xl">
+                <div class="bg-amber-50/60 p-2.5 rounded-xl">
                   <span class="text-[10px] text-slate-400 block mb-0.5">Durata</span>
-                  <span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-clock text-emerald-600 mr-1"></i>${gioco.tempo}</span>
+                  <span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-clock text-orange-600 mr-1"></i>${gioco.tempo}</span>
                 </div>
                 ${infoEta}
                 ${infoDiff}
