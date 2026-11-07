@@ -108,14 +108,26 @@
       return val;
     }
 
-    function pulisciUrl(url) {
-      if (!url) return '';
-      let clean = url.trim();
-      if (!clean) return '';
-      if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
-        clean = 'https://' + clean;
+    // Estrae tassativamente soltanto URL reali (es. https://...) da celle o formule ipertesto
+    function estraiUrlValido(cellObj) {
+      if (!cellObj) return '';
+      
+      let valV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
+      let valF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
+      
+      // Prova a cercare un URL completo sia nel valore che nella formattazione
+      let matchV = valV.match(/https?:\/\/[^\s"']+/);
+      if (matchV) return matchV[0];
+
+      let matchF = valF.match(/https?:\/\/[^\s"']+/);
+      if (matchF) return matchF[0];
+
+      // Se la riga è semplicemente un dominio tipo www.youtube.com...
+      if (valV.indexOf('youtube.com') !== -1 || valV.indexOf('youtu.be') !== -1) {
+        return valV.startsWith('http') ? valV : 'https://' + valV;
       }
-      return clean;
+
+      return '';
     }
 
     function processGoogleSheetsData(json) {
@@ -151,9 +163,8 @@
           let difficolta = getFormattedVal(5);     // Colonna F: Difficoltà
           let tipo = getFormattedVal(6) || 'Generico'; // Colonna G: Tipo
           
-          // Legge l'URL del tutorial (Colonna H)
-          let rawTutorial = (c[7] && c[7].v) ? String(c[7].v) : getFormattedVal(7);
-          let tutorial = pulisciUrl(rawTutorial);
+          // Estrazione sicura dell'URL per la Colonna H (Tutorial)
+          let tutorial = estraiUrlValido(c[7]);
 
           let eta = getFormattedVal(8);            // Colonna I: Età
           let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
