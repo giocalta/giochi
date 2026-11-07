@@ -181,7 +181,7 @@
 
     <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
     <div id="viewGioco" class="hidden">
-      <button onclick="tornaAlCatalogo()" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm">
+      <button onclick="history.back()" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm">
         <i class="fa-solid fa-arrow-left"></i> Torna a tutti i giochi
       </button>
 
@@ -195,6 +195,10 @@
   </footer>
 
   <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
 
@@ -217,7 +221,6 @@
         document.getElementById('viewCatalogo').classList.remove('hidden');
         document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-catalogo').classList.remove('text-amber-100');
-        window.scrollTo(0, 0);
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
         document.getElementById('nav-info').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
@@ -245,9 +248,18 @@
       document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
       document.getElementById('nav-catalogo').classList.remove('text-amber-100');
 
-      // Ripristina istantaneamente la posizione memorizzata senza ridisegnare la griglia
       window.scrollTo(0, savedScrollPosition);
     }
+
+    // Gestione della pressione del tasto "Indietro" fisicamente sul telefono/browser
+    window.addEventListener('popstate', function(e) {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && giochiData.some(g => g.id === hash)) {
+        mostraDettaglioGioco(hash, false);
+      } else {
+        tornaAlCatalogo();
+      }
+    });
 
     function generaSlug(testo) {
       return testo.toLowerCase()
@@ -373,10 +385,9 @@
         popolaFiltroCategorie();
         applicaFiltri();
 
-        // Se l'utente apre direttamente un link con hash (es. #catan) al caricamento iniziale
         const hash = window.location.hash.replace('#', '');
         if (hash && giochiData.some(g => g.id === hash)) {
-          mostraDettaglioGioco(hash, true);
+          mostraDettaglioGioco(hash, false);
         }
 
       } catch (err) {
@@ -410,9 +421,9 @@
         const card = document.createElement('div');
         card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0";
         card.onclick = function() { 
-          // Memorizza la posizione di scorrimento esatta nel catalogo prima di nasconderlo
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-          mostraDettaglioGioco(g.id, false); 
+          history.pushState({ giocoId: g.id }, '', '#' + g.id);
+          mostraDettaglioGioco(g.id, true); 
         };
         
         card.innerHTML = 
@@ -442,7 +453,7 @@
       });
     }
 
-    function mostraDettaglioGioco(idGioco, daLinkDiretto) {
+    function mostraDettaglioGioco(idGioco, scrollUp) {
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) return;
 
@@ -513,7 +524,9 @@
         </div>
       `;
       
-      window.scrollTo(0, 0);
+      if (scrollUp) {
+        window.scrollTo(0, 0);
+      }
     }
 
     function popolaFiltroCategorie() {
