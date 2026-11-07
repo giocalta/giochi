@@ -55,7 +55,7 @@
 
     <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-6">
       <p class="font-semibold mb-1">Impossibile caricare i dati dal foglio Google.</p>
-      <p class="text-xs text-red-500">Verifica che l'accesso generale sul foglio Google sia impostato su "Chiunque abbia il link".</p>
+      <p class="text-xs text-red-500">Verifica le impostazioni del foglio di calcolo.</p>
     </div>
 
     <!-- Griglia Giochi -->
@@ -64,7 +64,7 @@
     <!-- Sezione Regolamento -->
     <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
       <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-circle-info text-emerald-600"></i> Come funziona il noleggio
+        <i class="fa-solid fa-circle-info text-emerald-600"></i> Come funciona il noleggio
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600">
         <div class="flex flex-col gap-2">
@@ -100,35 +100,52 @@
   <script>
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
+    
+    // Url del CSV nativo con bypass per evitare problemi di CORS
+    const TARGET_CSV_URL = https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv;
+    const FETCH_URL = https://api.allorigins.win/raw?url=${encodeURIComponent(TARGET_CSV_URL)};
 
     let giochiData = [];
 
-    // Callback richiamata automaticamente da Google via JSONP
-    window.gvizCallback = function(json) {
+    function parseCSV(text) {
+      const lines = text.split(/\r\n|\n/);
+      const result = [];
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+        if (!line) continue;
+        let row = line.split(/,(?=(?:[^\"]\"[^\"]\")[^\"]$)/).map(v => v.replace(/^"|"$/g, '').trim());
+        result.push(row);
+      }
+      return result;
+    }
+
+    async function caricaGiochi() {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
 
       try {
-        if (!json || !json.table || !json.table.rows) {
-          throw new Error("Formato dati non valido");
-        }
+        const response = await fetch(FETCH_URL);
+        if (!response.ok) throw new Error("Errore nel caricamento del CSV");
 
-        const rows = json.table.rows;
+        const text = await response.text();
+        const rows = parseCSV(text);
+
+        if (rows.length <= 1) throw new Error("Nessun dato trovato");
+
         giochiData = [];
+        
+        // Escludiamo la prima riga di intestazione
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i];
+          let titolo = row[0] ? row[0].trim() : '';
+          if (!titolo || titolo.toLowerCase() === 'titolo') continue;
 
-        rows.forEach(r => {
-          const c = r.c;
-          if (!c || !c[0] || !c[0].v) return;
-
-          let titolo = c[0].v.toString().trim();
-          if (titolo.toLowerCase() === 'titolo') return;
-
-          let tipo = (c[1] && c[1].v) ? c[1].v.toString().trim() : 'Generico';
-          let persone = (c[2] && c[2].v) ? c[2].v.toString().trim() : '-';
-          let tempo = (c[3] && c[3].v) ? c[3].v.toString().trim() : '-';
-          let stato = (c[4] && c[4].v) ? c[4].v.toString().trim().toUpperCase() : 'SI';
-          let foto = (c[5] && c[5].v) ? c[5].v.toString().trim() : '';
-          let prezzo = (c[6] && c[6].v) ? c[6].v.toString().trim() : '';
+          let tipo = row[1] ? row[1].trim() : 'Generico';
+          let persone = row[2] ? row[2].trim() : '-';
+          let tempo = row[3] ? row[3].trim() : '-';
+          let stato = row[4] ? row[4].trim().toUpperCase() : 'SI';
+          let foto = row[5] ? row[5].trim() : '';
+          let prezzo = row[6] ? row[6].trim() : '';
 
           const isDisp = stato === '' || ['SI', 'SÌ', 'TRUE', 'DISPONIBILE', 'OK', '1'].includes(stato);
 
@@ -141,27 +158,17 @@
             foto: foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80',
             prezzo: prezzo
           });
-        });
+        }
 
         loadingEl.classList.add('hidden');
         popolaFiltroCategorie();
         renderGiochi(giochiData);
 
       } catch (err) {
-        console.error("Errore elaborazione dati:", err);
+        console.error("Errore caricamento catalogo:", err);
         loadingEl.classList.add('hidden');
         errorEl.classList.remove('hidden');
       }
-    };
-
-    function caricaDatiJSONP() {
-      const script = document.createElement('script');
-      script.src = https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=responseHandler:gvizCallback;
-      script.onerror = function() {
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('errorMessage').classList.remove('hidden');
-      };
-      document.body.appendChild(script);
     }
 
     function renderGiochi(lista) {
@@ -246,8 +253,7 @@
     document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
     document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
 
-    // Avvia la chiamata JSONP
-    caricaDatiJSONP();
+    caricaGiochi();
   </script>
 </body>
 </html>
