@@ -108,24 +108,26 @@
       return val;
     }
 
-    // Estrae in modo intelligente l'URL di YouTube sia dal valore grezzo che dalle formule HYPERLINK di Google
+    // Cerca qualsiasi traccia di link YouTube all'interno della cella (sia valore che formula)
     function estraiUrlTutorial(cellObj) {
       if (!cellObj) return '';
       
-      let valV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
-      let valF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
-      
-      // 1. Cerca un indirizzo web http/https dentro il valore visualizzato
-      let matchV = valV.match(/https?:\/\/[^\s"']+/);
-      if (matchV) return matchV[0];
+      let strV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v) : '';
+      let strF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f) : '';
+      let testoCompleto = strV + ' ' + strF;
 
-      // 2. Cerca l'indirizzo web nascosto dentro la formula di Google =HYPERLINK("https://...", "apri tutorial")
-      let matchF = valF.match(/https?:\/\/[^\s"']+/);
-      if (matchF) return matchF[0];
+      // Regex per trovare link youtube standard o shorts
+      let regex = /(https?:\/\/[^\s"']*(?:youtube\.com|youtu\.be)[^\s"']*)/i;
+      let match = testoCompleto.match(regex);
 
-      // 3. Se la cella è una stringa tipo www.youtube.com...
-      if (valV.indexOf('youtube.com') !== -1 || valV.indexOf('youtu.be') !== -1) {
-        return valV.startsWith('http') ? valV : 'https://' + valV;
+      if (match) {
+        return match[1].replace(/&amp;/g, '&');
+      }
+
+      // Se c'è un link generico con http
+      let genericMatch = testoCompleto.match(/(https?:\/\/[^\s"']+)/i);
+      if (genericMatch) {
+        return genericMatch[1];
       }
 
       return '';
@@ -157,15 +159,15 @@
             return pulisciValore(val);
           }
 
-          let foto = getFormattedVal(0);            // Colonna A: Immagine
+          let foto = getFormattedVal(0);            // Colonna A: Immagine URL
           let titolo = getFormattedVal(1);          // Colonna B: Titolo
-          let persone = getFormattedVal(2);         // Colonna C: Persone (esclusa Colonna D)
+          let persone = getFormattedVal(2);         // Colonna C: Persone
           let tempo = getFormattedVal(4) || '-';    // Colonna E: Tempo
           let difficolta = getFormattedVal(5);     // Colonna F: Difficoltà
           let tipo = getFormattedVal(6) || 'Generico'; // Colonna G: Tipo
           
-          // Estrae l'URL reale ignorando la scritta "apri tutorial"
-          let tutorial = estraiUrlTutorial(c[7]);     // Colonna H: Tutorial
+          // Estrae il link di YouTube anche se la cella visualizza "apri tutorial"
+          let tutorial = estraiUrlTutorial(c[7]);    // Colonna H: Tutorial
 
           let eta = getFormattedVal(8);            // Colonna I: Età
           let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
