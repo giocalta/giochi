@@ -108,26 +108,18 @@
       return val;
     }
 
-    // Cerca qualsiasi traccia di link YouTube all'interno della cella (sia valore che formula)
-    function estraiUrlTutorial(cellObj) {
-      if (!cellObj) return '';
-      
-      let strV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v) : '';
-      let strF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f) : '';
-      let testoCompleto = strV + ' ' + strF;
+    function ottieniLinkTutorial(cellObj, titoloGioco) {
+      let strV = (cellObj && cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
+      let strF = (cellObj && cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
+      let testo = strV + ' ' + strF;
 
-      // Regex per trovare link youtube standard o shorts
-      let regex = /(https?:\/\/[^\s"']*(?:youtube\.com|youtu\.be)[^\s"']*)/i;
-      let match = testoCompleto.match(regex);
-
+      let match = testo.match(/(https?:\/\/[^\s"']+)/i);
       if (match) {
-        return match[1].replace(/&amp;/g, '&');
+        return match[1];
       }
 
-      // Se c'è un link generico con http
-      let genericMatch = testoCompleto.match(/(https?:\/\/[^\s"']+)/i);
-      if (genericMatch) {
-        return genericMatch[1];
+      if (titoloGioco) {
+        return 'https://www.youtube.com/results?search_query=' + encodeURIComponent('tutorial ' + titoloGioco + ' gioco da tavolo');
       }
 
       return '';
@@ -166,8 +158,7 @@
           let difficolta = getFormattedVal(5);     // Colonna F: Difficoltà
           let tipo = getFormattedVal(6) || 'Generico'; // Colonna G: Tipo
           
-          // Estrae il link di YouTube anche se la cella visualizza "apri tutorial"
-          let tutorial = estraiUrlTutorial(c[7]);    // Colonna H: Tutorial
+          let tutorial = ottieniLinkTutorial(c[7], titolo); // Colonna H: Tutorial
 
           let eta = getFormattedVal(8);            // Colonna I: Età
           let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
@@ -225,8 +216,9 @@
           ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"><i class="fa-brands fa-whatsapp text-base"></i> Prenota su WhatsApp</a>'
           : '<button disabled class="w-full bg-slate-200 text-slate-400 text-xs font-bold py-2.5 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2"><i class="fa-solid fa-ban text-xs"></i> Attualmente Noleggiato</button>';
 
-        const tutorialBtn = g.tutorial 
-          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" class="text-xs text-red-600 hover:text-red-700 hover:underline flex items-center gap-1.5 mt-2 font-semibold"><i class="fa-brands fa-youtube text-base"></i> Guarda Tutorial</a>' 
+        // Icona YouTube tonda posizionata in alto a sinistra sopra la foto del gioco
+        const tutorialIcon = g.tutorial 
+          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" class="absolute top-3 left-3 bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-transform hover:scale-110 z-10"><i class="fa-brands fa-youtube text-lg"></i></a>' 
           : '';
 
         let badgeVoto = '';
@@ -249,6 +241,7 @@
         card.innerHTML = 
           '<div class="h-48 bg-slate-200 overflow-hidden relative">' +
             '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\'">' +
+            tutorialIcon +
             '<div class="absolute top-3 right-3">' + statusBadge + '</div>' +
             badgeVoto +
           '</div>' +
@@ -256,7 +249,6 @@
             '<div>' +
               '<span class="text-xs font-semibold text-emerald-600 uppercase mb-1 block">' + g.tipo + '</span>' +
               '<h3 class="text-lg font-bold text-slate-800 leading-snug">' + g.titolo + '</h3>' +
-              tutorialBtn +
               '<div class="grid grid-cols-2 gap-2 text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">' +
                 '<span><i class="fa-solid fa-users mr-1"></i>' + g.persone + '</span>' +
                 '<span><i class="fa-solid fa-clock mr-1"></i>' + g.tempo + '</span>' +
