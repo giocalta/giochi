@@ -455,3 +455,122 @@
 
       const statusBadge = gioco.disponibile 
         ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5"><i class="fa-solid fa-check"></i> Disponibile per il noleggio</span>'
+        : '<span class="bg-rose-100 text-rose-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5"><i class="fa-solid fa-clock"></i> Attualmente noleggiato</span>';
+
+      const msgWA = encodeURIComponent('Ciao Giuseppe! Vorrei noleggiare il gioco "' + gioco.titolo + '". È disponibile?');
+      const urlWA = 'https://wa.me/' + NUMERO_WHATSAPP + '?text=' + msgWA;
+
+      const btnWA = gioco.disponibile
+        ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-2xl flex items-center justify-center gap-2 transition-colors shadow-sm text-sm md:text-base"><i class="fa-brands fa-whatsapp text-lg"></i> Prenota su WhatsApp</a>'
+        : '<button disabled class="w-full bg-slate-200 text-slate-400 font-bold py-3 px-6 rounded-2xl cursor-not-allowed flex items-center justify-center gap-2 text-sm md:text-base"><i class="fa-solid fa-ban"></i> Attualmente Noleggiato</button>';
+
+      const tutorialBtn = gioco.tutorial
+        ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors"><i class="fa-brands fa-youtube text-lg text-red-600"></i> Guarda Tutorial Su YouTube</a>'
+        : '';
+
+      let infoEta = gioco.eta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Età cons.</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-child text-orange-600 mr-1"></i>' + gioco.eta + '+ anni</span></div>' : '';
+      let infoDiff = gioco.difficolta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Difficoltà</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-brain text-orange-600 mr-1"></i>' + gioco.difficolta + '</span></div>' : '';
+      let infoVoto = gioco.voto ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Voto</span><span class="font-bold text-slate-800 text-xs md:text-sm">⭐ ' + gioco.voto + ' / 10</span></div>' : '';
+
+      container.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
+          <div class="md:col-span-5 bg-slate-100 relative min-h-[250px] md:min-h-[400px]">
+            <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
+          </div>
+          <div class="md:col-span-7 p-5 md:p-8 flex flex-col justify-between space-y-5">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3 py-1 rounded-lg">${gioco.tipo}</span>
+                ${statusBadge}
+              </div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4 leading-tight">${gioco.titolo}</h2>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center mb-5">
+                <div class="bg-amber-50/60 p-2.5 rounded-xl">
+                  <span class="text-[10px] text-slate-400 block mb-0.5">Giocatori</span>
+                  <span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-users text-orange-600 mr-1"></i>${gioco.persone}</span>
+                </div>
+                <div class="bg-amber-50/60 p-2.5 rounded-xl">
+                  <span class="text-[10px] text-slate-400 block mb-0.5">Durata</span>
+                  <span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-clock text-orange-600 mr-1"></i>${gioco.tempo}</span>
+                </div>
+                ${infoEta}
+                ${infoDiff}
+                ${infoVoto}
+              </div>
+
+              <div class="border-t border-slate-100 pt-4 space-y-2">
+                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Descrizione</h3>
+                <p class="text-slate-600 text-xs md:text-sm leading-relaxed whitespace-pre-line">${gioco.descrizione}</p>
+              </div>
+            </div>
+
+            <div class="space-y-2.5 pt-4 border-t border-slate-100">
+              ${btnWA}
+              ${tutorialBtn}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      window.scrollTo(0, 0);
+    }
+
+    function popolaFiltroCategorie() {
+      const select = document.getElementById('categoryFilter');
+      select.innerHTML = '<option value="">Tutti i Tipi</option>';
+      const catSet = {};
+      giochiData.forEach(function(g) {
+        if (g.tipo) catSet[g.tipo] = true;
+      });
+      Object.keys(catSet).forEach(function(cat) {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+    }
+
+    function applicaFiltri() {
+      const textQuery = document.getElementById('searchInput').value.toLowerCase();
+      const catQuery = document.getElementById('categoryFilter').value;
+      const statusQuery = document.getElementById('statusFilter').value;
+      const sortQuery = document.getElementById('sortOrder').value;
+
+      let filtrati = giochiData.filter(function(g) {
+        const matchTitle = g.titolo.toLowerCase().indexOf(textQuery) !== -1;
+        const matchCat = catQuery === '' || g.tipo === catQuery;
+        let matchStatus = true;
+        if (statusQuery === 'disponibile') matchStatus = g.disponibile;
+        if (statusQuery === 'noleggiato') matchStatus = !g.disponibile;
+        return matchTitle && matchCat && matchStatus;
+      });
+
+      if (sortQuery === 'recenti') {
+        filtrati.sort((a, b) => b.idFisso - a.idFisso);
+      } else if (sortQuery === 'az') {
+        filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo));
+      } else if (sortQuery === 'za') {
+        filtrati.sort((a, b) => b.titolo.localeCompare(a.titolo));
+      } else if (sortQuery === 'voto') {
+        filtrati.sort((a, b) => (parseFloat(b.voto) || 0) - (parseFloat(a.voto) || 0));
+      }
+
+      renderGiochi(filtrati);
+    }
+
+    document.getElementById('searchInput').addEventListener('input', applicaFiltri);
+    document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
+    document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
+    document.getElementById('sortOrder').addEventListener('change', applicaFiltri);
+
+    const script = document.createElement('script');
+    script.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
+    script.onerror = function() {
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('errorMessage').classList.remove('hidden');
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
