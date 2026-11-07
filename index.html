@@ -26,25 +26,38 @@
     <!-- SEZIONE CATALOGO (HOME) -->
     <div id="viewCatalogo">
       <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-8 space-y-4">
-        <div class="flex flex-col md:flex-row gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           
-          <div class="flex-1 relative">
+          <!-- Ricerca -->
+          <div class="relative sm:col-span-2 lg:col-span-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input type="text" id="searchInput" placeholder="Cerca un gioco per titolo..." 
+            <input type="text" id="searchInput" placeholder="Cerca un gioco..." 
                    class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
           </div>
 
-          <div class="w-full md:w-48">
+          <!-- Filtro Tipo -->
+          <div>
             <select id="categoryFilter" class="w-full py-2 px-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white">
               <option value="">Tutti i Tipi</option>
             </select>
           </div>
 
-          <div class="w-full md:w-48">
+          <!-- Filtro Stato -->
+          <div>
             <select id="statusFilter" class="w-full py-2 px-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white">
               <option value="">Tutti gli Stati</option>
               <option value="disponibile">Solo Disponibili</option>
               <option value="noleggiato">Solo Noleggiati</option>
+            </select>
+          </div>
+
+          <!-- Ordinamento (Novità per primo di default) -->
+          <div>
+            <select id="sortOrder" class="w-full py-2 px-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white font-medium text-emerald-800">
+              <option value="recenti">✨ Ultimi inseriti</option>
+              <option value="az">🔤 Ordine A-Z</option>
+              <option value="za">🔤 Ordine Z-A</option>
+              <option value="voto">⭐ Voto più alto</option>
             </select>
           </div>
 
@@ -154,7 +167,7 @@
         const rows = json.table.rows;
         giochiData = [];
 
-        rows.forEach(function(r) {
+        rows.forEach(function(r, index) {
           const c = r.c || [];
           
           function getFormattedVal(idx) {
@@ -190,6 +203,7 @@
 
           giochiData.push({
             id: generaSlug(titolo),
+            ordineOriginale: index, // Conserva la posizione per ordinare per gli ultimi inseriti
             titolo: titolo,
             tipo: tipo,
             persone: persone || '-',
@@ -207,8 +221,6 @@
 
         loadingEl.classList.add('hidden');
         popolaFiltroCategorie();
-        
-        // Verifica se c'è un gioco specificato nell'URL (es. #canvas)
         gestisciRouting();
 
       } catch (err) {
@@ -276,7 +288,6 @@
         return;
       }
 
-      // Aggiorna l'URL nel browser (es. #canvas)
       window.location.hash = gioco.id;
 
       document.getElementById('viewCatalogo').classList.add('hidden');
@@ -353,7 +364,7 @@
       document.getElementById('viewGioco').classList.add('hidden');
       document.getElementById('btnTornaHomeHeader').classList.add('hidden');
       document.getElementById('viewCatalogo').classList.remove('hidden');
-      renderGiochi(giochiData);
+      applicaFiltri();
     }
 
     function gestisciRouting() {
@@ -386,8 +397,9 @@
       const textQuery = document.getElementById('searchInput').value.toLowerCase();
       const catQuery = document.getElementById('categoryFilter').value;
       const statusQuery = document.getElementById('statusFilter').value;
+      const sortQuery = document.getElementById('sortOrder').value;
 
-      const filtrati = giochiData.filter(function(g) {
+      let filtrati = giochiData.filter(function(g) {
         const matchTitle = g.titolo.toLowerCase().indexOf(textQuery) !== -1;
         const matchCat = catQuery === '' || g.tipo === catQuery;
         let matchStatus = true;
@@ -396,12 +408,24 @@
         return matchTitle && matchCat && matchStatus;
       });
 
+      // Gestione dell'ordinamento
+      if (sortQuery === 'recenti') {
+        filtrati.sort((a, b) => b.ordineOriginale - a.ordineOriginale);
+      } else if (sortQuery === 'az') {
+        filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo));
+      } else if (sortQuery === 'za') {
+        filtrati.sort((a, b) => b.titolo.localeCompare(a.titolo));
+      } else if (sortQuery === 'voto') {
+        filtrati.sort((a, b) => (parseFloat(b.voto) || 0) - (parseFloat(a.voto) || 0));
+      }
+
       renderGiochi(filtrati);
     }
 
     document.getElementById('searchInput').addEventListener('input', applicaFiltri);
     document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
     document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
+    document.getElementById('sortOrder').addEventListener('change', applicaFiltri);
 
     const script = document.createElement('script');
     script.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
