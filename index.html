@@ -9,7 +9,6 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <!-- Header -->
   <header class="bg-slate-900 text-white shadow-md">
     <div class="max-w-6xl mx-auto px-4 py-8 text-center">
       <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-2">🎲 Il Mio Catalogo Giochi</h1>
@@ -17,10 +16,8 @@
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
     
-    <!-- Filtri e Ricerca -->
     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-8 space-y-4">
       <div class="flex flex-col md:flex-row gap-4">
         
@@ -47,7 +44,6 @@
       </div>
     </div>
 
-    <!-- Stato Caricamento / Messaggi -->
     <div id="loading" class="text-center py-12">
       <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-slate-300 border-t-emerald-600 mb-3"></div>
       <p class="text-slate-500 text-sm">Caricamento del catalogo in corso...</p>
@@ -58,10 +54,8 @@
       <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
     </div>
 
-    <!-- Griglia Giochi -->
     <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"></div>
 
-    <!-- Sezione Regolamento -->
     <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
       <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
         <i class="fa-solid fa-circle-info text-emerald-600"></i> Come funziona il noleggio
@@ -102,7 +96,7 @@
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
     
     const TARGET_CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/export?format=csv';
-    const FETCH_URL = https://api.allorigins.win/raw?url=${encodeURIComponent(TARGET_CSV_URL)};
+    const FETCH_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(TARGET_CSV_URL);
 
     let giochiData = [];
 
@@ -112,7 +106,9 @@
       for (let i = 0; i < lines.length; i++) {
         let line = lines[i].trim();
         if (!line) continue;
-        let row = line.split(/,(?=(?:[^\"]\"[^\"]\")[^\"]$)/).map(v => v.replace(/^"|"$/g, '').trim());
+        let row = line.split(/,(?=(?:[^\"]\"[^\"]\")[^\"]$)/).map(function(v) {
+          return v.replace(/^"|"$/g, '').trim();
+        });
         result.push(row);
       }
       return result;
@@ -124,19 +120,15 @@
 
       try {
         const response = await fetch(FETCH_URL);
-        if (!response.ok) throw new Error("Errore nel caricamento del CSV");
+        if (!response.ok) throw new Error("Errore CSV");
 
         const text = await response.text();
         const rows = parseCSV(text);
 
-        if (rows.length <= 1) throw new Error("Nessun dato trovato");
+        if (rows.length <= 1) throw new Error("Nessun dato");
 
         giochiData = [];
         
-        // Mappatura esatta basata sulla tua struttura di colonne (A->L):
-        // A(0): immagine | B(1): titolo | C(2): Persone | D(3): top persone
-        // E(4): Tempo | F(5): Difficoltà | G(6): tipo | H(7): tutorial
-        // I(8): età | J(9): voto (1-10) | K(10): peso | L(11): disponibilita
         for (let i = 1; i < rows.length; i++) {
           const row = rows[i];
           let titolo = row[1] ? row[1].trim() : '';
@@ -156,11 +148,11 @@
 
           let personeTxt = personeMin;
           if (personeMax && personeMax !== personeMin) {
-            personeTxt += -${personeMax};
+            personeTxt = personeTxt + '-' + personeMax;
           }
           if (!personeTxt) personeTxt = '-';
 
-          const isDisp = disponibilitaStr === '' || ['SI', 'SÌ', 'TRUE', 'DISPONIBILE', 'OK', '1'].includes(disponibilitaStr);
+          const isDisp = disponibilitaStr === '' || ['SI', 'SÌ', 'TRUE', 'DISPONIBILE', 'OK', '1'].indexOf(disponibilitaStr) !== -1;
 
           giochiData.push({
             titolo: titolo,
@@ -182,7 +174,7 @@
         renderGiochi(giochiData);
 
       } catch (err) {
-        console.error("Errore caricamento catalogo:", err);
+        console.error(err);
         loadingEl.classList.add('hidden');
         errorEl.classList.remove('hidden');
       }
@@ -193,56 +185,63 @@
       gridEl.innerHTML = '';
 
       if (lista.length === 0) {
-        gridEl.innerHTML = <p class="col-span-full text-center text-slate-400 py-8">Nessun gioco trovato nel catalogo.</p>;
+        gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-8">Nessun gioco trovato nel catalogo.</p>';
         return;
       }
 
-      lista.forEach(g => {
+      lista.forEach(function(g) {
         const statusBadge = g.disponibile 
-          ? <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold"><i class="fa-solid fa-check text-xs mr-1"></i>Disponibile</span>
-          : <span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-full font-semibold"><i class="fa-solid fa-clock text-xs mr-1"></i>Noleggiato</span>;
+          ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold"><i class="fa-solid fa-check text-xs mr-1"></i>Disponibile</span>'
+          : '<span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-full font-semibold"><i class="fa-solid fa-clock text-xs mr-1"></i>Noleggiato</span>';
 
-        const msgWA = encodeURIComponent(Ciao Giuseppe! Vorrei noleggiare il gioco "${g.titolo}". È disponibile?);
-        const urlWA = https://wa.me/${NUMERO_WHATSAPP}?text=${msgWA};
+        const msgWA = encodeURIComponent('Ciao Giuseppe! Vorrei noleggiare il gioco "' + g.titolo + '". È disponibile?');
+        const urlWA = 'https://wa.me/' + NUMERO_WHATSAPP + '?text=' + msgWA;
 
         const btnWA = g.disponibile
-          ? `<a href="${urlWA}" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm">
-              <i class="fa-brands fa-whatsapp text-base"></i> Prenota su WhatsApp
-             </a>`
-          : `<button disabled class="w-full bg-slate-200 text-slate-400 text-xs font-bold py-2.5 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2">
-              <i class="fa-solid fa-ban text-xs"></i> Attualmente Noleggiato
-             </button>`;
+          ? '<a href="' + urlWA + '" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"><i class="fa-brands fa-whatsapp text-base"></i> Prenota su WhatsApp</a>'
+          : '<button disabled class="w-full bg-slate-200 text-slate-400 text-xs font-bold py-2.5 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2"><i class="fa-solid fa-ban text-xs"></i> Attualmente Noleggiato</button>';
 
         const tutorialBtn = g.tutorial 
-          ? `<a href="${g.tutorial}" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1 mt-1">
-              <i class="fa-solid fa-video text-xs"></i> Guarda Tutorial
-             </a>` 
+          ? '<a href="' + g.tutorial + '" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1 mt-1"><i class="fa-solid fa-video text-xs"></i> Guarda Tutorial</a>' 
           : '';
+
+        let badgeVoto = '';
+        if (g.voto) {
+          badgeVoto = '<div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-lg font-bold">⭐ ' + g.voto + '</div>';
+        }
+
+        let infoEta = '';
+        if (g.eta) {
+          infoEta = '<span><i class="fa-solid fa-child mr-1"></i>' + g.eta + '+ anni</span>';
+        }
+
+        let infoDiff = '';
+        if (g.difficolta) {
+          infoDiff = '<span><i class="fa-solid fa-brain mr-1"></i>' + g.difficolta + '</span>';
+        }
 
         const card = document.createElement('div');
         card.className = "bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-shadow";
-        card.innerHTML = `
-          <div class="h-48 bg-slate-200 overflow-hidden relative">
-            <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
-            <div class="absolute top-3 right-3">${statusBadge}</div>
-            ${g.voto ? <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-lg font-bold">⭐ ${g.voto}</div> : ''}
-          </div>
-          <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-            <div>
-              <span class="text-xs font-semibold text-emerald-600 uppercase mb-1 block">${g.tipo}</span>
-              <h3 class="text-lg font-bold text-slate-800 leading-snug">${g.titolo}</h3>
-              ${tutorialBtn}
-              
-              <div class="grid grid-cols-2 gap-2 text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">
-                <span><i class="fa-solid fa-users mr-1"></i>${g.persone} giog.</span>
-                <span><i class="fa-solid fa-clock mr-1"></i>${g.tempo}</span>
-                ${g.eta ? <span><i class="fa-solid fa-child mr-1"></i>${g.eta}+ anni</span> : ''}
-                ${g.difficolta ? <span><i class="fa-solid fa-brain mr-1"></i>${g.difficolta}</span> : ''}
-              </div>
-            </div>
-            <div class="pt-2 border-t border-slate-100">${btnWA}</div>
-          </div>
-        `;
+        card.innerHTML = 
+          '<div class="h-48 bg-slate-200 overflow-hidden relative">' +
+            '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\'">' +
+            '<div class="absolute top-3 right-3">' + statusBadge + '</div>' +
+            badgeVoto +
+          '</div>' +
+          '<div class="p-5 flex-grow flex flex-col justify-between space-y-4">' +
+            '<div>' +
+              '<span class="text-xs font-semibold text-emerald-600 uppercase mb-1 block">' + g.tipo + '</span>' +
+              '<h3 class="text-lg font-bold text-slate-800 leading-snug">' + g.titolo + '</h3>' +
+              tutorialBtn +
+              '<div class="grid grid-cols-2 gap-2 text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">' +
+                '<span><i class="fa-solid fa-users mr-1"></i>' + g.persone + ' giog.</span>' +
+                '<span><i class="fa-solid fa-clock mr-1"></i>' + g.tempo + '</span>' +
+                infoEta +
+                infoDiff +
+              '</div>' +
+            '</div>' +
+            '<div class="pt-2 border-t border-slate-100">' + btnWA + '</div>' +
+          '</div>';
         gridEl.appendChild(card);
       });
     }
@@ -250,8 +249,11 @@
     function popolaFiltroCategorie() {
       const select = document.getElementById('categoryFilter');
       select.innerHTML = '<option value="">Tutti i Tipi</option>';
-      const categorie = [...new Set(giochiData.map(g => g.tipo))].filter(Boolean);
-      categorie.forEach(cat => {
+      const catSet = {};
+      giochiData.forEach(function(g) {
+        if (g.tipo) catSet[g.tipo] = true;
+      });
+      Object.keys(catSet).forEach(function(cat) {
         const opt = document.createElement('option');
         opt.value = cat;
         opt.textContent = cat;
@@ -264,8 +266,8 @@
       const catQuery = document.getElementById('categoryFilter').value;
       const statusQuery = document.getElementById('statusFilter').value;
 
-      const filtrati = giochiData.filter(g => {
-        const matchTitle = g.titolo.toLowerCase().includes(textQuery);
+      const filtrati = giochiData.filter(function(g) {
+        const matchTitle = g.titolo.toLowerCase().indexOf(textQuery) !== -1;
         const matchCat = catQuery === '' || g.tipo === catQuery;
         let matchStatus = true;
         if (statusQuery === 'disponibile') matchStatus = g.disponibile;
