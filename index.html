@@ -10,80 +10,68 @@
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
   <header class="bg-slate-900 text-white shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-8 text-center">
-      <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-2">🎲 Il Mio Catalogo Giochi</h1>
-      <p class="text-slate-300 text-sm md:text-base">Sfoglia la collezione, verifica la disponibilità e prenota subito su WhatsApp</p>
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight cursor-pointer" onclick="mostraHome()">🎲 Il Mio Catalogo Giochi</h1>
+        <p class="text-slate-300 text-xs md:text-sm">Noleggio giochi da tavolo a Caltagirone</p>
+      </div>
+      <button onclick="mostraHome()" id="btnTornaHomeHeader" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-4 py-2 rounded-xl transition-colors">
+        <i class="fa-solid fa-arrow-left mr-1.5"></i> Torna al Catalogo
+      </button>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
     
-    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-8 space-y-4">
-      <div class="flex flex-col md:flex-row gap-4">
-        
-        <div class="flex-1 relative">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input type="text" id="searchInput" placeholder="Cerca un gioco per titolo..." 
-                 class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
-        </div>
+    <!-- SEZIONE CATALOGO (HOME) -->
+    <div id="viewCatalogo">
+      <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-8 space-y-4">
+        <div class="flex flex-col md:flex-row gap-4">
+          
+          <div class="flex-1 relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="searchInput" placeholder="Cerca un gioco per titolo..." 
+                   class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+          </div>
 
-        <div class="w-full md:w-48">
-          <select id="categoryFilter" class="w-full py-2 px-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white">
-            <option value="">Tutti i Tipi</option>
-          </select>
-        </div>
+          <div class="w-full md:w-48">
+            <select id="categoryFilter" class="w-full py-2 px-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white">
+              <option value="">Tutti i Tipi</option>
+            </select>
+          </div>
 
-        <div class="w-full md:w-48">
-          <select id="statusFilter" class="w-full py-2 px-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white">
-            <option value="">Tutti gli Stati</option>
-            <option value="disponibile">Solo Disponibili</option>
-            <option value="noleggiato">Solo Noleggiati</option>
-          </select>
-        </div>
+          <div class="w-full md:w-48">
+            <select id="statusFilter" class="w-full py-2 px-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white">
+              <option value="">Tutti gli Stati</option>
+              <option value="disponibile">Solo Disponibili</option>
+              <option value="noleggiato">Solo Noleggiati</option>
+            </select>
+          </div>
 
-      </div>
-    </div>
-
-    <div id="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-slate-300 border-t-emerald-600 mb-3"></div>
-      <p class="text-slate-500 text-sm">Caricamento del catalogo in corso...</p>
-    </div>
-
-    <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-6">
-      <p class="font-semibold mb-1">Impossibile caricare i dati dal foglio Google.</p>
-      <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
-    </div>
-
-    <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"></div>
-
-    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-circle-info text-emerald-600"></i> Come funziona il noleggio
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600">
-        <div class="flex flex-col gap-2">
-          <span class="font-bold text-slate-800 flex items-center gap-2">
-            <span class="bg-emerald-100 text-emerald-800 w-6 h-6 rounded-full inline-flex items-center justify-center text-xs">1</span> 
-            Scegli e Prenota
-          </span>
-          <p>Sfoglia il catalogo e clicca su <strong>Prenota su WhatsApp</strong> per inviare una richiesta diretta per il gioco scelto.</p>
-        </div>
-        <div class="flex flex-col gap-2">
-          <span class="font-bold text-slate-800 flex items-center gap-2">
-            <span class="bg-emerald-100 text-emerald-800 w-6 h-6 rounded-full inline-flex items-center justify-center text-xs">2</span> 
-            Ritiro a Caltagirone
-          </span>
-          <p>Concordiamo l'orario di ritiro direttamente a Caltagirone.</p>
-        </div>
-        <div class="flex flex-col gap-2">
-          <span class="font-bold text-slate-800 flex items-center gap-2">
-            <span class="bg-emerald-100 text-emerald-800 w-6 h-6 rounded-full inline-flex items-center justify-center text-xs">3</span> 
-            Gioca e Restituisci
-          </span>
-          <p>Divertiti con gli amici e restituisci il gioco completo di tutte le sue componenti entro la data stabilita.</p>
         </div>
       </div>
-    </section>
+
+      <div id="loading" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-slate-300 border-t-emerald-600 mb-3"></div>
+        <p class="text-slate-500 text-sm">Caricamento del catalogo in corso...</p>
+      </div>
+
+      <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-6">
+        <p class="font-semibold mb-1">Impossibile caricare i dati dal foglio Google.</p>
+        <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
+      </div>
+
+      <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"></div>
+    </div>
+
+    <!-- SEZIONE SCHEDA SINGOLO GIOCO -->
+    <div id="viewGioco" class="hidden">
+      <button onclick="mostraHome()" class="mb-6 inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium text-sm">
+        <i class="fa-solid fa-arrow-left"></i> Torna a tutti i giochi
+      </button>
+
+      <div id="dettaglioGiocoContainer" class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden"></div>
+    </div>
 
   </main>
 
@@ -97,6 +85,13 @@
 
     let giochiData = [];
 
+    function generaSlug(testo) {
+      return testo.toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
     function pulisciValore(val) {
       if (!val) return '';
       if (val.indexOf('Date(') !== -1) {
@@ -108,16 +103,12 @@
       return val;
     }
 
-    // Trasforma i link di Google Drive in URL direttamente visualizzabili
     function pulisciUrlFoto(url) {
       if (!url) return '';
       let clean = url.trim();
-      
-      // Se è un ipertesto di Google o formula
       let matchUrl = clean.match(/(https?:\/\/[^\s"']+)/i);
       if (matchUrl) clean = matchUrl[1];
 
-      // Se il link proviene da Google Drive, ricava il thumbnail ad alta risoluzione
       if (clean.indexOf('drive.google.com') !== -1) {
         let matchId = clean.match(/\/d\/([^\/]+)/) || clean.match(/id=([^&]+)/);
         if (matchId && matchId[1]) {
@@ -191,12 +182,14 @@
           let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
           let peso = getFormattedVal(10);          // Colonna K: Peso
           let dispStr = getFormattedVal(11).toUpperCase(); // Colonna L: Disponibilità
+          let descrizione = getFormattedVal(12);   // Colonna M: Descrizione
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
           const isDisp = dispStr === '' || ['SI', 'SÌ', 'TRUE', 'DISPONIBILE', 'OK', '1'].indexOf(dispStr) !== -1;
 
           giochiData.push({
+            id: generaSlug(titolo),
             titolo: titolo,
             tipo: tipo,
             persone: persone || '-',
@@ -207,13 +200,16 @@
             voto: voto,
             peso: peso,
             disponibile: isDisp,
+            descrizione: descrizione || 'Nessuna descrizione dettagliata disponibile al momento.',
             foto: foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'
           });
         });
 
         loadingEl.classList.add('hidden');
         popolaFiltroCategorie();
-        renderGiochi(giochiData);
+        
+        // Verifica se c'è un gioco specificato nell'URL (es. #canvas)
+        gestisciRouting();
 
       } catch (err) {
         console.error(err);
@@ -236,15 +232,8 @@
           ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold"><i class="fa-solid fa-check text-xs mr-1"></i>Disponibile</span>'
           : '<span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-full font-semibold"><i class="fa-solid fa-clock text-xs mr-1"></i>Noleggiato</span>';
 
-        const msgWA = encodeURIComponent('Ciao Giuseppe! Vorrei noleggiare il gioco "' + g.titolo + '". È disponibile?');
-        const urlWA = 'https://wa.me/' + NUMERO_WHATSAPP + '?text=' + msgWA;
-
-        const btnWA = g.disponibile
-          ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"><i class="fa-brands fa-whatsapp text-base"></i> Prenota su WhatsApp</a>'
-          : '<button disabled class="w-full bg-slate-200 text-slate-400 text-xs font-bold py-2.5 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2"><i class="fa-solid fa-ban text-xs"></i> Attualmente Noleggiato</button>';
-
         const tutorialIcon = g.tutorial 
-          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" class="absolute top-3 left-3 bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-transform hover:scale-110 z-10"><i class="fa-brands fa-youtube text-lg"></i></a>' 
+          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" onclick="event.stopPropagation();" class="absolute top-3 left-3 bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-transform hover:scale-110 z-10"><i class="fa-brands fa-youtube text-lg"></i></a>' 
           : '';
 
         let badgeVoto = '';
@@ -252,41 +241,131 @@
           badgeVoto = '<div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-lg font-bold">⭐ ' + g.voto + '</div>';
         }
 
-        let infoEta = '';
-        if (g.eta) {
-          infoEta = '<span><i class="fa-solid fa-child mr-1"></i>' + g.eta + '+ anni</span>';
-        }
-
-        let infoDiff = '';
-        if (g.difficolta) {
-          infoDiff = '<span><i class="fa-solid fa-brain mr-1"></i>' + g.difficolta + '</span>';
-        }
-
         const card = document.createElement('div');
-        card.className = "bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-shadow";
+        card.className = "bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-all cursor-pointer group";
+        card.onclick = function() { mostraDettaglioGioco(g.id); };
+        
         card.innerHTML = 
           '<div class="h-48 bg-slate-200 overflow-hidden relative">' +
-            '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\'">' +
+            '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\'">' +
             tutorialIcon +
             '<div class="absolute top-3 right-3">' + statusBadge + '</div>' +
             badgeVoto +
           '</div>' +
-          '<div class="p-5 flex-grow flex flex-col justify-between space-y-4">' +
+          '<div class="p-5 flex-grow flex flex-col justify-between space-y-3">' +
             '<div>' +
               '<span class="text-xs font-semibold text-emerald-600 uppercase mb-1 block">' + g.tipo + '</span>' +
-              '<h3 class="text-lg font-bold text-slate-800 leading-snug">' + g.titolo + '</h3>' +
+              '<h3 class="text-lg font-bold text-slate-800 leading-snug group-hover:text-emerald-600 transition-colors">' + g.titolo + '</h3>' +
               '<div class="grid grid-cols-2 gap-2 text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">' +
                 '<span><i class="fa-solid fa-users mr-1"></i>' + g.persone + '</span>' +
                 '<span><i class="fa-solid fa-clock mr-1"></i>' + g.tempo + '</span>' +
-                infoEta +
-                infoDiff +
               '</div>' +
             '</div>' +
-            '<div class="pt-2 border-t border-slate-100">' + btnWA + '</div>' +
+            '<div class="pt-2 border-t border-slate-100 text-right">' +
+              '<span class="text-xs font-semibold text-emerald-600 group-hover:underline">Scopri dettagli <i class="fa-solid fa-chevron-right text-xs ml-1"></i></span>' +
+            '</div>' +
           '</div>';
         gridEl.appendChild(card);
       });
     }
+
+    function mostraDettaglioGioco(idGioco) {
+      const gioco = giochiData.find(g => g.id === idGioco);
+      if (!gioco) {
+        mostraHome();
+        return;
+      }
+
+      // Aggiorna l'URL nel browser (es. #canvas)
+      window.location.hash = gioco.id;
+
+      document.getElementById('viewCatalogo').classList.add('hidden');
+      document.getElementById('viewGioco').classList.remove('hidden');
+      document.getElementById('btnTornaHomeHeader').classList.remove('hidden');
+
+      const container = document.getElementById('dettaglioGiocoContainer');
+
+      const statusBadge = gioco.disponibile 
+        ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5"><i class="fa-solid fa-check"></i> Disponibile per il noleggio</span>'
+        : '<span class="bg-rose-100 text-rose-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5"><i class="fa-solid fa-clock"></i> Attualmente noleggiato</span>';
+
+      const msgWA = encodeURIComponent('Ciao Giuseppe! Vorrei noleggiare il gioco "' + gioco.titolo + '". È disponibile?');
+      const urlWA = 'https://wa.me/' + NUMERO_WHATSAPP + '?text=' + msgWA;
+
+      const btnWA = gioco.disponibile
+        ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-2xl flex items-center justify-center gap-2 transition-colors shadow-sm text-sm md:text-base"><i class="fa-brands fa-whatsapp text-lg"></i> Prenota su WhatsApp</a>'
+        : '<button disabled class="w-full bg-slate-200 text-slate-400 font-bold py-3 px-6 rounded-2xl cursor-not-allowed flex items-center justify-center gap-2 text-sm md:text-base"><i class="fa-solid fa-ban"></i> Attualmente Noleggiato</button>';
+
+      const tutorialBtn = gioco.tutorial
+        ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors"><i class="fa-brands fa-youtube text-lg text-red-600"></i> Guarda Tutorial Su YouTube</a>'
+        : '';
+
+      let infoEta = gioco.eta ? '<div class="bg-slate-50 p-3 rounded-xl"><span class="text-xs text-slate-400 block mb-0.5">Età cons.</span><span class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-child text-emerald-600 mr-1"></i>' + gioco.eta + '+ anni</span></div>' : '';
+      let infoDiff = gioco.difficolta ? '<div class="bg-slate-50 p-3 rounded-xl"><span class="text-xs text-slate-400 block mb-0.5">Difficoltà</span><span class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-brain text-emerald-600 mr-1"></i>' + gioco.difficolta + '</span></div>' : '';
+      let infoVoto = gioco.voto ? '<div class="bg-slate-50 p-3 rounded-xl"><span class="text-xs text-slate-400 block mb-0.5">Voto</span><span class="font-bold text-slate-800 text-sm">⭐ ' + gioco.voto + ' / 10</span></div>' : '';
+
+      container.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+          <div class="lg:col-span-5 bg-slate-100 relative min-h-[300px] lg:min-h-[450px]">
+            <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
+          </div>
+          <div class="lg:col-span-7 p-6 md:p-10 flex flex-col justify-between space-y-6">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <span class="text-xs font-bold tracking-wider uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg">${gioco.tipo}</span>
+                ${statusBadge}
+              </div>
+              <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 mb-4 leading-tight">${gioco.titolo}</h2>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-6">
+                <div class="bg-slate-50 p-3 rounded-xl">
+                  <span class="text-xs text-slate-400 block mb-0.5">Giocatori</span>
+                  <span class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-users text-emerald-600 mr-1"></i>${gioco.persone}</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl">
+                  <span class="text-xs text-slate-400 block mb-0.5">Durata</span>
+                  <span class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-clock text-emerald-600 mr-1"></i>${gioco.tempo}</span>
+                </div>
+                ${infoEta}
+                ${infoDiff}
+                ${infoVoto}
+              </div>
+
+              <div class="border-t border-slate-100 pt-5 space-y-2">
+                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Descrizione</h3>
+                <p class="text-slate-600 text-sm md:text-base leading-relaxed whitespace-pre-line">${gioco.descrizione}</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 pt-4 border-t border-slate-100">
+              ${btnWA}
+              ${tutorialBtn}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function mostraHome() {
+      history.pushState("", document.title, window.location.pathname + window.location.search);
+      document.getElementById('viewGioco').classList.add('hidden');
+      document.getElementById('btnTornaHomeHeader').classList.add('hidden');
+      document.getElementById('viewCatalogo').classList.remove('hidden');
+      renderGiochi(giochiData);
+    }
+
+    function gestisciRouting() {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && giochiData.some(g => g.id === hash)) {
+        mostraDettaglioGioco(hash);
+      } else {
+        mostraHome();
+      }
+    }
+
+    window.addEventListener('hashchange', gestisciRouting);
 
     function popolaFiltroCategorie() {
       const select = document.getElementById('categoryFilter');
