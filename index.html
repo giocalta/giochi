@@ -108,27 +108,42 @@
       return val;
     }
 
-    // Estrae tassativamente il link specifico inserito nella cella H
+    // Trasforma i link di Google Drive in URL direttamente visualizzabili
+    function pulisciUrlFoto(url) {
+      if (!url) return '';
+      let clean = url.trim();
+      
+      // Se è un ipertesto di Google o formula
+      let matchUrl = clean.match(/(https?:\/\/[^\s"']+)/i);
+      if (matchUrl) clean = matchUrl[1];
+
+      // Se il link proviene da Google Drive, ricava il thumbnail ad alta risoluzione
+      if (clean.indexOf('drive.google.com') !== -1) {
+        let matchId = clean.match(/\/d\/([^\/]+)/) || clean.match(/id=([^&]+)/);
+        if (matchId && matchId[1]) {
+          return 'https://lh3.googleusercontent.com/d/' + matchId[1] + '=s800';
+        }
+      }
+
+      return clean;
+    }
+
     function ottieniLinkTutorial(cellObj, titoloGioco) {
       if (!cellObj) return '';
 
-      // Isola il testo grezzo e formattato restituito da Google
       let valV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
       let valF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
       
-      // 1. Cerca un indirizzo che inizia con http o https nel valore grezzo o nella formula
       let matchV = valV.match(/(https?:\/\/[^\s"']+)/i);
       if (matchV) return matchV[1];
 
       let matchF = valF.match(/(https?:\/\/[^\s"']+)/i);
       if (matchF) return matchF[1];
 
-      // 2. Se la cella contiene un URL senza https:// (es. www.youtube.com... o youtu.be/...)
       if (valV.indexOf('youtube.com') !== -1 || valV.indexOf('youtu.be') !== -1) {
         return valV.startsWith('http') ? valV : 'https://' + valV;
       }
 
-      // 3. Solo come extrema ratio se la cella contiene testo semplice e nessun URL
       if (titoloGioco && valV !== '') {
         return 'https://www.youtube.com/results?search_query=' + encodeURIComponent('tutorial ' + titoloGioco + ' gioco da tavolo');
       }
@@ -162,7 +177,8 @@
             return pulisciValore(val);
           }
 
-          let foto = getFormattedVal(0);            // Colonna A: Immagine URL
+          let rawFoto = (c[0] && (c[0].f || c[0].v)) ? String(c[0].f || c[0].v) : '';
+          let foto = pulisciUrlFoto(rawFoto);
           let titolo = getFormattedVal(1);          // Colonna B: Titolo
           let persone = getFormattedVal(2);         // Colonna C: Persone
           let tempo = getFormattedVal(4) || '-';    // Colonna E: Tempo
