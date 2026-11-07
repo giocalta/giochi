@@ -93,7 +93,7 @@
     <div id="viewInfo" class="hidden space-y-6">
       <div class="bg-white rounded-3xl p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
         <div>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">Come funziona GIOCALTA 🎲</h2>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">Come funciona GIOCALTA 🎲</h2>
           <p class="text-slate-600 text-sm">Noleggio giochi da tavolo a Caltagirone per serate in compagnia, eventi e famiglie.</p>
         </div>
 
@@ -181,7 +181,7 @@
 
     <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
     <div id="viewGioco" class="hidden">
-      <button onclick="cambiaSezione('catalogo')" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm">
+      <button onclick="tornaAlCatalogo()" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm">
         <i class="fa-solid fa-arrow-left"></i> Torna a tutti i giochi
       </button>
 
@@ -199,6 +199,7 @@
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
 
     let giochiData = [];
+    let savedScrollPosition = 0; // Memorizza la posizione di scorrimento nel catalogo
 
     function cambiaSezione(nomeSezione) {
       document.getElementById('viewCatalogo').classList.add('hidden');
@@ -218,17 +219,39 @@
         document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-catalogo').classList.remove('text-amber-100');
         applicaFiltri();
+        window.scrollTo({ top: 0, behavior: 'instant' });
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
         document.getElementById('nav-info').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-info').classList.remove('text-amber-100');
+        window.scrollTo({ top: 0, behavior: 'instant' });
       } else if (nomeSezione === 'contatti') {
         document.getElementById('viewContatti').classList.remove('hidden');
         document.getElementById('nav-contatti').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-contatti').classList.remove('text-amber-100');
+        window.scrollTo({ top: 0, behavior: 'instant' });
       }
+    }
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function tornaAlCatalogo() {
+      history.pushState("", document.title, window.location.pathname + window.location.search);
+      document.getElementById('viewGioco').classList.add('hidden');
+      document.getElementById('viewInfo').classList.add('hidden');
+      document.getElementById('viewContatti').classList.add('hidden');
+      document.getElementById('viewCatalogo').classList.remove('hidden');
+      
+      ['catalogo', 'info', 'contatti'].forEach(s => {
+        const btn = document.getElementById('nav-' + s);
+        btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
+        btn.classList.add('text-amber-100');
+      });
+      document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
+      document.getElementById('nav-catalogo').classList.remove('text-amber-100');
+
+      applicaFiltri();
+
+      // Ripristina la posizione esatta a cui si era arrivati nel catalogo
+      window.scrollTo({ top: savedScrollPosition, behavior: 'instant' });
     }
 
     function generaSlug(testo) {
@@ -385,7 +408,11 @@
 
         const card = document.createElement('div');
         card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0";
-        card.onclick = function() { mostraDettaglioGioco(g.id); };
+        card.onclick = function() { 
+          // Salva la posizione di scorrimento prima di aprire la scheda
+          savedScrollPosition = window.scrollY || document.documentElement.scrollTop;
+          mostraDettaglioGioco(g.id); 
+        };
         
         card.innerHTML = 
           '<div class="w-24 md:w-full h-full md:h-44 bg-slate-200 overflow-hidden relative rounded-lg md:rounded-none shrink-0">' +
@@ -490,7 +517,7 @@
         </div>
       `;
       
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     function gestisciRouting() {
