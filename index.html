@@ -51,7 +51,7 @@
 
     <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-6">
       <p class="font-semibold mb-1">Impossibile caricare i dati dal foglio Google.</p>
-      <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
+      <p class="text-xs text-red-500">Verifica che il foglio sia condiviso con "Chiunque abbia il link".</p>
     </div>
 
     <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"></div>
@@ -94,57 +94,49 @@
   <script>
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
-    
-    const TARGET_CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/export?format=csv';
-    const FETCH_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(TARGET_CSV_URL);
 
     let giochiData = [];
 
-    function parseCSV(text) {
-      const lines = text.split(/\r\n|\n/);
-      const result = [];
-      for (let i = 0; i < lines.length; i++) {
-        let line = lines[i].trim();
-        if (!line) continue;
-        let row = line.split(/,(?=(?:[^\"]\"[^\"]\")[^\"]$)/).map(function(v) {
-          return v.replace(/^"|"$/g, '').trim();
-        });
-        result.push(row);
-      }
-      return result;
-    }
-
-    async function caricaGiochi() {
+    function processGoogleSheetsData(json) {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
 
       try {
-        const response = await fetch(FETCH_URL);
-        if (!response.ok) throw new Error("Errore CSV");
+        if (!json || !json.table || !json.table.rows) {
+          throw new Error("Formato dati non valido");
+        }
 
-        const text = await response.text();
-        const rows = parseCSV(text);
-
-        if (rows.length <= 1) throw new Error("Nessun dato");
-
+        const rows = json.table.rows;
         giochiData = [];
-        
-        for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-          let titolo = row[1] ? row[1].trim() : '';
-          if (!titolo || titolo.toLowerCase() === 'titolo') continue;
 
-          let foto = row[0] ? row[0].trim() : '';
-          let personeMin = row[2] ? row[2].trim() : '';
-          let personeMax = row[3] ? row[3].trim() : '';
-          let tempo = row[4] ? row[4].trim() : '-';
-          let difficolta = row[5] ? row[5].trim() : '';
-          let tipo = row[6] ? row[6].trim() : 'Generico';
-          let tutorial = row[7] ? row[7].trim() : '';
-          let eta = row[8] ? row[8].trim() : '';
-          let voto = row[9] ? row[9].trim() : '';
-          let peso = row[10] ? row[10].trim() : '';
-          let disponibilitaStr = row[11] ? row[11].trim().toUpperCase() : 'SI';
+        rows.forEach(function(r) {
+          const c = r.c || [];
+          
+          function getVal(idx) {
+            if (!c[idx]) return '';
+            if (c[idx].v !== null && c[idx].v !== undefined) {
+              return String(c[idx].v).trim();
+            }
+            if (c[idx].f !== null && c[idx].f !== undefined) {
+              return String(c[idx].f).trim();
+            }
+            return '';
+          }
+
+          let foto = getVal(0);            // Colonna A: Immagine
+          let titolo = getVal(1);          // Colonna B: Titolo
+          let personeMin = getVal(2);      // Colonna C: Persone
+          let personeMax = getVal(3);      // Colonna D: Top persone
+          let tempo = getVal(4) || '-';    // Colonna E: Tempo
+          let difficolta = getVal(5);     // Colonna F: Difficoltà
+          let tipo = getVal(6) || 'Generico'; // Colonna G: Tipo
+          let tutorial = getVal(7);       // Colonna H: Tutorial
+          let eta = getVal(8);            // Colonna I: Età
+          let voto = getVal(9);           // Colonna J: Voto (1-10)
+          let peso = getVal(10);          // Colonna K: Peso
+          let dispStr = getVal(11).toUpperCase(); // Colonna L: Disponibilità
+
+          if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
           let personeTxt = personeMin;
           if (personeMax && personeMax !== personeMin) {
@@ -152,7 +144,7 @@
           }
           if (!personeTxt) personeTxt = '-';
 
-          const isDisp = disponibilitaStr === '' || ['SI', 'SÌ', 'TRUE', 'DISPONIBILE', 'OK', '1'].indexOf(disponibilitaStr) !== -1;
+          const isDisp = dispStr === '' || ['SI', 'SÌ', 'TRUE', 'DISPONIBILE', 'OK', '1'].indexOf(dispStr) !== -1;
 
           giochiData.push({
             titolo: titolo,
@@ -167,7 +159,7 @@
             disponibile: isDisp,
             foto: foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'
           });
-        }
+        });
 
         loadingEl.classList.add('hidden');
         popolaFiltroCategorie();
@@ -282,7 +274,14 @@
     document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
     document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
 
-    caricaGiochi();
+    // Iniezione diretta dello script JSONP nativo di Google senza proxy
+    const script = document.createElement('script');
+    script.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
+    script.onerror = function() {
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('errorMessage').classList.remove('hidden');
+    };
+    document.body.appendChild(script);
   </script>
 </body>
 </html>
