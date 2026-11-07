@@ -108,17 +108,28 @@
       return val;
     }
 
+    // Estrae tassativamente il link specifico inserito nella cella H
     function ottieniLinkTutorial(cellObj, titoloGioco) {
-      let strV = (cellObj && cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
-      let strF = (cellObj && cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
-      let testo = strV + ' ' + strF;
+      if (!cellObj) return '';
 
-      let match = testo.match(/(https?:\/\/[^\s"']+)/i);
-      if (match) {
-        return match[1];
+      // Isola il testo grezzo e formattato restituito da Google
+      let valV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
+      let valF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
+      
+      // 1. Cerca un indirizzo che inizia con http o https nel valore grezzo o nella formula
+      let matchV = valV.match(/(https?:\/\/[^\s"']+)/i);
+      if (matchV) return matchV[1];
+
+      let matchF = valF.match(/(https?:\/\/[^\s"']+)/i);
+      if (matchF) return matchF[1];
+
+      // 2. Se la cella contiene un URL senza https:// (es. www.youtube.com... o youtu.be/...)
+      if (valV.indexOf('youtube.com') !== -1 || valV.indexOf('youtu.be') !== -1) {
+        return valV.startsWith('http') ? valV : 'https://' + valV;
       }
 
-      if (titoloGioco) {
+      // 3. Solo come extrema ratio se la cella contiene testo semplice e nessun URL
+      if (titoloGioco && valV !== '') {
         return 'https://www.youtube.com/results?search_query=' + encodeURIComponent('tutorial ' + titoloGioco + ' gioco da tavolo');
       }
 
@@ -216,7 +227,6 @@
           ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"><i class="fa-brands fa-whatsapp text-base"></i> Prenota su WhatsApp</a>'
           : '<button disabled class="w-full bg-slate-200 text-slate-400 text-xs font-bold py-2.5 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2"><i class="fa-solid fa-ban text-xs"></i> Attualmente Noleggiato</button>';
 
-        // Icona YouTube tonda posizionata in alto a sinistra sopra la foto del gioco
         const tutorialIcon = g.tutorial 
           ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" class="absolute top-3 left-3 bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-transform hover:scale-110 z-10"><i class="fa-brands fa-youtube text-lg"></i></a>' 
           : '';
