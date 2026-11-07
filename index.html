@@ -97,6 +97,35 @@
 
     let giochiData = [];
 
+    function pulisciValore(val) {
+      if (!val) return '';
+      if (val.indexOf('Date(') !== -1) {
+        const parts = val.split(',');
+        if (parts.length >= 3) {
+          return parts[2].replace(/\)/g, '').trim();
+        }
+      }
+      return val;
+    }
+
+    // Isola e valida solo indirizzi web veri che iniziano per http:// o https://
+    function estraiUrlValido(cellObj) {
+      if (!cellObj) return '';
+      let val = '';
+      if (cellObj.v !== null && cellObj.v !== undefined) val = String(cellObj.v).trim();
+      
+      // Se il valore inizia direttamente con http, restituiscilo
+      if (val.indexOf('http://') === 0 || val.indexOf('https://') === 0) {
+        return val;
+      }
+      
+      // Se il valore contiene una formula =HYPERLINK("http...", "...")
+      let match = val.match(/https?:\/\/[^\s"']+/);
+      if (match) return match[0];
+
+      return '';
+    }
+
     function processGoogleSheetsData(json) {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
@@ -112,29 +141,32 @@
         rows.forEach(function(r) {
           const c = r.c || [];
           
-          function getVal(idx) {
+          function getFormattedVal(idx) {
             if (!c[idx]) return '';
-            if (c[idx].v !== null && c[idx].v !== undefined) {
-              return String(c[idx].v).trim();
-            }
+            let val = '';
             if (c[idx].f !== null && c[idx].f !== undefined) {
-              return String(c[idx].f).trim();
+              val = String(c[idx].f).trim();
+            } else if (c[idx].v !== null && c[idx].v !== undefined) {
+              val = String(c[idx].v).trim();
             }
-            return '';
+            return pulisciValore(val);
           }
 
-          let foto = getVal(0);            // Colonna A: Immagine
-          let titolo = getVal(1);          // Colonna B: Titolo
-          let personeMin = getVal(2);      // Colonna C: Persone
-          let personeMax = getVal(3);      // Colonna D: Top persone
-          let tempo = getVal(4) || '-';    // Colonna E: Tempo
-          let difficolta = getVal(5);     // Colonna F: Difficoltà
-          let tipo = getVal(6) || 'Generico'; // Colonna G: Tipo
-          let tutorial = getVal(7);       // Colonna H: Tutorial
-          let eta = getVal(8);            // Colonna I: Età
-          let voto = getVal(9);           // Colonna J: Voto (1-10)
-          let peso = getVal(10);          // Colonna K: Peso
-          let dispStr = getVal(11).toUpperCase(); // Colonna L: Disponibilità
+          let foto = getFormattedVal(0);            // Colonna A: Immagine
+          let titolo = getFormattedVal(1);          // Colonna B: Titolo
+          let personeMin = getFormattedVal(2);      // Colonna C: Persone
+          let personeMax = getFormattedVal(3);      // Colonna D: Top persone
+          let tempo = getFormattedVal(4) || '-';    // Colonna E: Tempo
+          let difficolta = getFormattedVal(5);     // Colonna F: Difficoltà
+          let tipo = getFormattedVal(6) || 'Generico'; // Colonna G: Tipo
+          
+          // Estrazione rigorosa dell'URL reale per la colonna H (Tutorial)
+          let tutorial = estraiUrlValido(c[7]);
+
+          let eta = getFormattedVal(8);            // Colonna I: Età
+          let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
+          let peso = getFormattedVal(10);          // Colonna K: Peso
+          let dispStr = getFormattedVal(11).toUpperCase(); // Colonna L: Disponibilità
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
@@ -190,11 +222,11 @@
         const urlWA = 'https://wa.me/' + NUMERO_WHATSAPP + '?text=' + msgWA;
 
         const btnWA = g.disponibile
-          ? '<a href="' + urlWA + '" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"><i class="fa-brands fa-whatsapp text-base"></i> Prenota su WhatsApp</a>'
+          ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"><i class="fa-brands fa-whatsapp text-base"></i> Prenota su WhatsApp</a>'
           : '<button disabled class="w-full bg-slate-200 text-slate-400 text-xs font-bold py-2.5 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2"><i class="fa-solid fa-ban text-xs"></i> Attualmente Noleggiato</button>';
 
         const tutorialBtn = g.tutorial 
-          ? '<a href="' + g.tutorial + '" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1 mt-1"><i class="fa-solid fa-video text-xs"></i> Guarda Tutorial</a>' 
+          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1.5 mt-2.5 font-medium"><i class="fa-solid fa-circle-play text-red-600 text-sm"></i> Guarda Tutorial</a>' 
           : '';
 
         let badgeVoto = '';
@@ -274,7 +306,6 @@
     document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
     document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
 
-    // Iniezione diretta dello script JSONP nativo di Google senza proxy
     const script = document.createElement('script');
     script.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
     script.onerror = function() {
