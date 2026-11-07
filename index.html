@@ -108,21 +108,22 @@
       return val;
     }
 
-    // Estrae tassativamente soltanto URL reali (es. https://...) da celle o formule ipertesto
-    function estraiUrlValido(cellObj) {
+    // Estrae in modo intelligente l'URL di YouTube sia dal valore grezzo che dalle formule HYPERLINK di Google
+    function estraiUrlTutorial(cellObj) {
       if (!cellObj) return '';
       
       let valV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
       let valF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
       
-      // Prova a cercare un URL completo sia nel valore che nella formattazione
+      // 1. Cerca un indirizzo web http/https dentro il valore visualizzato
       let matchV = valV.match(/https?:\/\/[^\s"']+/);
       if (matchV) return matchV[0];
 
+      // 2. Cerca l'indirizzo web nascosto dentro la formula di Google =HYPERLINK("https://...", "apri tutorial")
       let matchF = valF.match(/https?:\/\/[^\s"']+/);
       if (matchF) return matchF[0];
 
-      // Se la riga è semplicemente un dominio tipo www.youtube.com...
+      // 3. Se la cella è una stringa tipo www.youtube.com...
       if (valV.indexOf('youtube.com') !== -1 || valV.indexOf('youtu.be') !== -1) {
         return valV.startsWith('http') ? valV : 'https://' + valV;
       }
@@ -158,13 +159,13 @@
 
           let foto = getFormattedVal(0);            // Colonna A: Immagine
           let titolo = getFormattedVal(1);          // Colonna B: Titolo
-          let persone = getFormattedVal(2);         // Colonna C: Persone (Soltanto Colonna C)
+          let persone = getFormattedVal(2);         // Colonna C: Persone (esclusa Colonna D)
           let tempo = getFormattedVal(4) || '-';    // Colonna E: Tempo
           let difficolta = getFormattedVal(5);     // Colonna F: Difficoltà
           let tipo = getFormattedVal(6) || 'Generico'; // Colonna G: Tipo
           
-          // Estrazione sicura dell'URL per la Colonna H (Tutorial)
-          let tutorial = estraiUrlValido(c[7]);
+          // Estrae l'URL reale ignorando la scritta "apri tutorial"
+          let tutorial = estraiUrlTutorial(c[7]);     // Colonna H: Tutorial
 
           let eta = getFormattedVal(8);            // Colonna I: Età
           let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
