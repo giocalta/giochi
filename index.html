@@ -168,7 +168,7 @@
         const rows = json.table.rows;
         giochiData = [];
 
-        rows.forEach(function(r, index) {
+        rows.forEach(function(r) {
           const c = r.c || [];
           
           function getFormattedVal(idx) {
@@ -182,16 +182,15 @@
             return pulisciValore(val);
           }
 
-          let rawFoto = (c[0] && (c[0].f || c[0].v)) ? String(c[0].f || c[0].v) : '';
+          let idFisso = parseInt(getFormattedVal(0), 10) || 0; // Colonna A: ID fisso numerico
+          let rawFoto = (c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : ''; // Colonna B: Foto
           let foto = pulisciUrlFoto(rawFoto);
-          let titolo = getFormattedVal(1);          // Colonna B: Titolo
-          let persone = getFormattedVal(2);         // Colonna C: Persone
+          let titolo = getFormattedVal(2);          // Colonna C: Titolo
+          let persone = getFormattedVal(3);         // Colonna D: Persone
           let tempo = getFormattedVal(4) || '-';    // Colonna E: Tempo
           let difficolta = getFormattedVal(5);     // Colonna F: Difficoltà
           let tipo = getFormattedVal(6) || 'Generico'; // Colonna G: Tipo
-          
           let tutorial = ottieniLinkTutorial(c[7], titolo); // Colonna H: Tutorial
-
           let eta = getFormattedVal(8);            // Colonna I: Età
           let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
           let peso = getFormattedVal(10);          // Colonna K: Peso
@@ -204,7 +203,7 @@
 
           giochiData.push({
             id: generaSlug(titolo),
-            ordineOriginale: index,
+            idFisso: idFisso, // ID numerico per ordinare gli ultimi inseriti
             titolo: titolo,
             tipo: tipo,
             persone: persone || '-',
@@ -253,7 +252,6 @@
         let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded font-bold">⭐ ' + g.voto + '</div>' : '';
 
         const card = document.createElement('div');
-        // Su Mobile: riga sottile compatto (h-24) | Su Desktop: scheda classica verticale (h-auto)
         card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0";
         card.onclick = function() { mostraDettaglioGioco(g.id); };
         
@@ -411,8 +409,9 @@
         return matchTitle && matchCat && matchStatus;
       });
 
+      // Ora l'ordinamento "Ultimi inseriti" si basa sulla nuova Colonna ID numerica!
       if (sortQuery === 'recenti') {
-        filtrati.sort((a, b) => b.ordineOriginale - a.ordineOriginale);
+        filtrati.sort((a, b) => b.idFisso - a.idFisso);
       } else if (sortQuery === 'az') {
         filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo));
       } else if (sortQuery === 'za') {
