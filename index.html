@@ -9,40 +9,48 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <header class="bg-slate-900 text-white shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-4 md:py-6 text-center flex flex-col md:flex-row justify-between items-center gap-3">
-      <div>
-        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight cursor-pointer" onclick="mostraHome()">🎲 Il Mio Catalogo Giochi</h1>
-        <p class="text-slate-300 text-xs md:text-sm">Noleggio giochi da tavolo a Caltagirone</p>
+  <!-- HEADER CON NAVIGAZIONE -->
+  <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="cursor-pointer text-center sm:text-left" onclick="cambiaSezione('catalogo')">
+        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">🎲 Noleggio Giochi da Tavolo</h1>
+        <p class="text-emerald-400 text-xs">Caltagirone</p>
       </div>
-      <button onclick="mostraHome()" id="btnTornaHomeHeader" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-4 py-2 rounded-xl transition-colors">
-        <i class="fa-solid fa-arrow-left mr-1.5"></i> Torna al Catalogo
-      </button>
+
+      <!-- NAVIGAZIONE PAGINE -->
+      <nav class="flex items-center gap-1 bg-slate-800 p-1 rounded-xl text-xs">
+        <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3 py-1.5 rounded-lg font-semibold transition-colors bg-emerald-600 text-white">
+          <i class="fa-solid fa-gamepad mr-1"></i> Catalogo
+        </button>
+        <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-semibold transition-colors text-slate-300 hover:text-white">
+          <i class="fa-solid fa-circle-info mr-1"></i> Info Noleggio
+        </button>
+        <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3 py-1.5 rounded-lg font-semibold transition-colors text-slate-300 hover:text-white">
+          <i class="fa-solid fa-location-dot mr-1"></i> Sede & Contatti
+        </button>
+      </nav>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto px-3 md:px-4 py-4 md:py-6 flex-grow w-full">
     
-    <!-- SEZIONE CATALOGO (HOME) -->
+    <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo">
       <div class="bg-white p-3 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 space-y-3">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
           
-          <!-- Ricerca -->
           <div class="relative col-span-2 md:col-span-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
             <input type="text" id="searchInput" placeholder="Cerca un gioco..." 
                    class="w-full pl-8 md:pl-9 pr-3 py-1.5 md:py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs md:text-sm">
           </div>
 
-          <!-- Filtro Tipo -->
           <div>
             <select id="categoryFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs md:text-sm bg-white">
               <option value="">Tutti i Tipi</option>
             </select>
           </div>
 
-          <!-- Filtro Stato -->
           <div>
             <select id="statusFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs md:text-sm bg-white">
               <option value="">Tutti gli Stati</option>
@@ -51,7 +59,6 @@
             </select>
           </div>
 
-          <!-- Ordinamento -->
           <div class="col-span-2 md:col-span-1">
             <select id="sortOrder" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs md:text-sm bg-white font-medium text-emerald-800">
               <option value="recenti">✨ Ultimi inseriti</option>
@@ -74,13 +81,104 @@
         <p class="text-[10px] text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
       </div>
 
-      <!-- Su Mobile: lista compatta ad 1 colonna | Su Desktop: griglia a schede (3/4 colonne) -->
       <div id="gamesGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-6 mb-12"></div>
     </div>
 
-    <!-- SEZIONE SCHEDA SINGOLO GIOCO -->
+    <!-- SEZIONE 2: INFO & COME FUNZIONA -->
+    <div id="viewInfo" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 md:p-10 border border-slate-200 shadow-sm space-y-8">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">Come funziona il noleggio 🎲</h2>
+          <p class="text-slate-600 text-sm">Servizio di noleggio giochi da tavolo pensato per serate in famiglia, eventi e appassionati a Caltagirone.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+            <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold mb-3">1</div>
+            <h3 class="font-bold text-slate-800 mb-1">Scegli dal catalogo</h3>
+            <p class="text-xs text-slate-600">Sfoglia i giochi disponibili, controlla la durata, l'età consigliata e guarda il video tutorial.</p>
+          </div>
+
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+            <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold mb-3">2</div>
+            <h3 class="font-bold text-slate-800 mb-1">Prenota via WhatsApp</h3>
+            <p class="text-xs text-slate-600">Clicca su "Prenota su WhatsApp" per confermare la disponibilità e concordare l'orario del ritiro.</p>
+          </div>
+
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+            <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold mb-3">3</div>
+            <h3 class="font-bold text-slate-800 mb-1">Gioca e Restituisci</h3>
+            <p class="text-xs text-slate-600">Ritira il gioco completo a Caltagirone, divertiti con gli amici e restituiscilo integro nei tempi concordati.</p>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-6 space-y-4 text-xs md:text-sm text-slate-600">
+          <h3 class="font-bold text-slate-800 text-base">📌 Regole e Trasparenza</h3>
+          <ul class="list-disc pl-5 space-y-2">
+            <li><strong>Integrità dei componenti:</strong> Tutti i giochi vengono verificati prima della consegna. Ti chiediamo di far attenzione a carte, fustelle e segnalini.</li>
+            <li><strong>Durata del noleggio:</strong> Il periodo standard va concordato direttamente al momento della prenotazione.</li>
+            <li><strong>Ritiro e Consegna:</strong> Il ritiro avviene di persona presso la sede di Caltagirone previa conferma via messaggio.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEZIONE 3: CONTATTI E SEDE -->
+    <div id="viewContatti" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 md:p-10 border border-slate-200 shadow-sm">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Contatti & Sede 📍</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-location-dot text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-800 text-sm">Dove Siamo</h3>
+                <p class="text-xs text-slate-600 mt-1">Caltagirone (CT) - Sicilia</p>
+                <p class="text-[11px] text-slate-400">Punto di ritiro e riconsegna giochi previo appuntamento.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center shrink-0">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-800 text-sm">WhatsApp & Telefono</h3>
+                <p class="text-xs text-slate-600 mt-1">+39 333 345 5179</p>
+                <a href="https://wa.me/393333455179" target="_blank" rel="noopener noreferrer" class="inline-block mt-2 text-xs text-emerald-600 font-bold hover:underline">
+                  Invia un messaggio diretto <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-clock text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-800 text-sm">Orari di Ritiro</h3>
+                <p class="text-xs text-slate-600 mt-1">Su appuntamento dal Lunedì alla Domenica.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- MAPPA INTEGRATA DI CALTAGIRONE -->
+          <div class="rounded-2xl overflow-hidden border border-slate-200 h-64 md:h-auto min-h-[250px]">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25438.455648834615!2d14.500000000000002!3d37.23333333333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x131102e3b8b1a45d%3A0x400b047c2096ee0!2s95041%20Caltagirone%20CT!5e0!3m2!1sit!2sit!4v1680000000000!5m2!1sit!2sit" 
+              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
     <div id="viewGioco" class="hidden">
-      <button onclick="mostraHome()" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm">
+      <button onclick="cambiaSezione('catalogo')" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm">
         <i class="fa-solid fa-arrow-left"></i> Torna a tutti i giochi
       </button>
 
@@ -98,6 +196,38 @@
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
 
     let giochiData = [];
+
+    function cambiaSezione(nomeSezione) {
+      document.getElementById('viewCatalogo').classList.add('hidden');
+      document.getElementById('viewInfo').classList.add('hidden');
+      document.getElementById('viewContatti').classList.add('hidden');
+      document.getElementById('viewGioco').classList.add('hidden');
+
+      // Reset stili pulsanti nav
+      ['catalogo', 'info', 'contatti'].forEach(s => {
+        const btn = document.getElementById('nav-' + s);
+        btn.classList.remove('bg-emerald-600', 'text-white');
+        btn.classList.add('text-slate-300');
+      });
+
+      if (nomeSezione === 'catalogo') {
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+        document.getElementById('viewCatalogo').classList.remove('hidden');
+        document.getElementById('nav-catalogo').classList.add('bg-emerald-600', 'text-white');
+        document.getElementById('nav-catalogo').classList.remove('text-slate-300');
+        applicaFiltri();
+      } else if (nomeSezione === 'info') {
+        document.getElementById('viewInfo').classList.remove('hidden');
+        document.getElementById('nav-info').classList.add('bg-emerald-600', 'text-white');
+        document.getElementById('nav-info').classList.remove('text-slate-300');
+      } else if (nomeSezione === 'contatti') {
+        document.getElementById('viewContatti').classList.remove('hidden');
+        document.getElementById('nav-contatti').classList.add('bg-emerald-600', 'text-white');
+        document.getElementById('nav-contatti').classList.remove('text-slate-300');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     function generaSlug(testo) {
       return testo.toLowerCase()
@@ -182,20 +312,20 @@
             return pulisciValore(val);
           }
 
-          let idFisso = parseInt(getFormattedVal(0), 10) || 0; // Colonna A: ID fisso numerico
-          let rawFoto = (c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : ''; // Colonna B: Foto
+          let idFisso = parseInt(getFormattedVal(0), 10) || 0; 
+          let rawFoto = (c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : ''; 
           let foto = pulisciUrlFoto(rawFoto);
-          let titolo = getFormattedVal(2);          // Colonna C: Titolo
-          let persone = getFormattedVal(3);         // Colonna D: Persone
-          let tempo = getFormattedVal(4) || '-';    // Colonna E: Tempo
-          let difficolta = getFormattedVal(5);     // Colonna F: Difficoltà
-          let tipo = getFormattedVal(6) || 'Generico'; // Colonna G: Tipo
-          let tutorial = ottieniLinkTutorial(c[7], titolo); // Colonna H: Tutorial
-          let eta = getFormattedVal(8);            // Colonna I: Età
-          let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
-          let peso = getFormattedVal(10);          // Colonna K: Peso
-          let dispStr = getFormattedVal(11).toUpperCase(); // Colonna L: Disponibilità
-          let descrizione = getFormattedVal(12);   // Colonna M: Descrizione
+          let titolo = getFormattedVal(2);          
+          let persone = getFormattedVal(3);         
+          let tempo = getFormattedVal(4) || '-';    
+          let difficolta = getFormattedVal(5);     
+          let tipo = getFormattedVal(6) || 'Generico'; 
+          let tutorial = ottieniLinkTutorial(c[7], titolo); 
+          let eta = getFormattedVal(8);            
+          let voto = getFormattedVal(9);           
+          let peso = getFormattedVal(10);          
+          let dispStr = getFormattedVal(11).toUpperCase(); 
+          let descrizione = getFormattedVal(12);   
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
@@ -203,7 +333,7 @@
 
           giochiData.push({
             id: generaSlug(titolo),
-            idFisso: idFisso, // ID numerico per ordinare gli ultimi inseriti
+            idFisso: idFisso, 
             titolo: titolo,
             tipo: tipo,
             persone: persone || '-',
@@ -285,15 +415,16 @@
     function mostraDettaglioGioco(idGioco) {
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) {
-        mostraHome();
+        cambiaSezione('catalogo');
         return;
       }
 
       window.location.hash = gioco.id;
 
       document.getElementById('viewCatalogo').classList.add('hidden');
+      document.getElementById('viewInfo').classList.add('hidden');
+      document.getElementById('viewContatti').classList.add('hidden');
       document.getElementById('viewGioco').classList.remove('hidden');
-      document.getElementById('btnTornaHomeHeader').classList.remove('hidden');
 
       const container = document.getElementById('dettaglioGiocoContainer');
 
@@ -360,20 +491,12 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function mostraHome() {
-      history.pushState("", document.title, window.location.pathname + window.location.search);
-      document.getElementById('viewGioco').classList.add('hidden');
-      document.getElementById('btnTornaHomeHeader').classList.add('hidden');
-      document.getElementById('viewCatalogo').classList.remove('hidden');
-      applicaFiltri();
-    }
-
     function gestisciRouting() {
       const hash = window.location.hash.replace('#', '');
       if (hash && giochiData.some(g => g.id === hash)) {
         mostraDettaglioGioco(hash);
       } else {
-        mostraHome();
+        cambiaSezione('catalogo');
       }
     }
 
@@ -409,7 +532,6 @@
         return matchTitle && matchCat && matchStatus;
       });
 
-      // Ora l'ordinamento "Ultimi inseriti" si basa sulla nuova Colonna ID numerica!
       if (sortQuery === 'recenti') {
         filtrati.sort((a, b) => b.idFisso - a.idFisso);
       } else if (sortQuery === 'az') {
