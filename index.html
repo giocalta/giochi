@@ -51,7 +51,7 @@
 
     <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-6">
       <p class="font-semibold mb-1">Impossibile caricare i dati dal foglio Google.</p>
-      <p class="text-xs text-red-500">Verifica che il foglio sia condiviso con "Chiunque abbia il link".</p>
+      <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
     </div>
 
     <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"></div>
@@ -108,22 +108,14 @@
       return val;
     }
 
-    // Isola e valida solo indirizzi web veri che iniziano per http:// o https://
-    function estraiUrlValido(cellObj) {
-      if (!cellObj) return '';
-      let val = '';
-      if (cellObj.v !== null && cellObj.v !== undefined) val = String(cellObj.v).trim();
-      
-      // Se il valore inizia direttamente con http, restituiscilo
-      if (val.indexOf('http://') === 0 || val.indexOf('https://') === 0) {
-        return val;
+    function pulisciUrl(url) {
+      if (!url) return '';
+      let clean = url.trim();
+      if (!clean) return '';
+      if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+        clean = 'https://' + clean;
       }
-      
-      // Se il valore contiene una formula =HYPERLINK("http...", "...")
-      let match = val.match(/https?:\/\/[^\s"']+/);
-      if (match) return match[0];
-
-      return '';
+      return clean;
     }
 
     function processGoogleSheetsData(json) {
@@ -154,14 +146,14 @@
 
           let foto = getFormattedVal(0);            // Colonna A: Immagine
           let titolo = getFormattedVal(1);          // Colonna B: Titolo
-          let personeMin = getFormattedVal(2);      // Colonna C: Persone
-          let personeMax = getFormattedVal(3);      // Colonna D: Top persone
+          let persone = getFormattedVal(2);         // Colonna C: Persone (Soltanto Colonna C)
           let tempo = getFormattedVal(4) || '-';    // Colonna E: Tempo
           let difficolta = getFormattedVal(5);     // Colonna F: Difficoltà
           let tipo = getFormattedVal(6) || 'Generico'; // Colonna G: Tipo
           
-          // Estrazione rigorosa dell'URL reale per la colonna H (Tutorial)
-          let tutorial = estraiUrlValido(c[7]);
+          // Legge l'URL del tutorial (Colonna H)
+          let rawTutorial = (c[7] && c[7].v) ? String(c[7].v) : getFormattedVal(7);
+          let tutorial = pulisciUrl(rawTutorial);
 
           let eta = getFormattedVal(8);            // Colonna I: Età
           let voto = getFormattedVal(9);           // Colonna J: Voto (1-10)
@@ -170,18 +162,12 @@
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
-          let personeTxt = personeMin;
-          if (personeMax && personeMax !== personeMin) {
-            personeTxt = personeTxt + '-' + personeMax;
-          }
-          if (!personeTxt) personeTxt = '-';
-
           const isDisp = dispStr === '' || ['SI', 'SÌ', 'TRUE', 'DISPONIBILE', 'OK', '1'].indexOf(dispStr) !== -1;
 
           giochiData.push({
             titolo: titolo,
             tipo: tipo,
-            persone: personeTxt,
+            persone: persone || '-',
             tempo: tempo,
             difficolta: difficolta,
             tutorial: tutorial,
@@ -226,7 +212,7 @@
           : '<button disabled class="w-full bg-slate-200 text-slate-400 text-xs font-bold py-2.5 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2"><i class="fa-solid fa-ban text-xs"></i> Attualmente Noleggiato</button>';
 
         const tutorialBtn = g.tutorial 
-          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1.5 mt-2.5 font-medium"><i class="fa-solid fa-circle-play text-red-600 text-sm"></i> Guarda Tutorial</a>' 
+          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" class="text-xs text-red-600 hover:text-red-700 hover:underline flex items-center gap-1.5 mt-2 font-semibold"><i class="fa-brands fa-youtube text-base"></i> Guarda Tutorial</a>' 
           : '';
 
         let badgeVoto = '';
@@ -258,7 +244,7 @@
               '<h3 class="text-lg font-bold text-slate-800 leading-snug">' + g.titolo + '</h3>' +
               tutorialBtn +
               '<div class="grid grid-cols-2 gap-2 text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">' +
-                '<span><i class="fa-solid fa-users mr-1"></i>' + g.persone + ' giog.</span>' +
+                '<span><i class="fa-solid fa-users mr-1"></i>' + g.persone + '</span>' +
                 '<span><i class="fa-solid fa-clock mr-1"></i>' + g.tempo + '</span>' +
                 infoEta +
                 infoDiff +
