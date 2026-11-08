@@ -58,7 +58,7 @@
           </button>
         </div>
 
-        <!-- GRIGLIA OPZIONI FILTRO (COLLASSABILE SU MOBILE SE SI SCORRE) -->
+        <!-- GRIGLIA OPZIONI FILTRO -->
         <div id="filterOptionsContainer" class="space-y-3">
           
           <!-- RIGA 1 FILTRI -->
@@ -436,7 +436,7 @@
           let persone = getFormattedVal(3);         // Colonna D: Persone
           let topPersone = getFormattedVal(4);      // Colonna E: Top Persone
           let tempo = getFormattedVal(5) || '-';    // Colonna F: Tempo
-          let difficolta = getFormattedVal(6);     // Colonna G: Difficoltà
+          let difficolta = getFormattedVal(6) || '-'; // Colonna G: Difficoltà
           let tipo = getFormattedVal(7) || 'Generico'; // Colonna H: Tipo
           let tutorial = ottieniLinkTutorial(c[8], titolo); // Colonna I: Tutorial
           let eta = getFormattedVal(9);            // Colonna J: Età
@@ -531,11 +531,12 @@
               '<h3 class="text-xs md:text-base font-bold text-slate-800 leading-tight group-hover:text-orange-600 transition-colors truncate md:whitespace-normal">' + g.titolo + badgeVotoMobile + '</h3>' +
             '</div>' +
             '<div class="flex items-center justify-between text-[10px] md:text-xs text-slate-500 pt-1 md:pt-3 border-t border-slate-100 md:mt-3">' +
-              '<div class="flex items-center gap-2.5">' +
-                '<span><i class="fa-solid fa-users mr-1 text-slate-400"></i>' + g.persone + '</span>' +
-                '<span><i class="fa-solid fa-clock mr-1 text-slate-400"></i>' + g.tempo + '</span>' +
+              '<div class="flex items-center gap-1.5 md:gap-2.5 truncate pr-1">' +
+                '<span class="shrink-0" title="Giocatori"><i class="fa-solid fa-users mr-0.5 text-slate-400"></i>' + g.persone + '</span>' +
+                '<span class="shrink-0" title="Durata"><i class="fa-solid fa-clock mr-0.5 text-slate-400"></i>' + g.tempo + '</span>' +
+                '<span class="truncate" title="Difficoltà"><i class="fa-solid fa-brain mr-0.5 text-slate-400"></i>' + g.difficolta + '</span>' +
               '</div>' +
-              '<span class="text-[10px] md:text-xs font-bold text-orange-600 group-hover:underline flex items-center">Dettagli <i class="fa-solid fa-chevron-right text-[8px] md:text-xs ml-0.5"></i></span>' +
+              '<span class="text-[10px] md:text-xs font-bold text-orange-600 group-hover:underline flex items-center shrink-0">Dettagli <i class="fa-solid fa-chevron-right text-[8px] md:text-xs ml-0.5"></i></span>' +
             '</div>' +
           '</div>';
         gridEl.appendChild(card);
