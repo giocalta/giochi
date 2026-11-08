@@ -7,10 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col pb-16 md:pb-0">
+<body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col">
 
   <!-- HEADER CON SFONDO ARANCIONE -->
-  <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-lg sticky top-0 z-40">
+  <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-lg sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
       <div class="cursor-pointer text-center sm:text-left flex items-center gap-2.5" onclick="cambiaSezione('catalogo')">
         <div class="bg-white text-orange-600 p-2 rounded-2xl shadow-md font-black text-xl tracking-wider flex items-center justify-center w-10 h-10">
@@ -42,6 +42,83 @@
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo">
       
+      <!-- BARRA DI RICERCA STICKY IN ALTO -->
+      <div id="stickySearchContainer" class="sticky top-[68px] z-40 bg-amber-50/90 backdrop-blur-md pt-1 pb-4">
+        <div class="bg-white p-2.5 md:p-3 rounded-2xl shadow-md border border-amber-200/80">
+          
+          <!-- RIGA PRINCIPALE: RICERCA + PULSANTE FILTRI + PULSANTE AZZERA -->
+          <div class="flex items-center gap-2">
+            <div class="relative flex-grow">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
+              <input type="text" id="searchInput" placeholder="Cerca un gioco per nome..." 
+                     class="w-full pl-8 md:pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
+            </div>
+
+            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-amber-100/80 hover:bg-amber-200/80 text-slate-800 font-bold text-xs md:text-sm px-3 md:px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 shrink-0 border border-amber-300/50">
+              <i class="fa-solid fa-sliders text-orange-600"></i>
+              <span class="hidden sm:inline">Filtri</span>
+              <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
+              <i id="filterToggleIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-500 transition-transform duration-300"></i>
+            </button>
+
+            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-white hover:bg-orange-50 text-orange-600 border border-slate-300 font-semibold text-xs md:text-sm px-3 py-2 rounded-xl transition-colors flex items-center gap-1 shrink-0">
+              <i class="fa-solid fa-rotate-left text-xs"></i>
+              <span class="hidden md:inline">Azzera</span>
+            </button>
+          </div>
+
+          <!-- PANNELLO A TENDINA OPZIONALI (SCOMPARE/RIAPPARE AL CLICK) -->
+          <div id="filterOptionsContainer" class="hidden pt-3 mt-2 border-t border-slate-100 space-y-2.5">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div>
+                <select id="categoryFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
+                  <option value="">Tutti i Tipi</option>
+                </select>
+              </div>
+
+              <div>
+                <select id="statusFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
+                  <option value="">Tutti gli Stati</option>
+                  <option value="disponibile">Solo Disponibili</option>
+                  <option value="noleggiato">Solo Noleggiati</option>
+                </select>
+              </div>
+
+              <div>
+                <select id="difficultyFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
+                  <option value="">🧠 Difficoltà (Tutte)</option>
+                  <option value="semplice">Semplice</option>
+                  <option value="media">Media</option>
+                  <option value="elevata">Elevata</option>
+                </select>
+              </div>
+
+              <div>
+                <select id="timeFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
+                  <option value="">⏱️ Durata (Tutte)</option>
+                  <option value="15">Max 15 min</option>
+                  <option value="30">Max 30 min</option>
+                  <option value="60">Max 1 ora</option>
+                  <option value="90">Max 1,5 ore</option>
+                  <option value="120+">Più di 2 ore</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[11px] text-slate-400 font-medium">Ordina risultati per:</span>
+              <select id="sortOrder" class="py-1 px-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white font-semibold text-orange-700">
+                <option value="recenti">✨ Ultimi inseriti</option>
+                <option value="az">🔤 Ordine A-Z</option>
+                <option value="za">🔤 Ordine Z-A</option>
+                <option value="voto">⭐ Voto più alto</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <div id="loading" class="text-center py-10">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-amber-200 border-t-orange-600 mb-2"></div>
         <p class="text-slate-500 text-xs md:text-sm">Caricamento catalogo GIOCALTA...</p>
@@ -156,103 +233,6 @@
 
   </main>
 
-  <!-- LINGUETTA FISSA IN BASSO (PULSANTE FLOTTRANTE) -->
-  <div id="floatingFilterBar" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2">
-    <button onclick="toggleFiltri()" class="bg-gradient-to-r from-orange-600 to-amber-600 text-white font-extrabold text-xs md:text-sm px-5 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 border-2 border-white/40 backdrop-blur-sm">
-      <i class="fa-solid fa-sliders"></i>
-      <span>Filtri & Ricerca</span>
-      <span id="activeFiltersBadge" class="hidden bg-white text-orange-600 text-[10px] px-2 py-0.5 rounded-full font-black">Attivi</span>
-      <i id="filterToggleIcon" class="fa-solid fa-chevron-up text-xs transition-transform duration-300 ml-1"></i>
-    </button>
-
-    <button onclick="azzeraFiltri()" title="Azzera Filtri" class="bg-white hover:bg-orange-50 text-orange-600 w-9 h-9 rounded-full shadow-lg flex items-center justify-center transition-all border border-amber-200">
-      <i class="fa-solid fa-rotate-left text-xs"></i>
-    </button>
-  </div>
-
-  <!-- PANNELLO FILTRI A SCOMPARSA DAL BASSO -->
-  <div id="filterOverlay" onclick="toggleFiltri()" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 transition-opacity">
-    <div onclick="event.stopPropagation();" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl p-4 md:p-6 max-w-4xl mx-auto border-t border-amber-200 max-h-[85vh] overflow-y-auto">
-      
-      <!-- INTESTAZIONE PANNELLO -->
-      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-orange-600"></i>
-          <h3 class="font-extrabold text-slate-800 text-sm md:text-base">Filtra i giochi</h3>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="azzeraFiltri()" class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1 rounded-xl transition-colors flex items-center gap-1">
-            <i class="fa-solid fa-rotate-left text-[10px]"></i> Azzera
-          </button>
-          <button onclick="toggleFiltri()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- OPZIONI DI RICERCA -->
-      <div class="space-y-3">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div class="relative">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-            <input type="text" id="searchInput" placeholder="Cerca un gioco per nome..." 
-                   class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
-          </div>
-
-          <div>
-            <select id="categoryFilter" class="w-full py-2 px-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white">
-              <option value="">Tutti i Tipi / Categorie</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-          <div>
-            <select id="statusFilter" class="w-full py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white">
-              <option value="">Tutti gli Stati</option>
-              <option value="disponibile">Solo Disponibili</option>
-              <option value="noleggiato">Solo Noleggiati</option>
-            </select>
-          </div>
-
-          <div>
-            <select id="difficultyFilter" class="w-full py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white text-slate-700">
-              <option value="">🧠 Tutte le Difficoltà</option>
-              <option value="semplice">Semplice</option>
-              <option value="media">Media</option>
-              <option value="elevata">Elevata</option>
-            </select>
-          </div>
-
-          <div>
-            <select id="timeFilter" class="w-full py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white text-slate-700">
-              <option value="">⏱️ Tutte le Durate</option>
-              <option value="15">Max 15 min</option>
-              <option value="30">Max 30 min</option>
-              <option value="60">Max 1 ora</option>
-              <option value="90">Max 1,5 ore (90 min)</option>
-              <option value="120+">Più di 2 ore (+120 min)</option>
-            </select>
-          </div>
-
-          <div>
-            <select id="sortOrder" class="w-full py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-semibold text-orange-700">
-              <option value="recenti">✨ Ultimi inseriti</option>
-              <option value="az">🔤 Ordine A-Z</option>
-              <option value="za">🔤 Ordine Z-A</option>
-              <option value="voto">⭐ Voto più alto</option>
-            </select>
-          </div>
-        </div>
-
-        <button onclick="toggleFiltri()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs md:text-sm mt-3 transition-colors">
-          Mostra Risultati
-        </button>
-      </div>
-
-    </div>
-  </div>
-
   <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
     <p>© <strong>GIOCALTA</strong> - Noleggio Giochi da Tavolo Caltagirone.</p>
   </footer>
@@ -274,8 +254,6 @@
       document.getElementById('viewContatti').classList.add('hidden');
       document.getElementById('viewGioco').classList.add('hidden');
 
-      const bar = document.getElementById('floatingFilterBar');
-
       ['catalogo', 'info', 'contatti'].forEach(s => {
         const btn = document.getElementById('nav-' + s);
         btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
@@ -286,18 +264,15 @@
         document.getElementById('viewCatalogo').classList.remove('hidden');
         document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-catalogo').classList.remove('text-amber-100');
-        if (bar) bar.classList.remove('hidden');
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
         document.getElementById('nav-info').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-info').classList.remove('text-amber-100');
-        if (bar) bar.classList.add('hidden');
         window.scrollTo(0, 0);
       } else if (nomeSezione === 'contatti') {
         document.getElementById('viewContatti').classList.remove('hidden');
         document.getElementById('nav-contatti').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-contatti').classList.remove('text-amber-100');
-        if (bar) bar.classList.add('hidden');
         window.scrollTo(0, 0);
       }
     }
@@ -307,9 +282,6 @@
       document.getElementById('viewInfo').classList.add('hidden');
       document.getElementById('viewContatti').classList.add('hidden');
       document.getElementById('viewCatalogo').classList.remove('hidden');
-
-      const bar = document.getElementById('floatingFilterBar');
-      if (bar) bar.classList.remove('hidden');
 
       ['catalogo', 'info', 'contatti'].forEach(s => {
         const btn = document.getElementById('nav-' + s);
@@ -332,14 +304,14 @@
     });
 
     function toggleFiltri() {
-      const overlay = document.getElementById('filterOverlay');
+      const container = document.getElementById('filterOptionsContainer');
       const icon = document.getElementById('filterToggleIcon');
       
-      if (overlay.classList.contains('hidden')) {
-        overlay.classList.remove('hidden');
+      if (container.classList.contains('hidden')) {
+        container.classList.remove('hidden');
         icon.classList.add('rotate-180');
       } else {
-        overlay.classList.add('hidden');
+        container.classList.add('hidden');
         icon.classList.remove('rotate-180');
       }
     }
@@ -580,9 +552,6 @@
       document.getElementById('viewContatti').classList.add('hidden');
       document.getElementById('viewGioco').classList.remove('hidden');
 
-      const bar = document.getElementById('floatingFilterBar');
-      if (bar) bar.classList.add('hidden');
-
       const container = document.getElementById('dettaglioGiocoContainer');
 
       const statusBadge = gioco.disponibile 
@@ -656,7 +625,7 @@
 
     function popolaFiltroCategorie() {
       const select = document.getElementById('categoryFilter');
-      select.innerHTML = '<option value="">Tutti i Tipi / Categorie</option>';
+      select.innerHTML = '<option value="">Tutti i Tipi</option>';
       const catSet = {};
       giochiData.forEach(function(g) {
         if (g.tipo) catSet[g.tipo] = true;
@@ -677,7 +646,7 @@
       const diffQuery = document.getElementById('difficultyFilter').value.toLowerCase();
       const timeQuery = document.getElementById('timeFilter').value;
 
-      const hasActiveFilters = textQuery !== '' || catQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
+      const hasActiveFilters = catQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
       const badge = document.getElementById('activeFiltersBadge');
       if (hasActiveFilters) {
         badge.classList.remove('hidden');
