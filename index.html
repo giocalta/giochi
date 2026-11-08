@@ -42,8 +42,9 @@
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo">
       <div class="bg-white p-3 md:p-6 rounded-2xl shadow-sm border border-amber-200/60 mb-6 space-y-3">
+        
+        <!-- RIGA 1 FILTRI -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
-          
           <div class="relative col-span-2 md:col-span-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
             <input type="text" id="searchInput" placeholder="Cerca un gioco..." 
@@ -72,8 +73,31 @@
               <option value="voto">⭐ Voto più alto</option>
             </select>
           </div>
-
         </div>
+
+        <!-- RIGA 2 FILTRI (DIFFICOLTÀ E TEMPO) -->
+        <div class="grid grid-cols-2 md:grid-cols-2 gap-2.5 md:gap-4 pt-1">
+          <div>
+            <select id="difficultyFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-medium text-slate-700">
+              <option value="">🧠 Tutte le Difficoltà</option>
+              <option value="facile">Facile</option>
+              <option value="media">Media</option>
+              <option value="difficile">Difficile</option>
+            </select>
+          </div>
+
+          <div>
+            <select id="timeFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-medium text-slate-700">
+              <option value="">⏱️ Tutte le Durate</option>
+              <option value="15">Max 15 min</option>
+              <option value="30">Max 30 min</option>
+              <option value="60">Max 1 ora</option>
+              <option value="90">Max 1,5 ore (90 min)</option>
+              <option value="120+">Più di 2 ore (+120 min)</option>
+            </select>
+          </div>
+        </div>
+
       </div>
 
       <div id="loading" class="text-center py-10">
@@ -317,6 +341,29 @@
       return '';
     }
 
+    // Funzione helper per estrarre la durata massima in minuti dal testo del foglio
+    function estraiMinuti(tempoStr) {
+      if (!tempoStr) return 0;
+      let str = tempoStr.toLowerCase();
+      
+      // Se contiene ore (es. "1-2 ore", "1.5 ore", "2 h")
+      if (str.includes('h') || str.includes('ora') || str.includes('ore')) {
+        let matches = str.match(/(\d+[\.,]?\d*)/g);
+        if (matches && matches.length > 0) {
+          let maxVal = Math.max(...matches.map(n => parseFloat(n.replace(',', '.'))));
+          return Math.round(maxVal * 60);
+        }
+      }
+
+      // Estrae il numero massimo di minuti presente nella stringa (es. "30-45" -> 45)
+      let numMatches = str.match(/\d+/g);
+      if (numMatches && numMatches.length > 0) {
+        return Math.max(...numMatches.map(n => parseInt(n, 10)));
+      }
+
+      return 0;
+    }
+
     function processGoogleSheetsData(json) {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
@@ -361,7 +408,6 @@
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
-          // Legge la Colonna M: SI = Disponibile, NO = Noleggiato
           const noleggiatoParole = ['NO', 'NOLEGGIATO', 'OCCUPATO', 'FALSE', '0', 'NON DISPONIBILE'];
           const isDisp = dispStr === '' || !noleggiatoParole.includes(dispStr);
 
@@ -373,6 +419,7 @@
             persone: persone || '-',
             topPersone: topPersone,
             tempo: tempo,
+            tempoMinuti: estraiMinuti(tempo),
             difficolta: difficolta,
             tutorial: tutorial,
             eta: eta,
@@ -405,7 +452,7 @@
       gridEl.innerHTML = '';
 
       if (lista.length === 0) {
-        gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-6 text-xs">Nessun gioco trovato.</p>';
+        gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-6 text-xs">Nessun gioco trovato con questi filtri.</p>';
         return;
       }
 
@@ -556,14 +603,33 @@
       const catQuery = document.getElementById('categoryFilter').value;
       const statusQuery = document.getElementById('statusFilter').value;
       const sortQuery = document.getElementById('sortOrder').value;
+      const diffQuery = document.getElementById('difficultyFilter').value.toLowerCase();
+      const timeQuery = document.getElementById('timeFilter').value;
 
       let filtrati = giochiData.filter(function(g) {
         const matchTitle = g.titolo.toLowerCase().indexOf(textQuery) !== -1;
         const matchCat = catQuery === '' || g.tipo === catQuery;
+        
         let matchStatus = true;
         if (statusQuery === 'disponibile') matchStatus = g.disponibile;
         if (statusQuery === 'noleggiato') matchStatus = !g.disponibile;
-        return matchTitle && matchCat && matchStatus;
+
+        let matchDiff = true;
+        if (diffQuery !== '') {
+          matchDiff = g.difficolta.toLowerCase().indexOf(diffQuery) !== -1;
+        }
+
+        let matchTime = true;
+        if (timeQuery !== '') {
+          if (timeQuery === '120+') {
+            matchTime = g.tempoMinuti > 120;
+          } else {
+            let maxMin = parseInt(timeQuery, 10);
+            matchTime = g.tempoMinuti > 0 && g.tempoMinuti <= maxMin;
+          }
+        }
+
+        return matchTitle && matchCat && matchStatus && matchDiff && matchTime;
       });
 
       if (sortQuery === 'recenti') {
@@ -583,6 +649,8 @@
     document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
     document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
     document.getElementById('sortOrder').addEventListener('change', applicaFiltri);
+    document.getElementById('difficultyFilter').addEventListener('change', applicaFiltri);
+    document.getElementById('timeFilter').addEventListener('change', applicaFiltri);
 
     const script = document.createElement('script');
     script.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
