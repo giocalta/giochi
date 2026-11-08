@@ -9,128 +9,133 @@
 </head>
 <body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <!-- HEADER FISSO IN ALTO -->
-  <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-      <div class="cursor-pointer text-center sm:text-left flex items-center gap-2.5" onclick="cambiaSezione('catalogo')">
-        <div class="bg-white text-orange-600 p-2 rounded-2xl shadow-md font-black text-xl tracking-wider flex items-center justify-center w-10 h-10">
-          🎲
+  <!-- UNICO BLOCCO FISSO IN ALTO (HEADER + BARRA RICERCA ANCORATI INSIEME) -->
+  <div class="sticky top-0 z-50 shadow-md">
+    
+    <!-- HEADER BELLO E SPAZIOSO (ORIGINALE) -->
+    <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white border-b border-orange-700/30">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div class="cursor-pointer text-center sm:text-left flex items-center gap-2.5" onclick="cambiaSezione('catalogo')">
+          <div class="bg-white text-orange-600 p-2 rounded-2xl shadow-md font-black text-xl tracking-wider flex items-center justify-center w-10 h-10">
+            🎲
+          </div>
+          <div>
+            <h1 class="text-2xl font-black tracking-wider uppercase">GIOCALTA</h1>
+            <p class="text-amber-100 text-[11px] font-medium tracking-wide">Noleggio Giochi da Tavolo • Caltagirone</p>
+          </div>
         </div>
-        <div>
-          <h1 class="text-2xl font-black tracking-wider uppercase">GIOCALTA</h1>
-          <p class="text-amber-100 text-[11px] font-medium tracking-wide">Noleggio Giochi da Tavolo • Caltagirone</p>
+
+        <!-- NAVIGAZIONE PAGINE -->
+        <nav class="flex items-center gap-1 bg-orange-700/60 p-1 rounded-xl text-xs backdrop-blur-sm border border-orange-500/30">
+          <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3 py-1.5 rounded-lg font-bold transition-colors bg-white text-orange-600 shadow-sm">
+            <i class="fa-solid fa-gamepad mr-1"></i> Catalogo
+          </button>
+          <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white">
+            <i class="fa-solid fa-circle-info mr-1"></i> Info Noleggio
+          </button>
+          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white">
+            <i class="fa-solid fa-location-dot mr-1"></i> Sede & Contatti
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- BARRA RICERCA E FILTRI (SALDATA SUBITO SOTTO L'HEADER) -->
+    <div id="stickySearchContainer" class="bg-amber-50/95 backdrop-blur-md py-2 border-b border-amber-200/80">
+      <div class="max-w-6xl mx-auto px-3 md:px-4">
+        <div class="bg-white p-1.5 md:p-2 rounded-xl shadow-sm border border-amber-200/80">
+          
+          <!-- RIGA PRINCIPALE: RICERCA + PULSANTE FILTRI + PULSANTE AZZERA -->
+          <div class="flex items-center gap-1.5 md:gap-2">
+            <div class="relative flex-grow">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
+              <input type="text" id="searchInput" placeholder="Cerca un gioco per nome..." 
+                     class="w-full pl-8 md:pl-9 pr-3 py-1.5 md:py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
+            </div>
+
+            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-amber-100/80 hover:bg-amber-200/80 text-slate-800 font-bold text-xs md:text-sm px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 border border-amber-300/50">
+              <i class="fa-solid fa-sliders text-orange-600"></i>
+              <span class="hidden sm:inline">Filtri</span>
+              <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
+              <i id="filterToggleIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-500 transition-transform duration-300"></i>
+            </button>
+
+            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-white hover:bg-orange-50 text-orange-600 border border-slate-300 font-semibold text-xs md:text-sm px-2.5 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1 shrink-0">
+              <i class="fa-solid fa-rotate-left text-xs"></i>
+              <span class="hidden md:inline">Azzera</span>
+            </button>
+          </div>
+
+          <!-- PANNELLO FILTRI A TENDINA (INCLUSO FILTRO GIOCATORI) -->
+          <div id="filterOptionsContainer" class="hidden pt-2 mt-2 border-t border-slate-100 space-y-2">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+              <div>
+                <select id="playersFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700 font-semibold">
+                  <option value="">👥 N. Giocatori (Tutti)</option>
+                  <option value="1">1 Giocatore (Solo)</option>
+                  <option value="2">2 Giocatori</option>
+                  <option value="3">3 Giocatori</option>
+                  <option value="4">4 Giocatori</option>
+                  <option value="5">5 Giocatori</option>
+                  <option value="6">6 Giocatori</option>
+                  <option value="7">7 Giocatori</option>
+                  <option value="8+">8+ Giocatori (Party)</option>
+                </select>
+              </div>
+
+              <div>
+                <select id="categoryFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
+                  <option value="">Tutti i Tipi</option>
+                </select>
+              </div>
+
+              <div>
+                <select id="statusFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
+                  <option value="">Tutti gli Stati</option>
+                  <option value="disponibile">Solo Disponibili</option>
+                  <option value="noleggiato">Solo Noleggiati</option>
+                </select>
+              </div>
+
+              <div>
+                <select id="difficultyFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
+                  <option value="">🧠 Difficoltà (Tutte)</option>
+                  <option value="semplice">Semplice</option>
+                  <option value="media">Media</option>
+                  <option value="elevata">Elevata</option>
+                </select>
+              </div>
+
+              <div class="col-span-2 md:col-span-1">
+                <select id="timeFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
+                  <option value="">⏱️ Durata (Tutte)</option>
+                  <option value="15">Max 15 min</option>
+                  <option value="30">Max 30 min</option>
+                  <option value="60">Max 1 ora</option>
+                  <option value="90">Max 1,5 ore</option>
+                  <option value="120+">Più di 2 ore</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[11px] text-slate-400 font-medium">Ordina risultati per:</span>
+              <select id="sortOrder" class="py-1 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white font-semibold text-orange-700">
+                <option value="recenti">✨ Ultimi inseriti</option>
+                <option value="az">🔤 Ordine A-Z</option>
+                <option value="za">🔤 Ordine Z-A</option>
+                <option value="voto">⭐ Voto più alto</option>
+              </select>
+            </div>
+          </div>
+
         </div>
       </div>
-
-      <!-- NAVIGAZIONE PAGINE -->
-      <nav class="flex items-center gap-1 bg-orange-700/60 p-1 rounded-xl text-xs backdrop-blur-sm border border-orange-500/30">
-        <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3 py-1.5 rounded-lg font-bold transition-colors bg-white text-orange-600 shadow-sm">
-          <i class="fa-solid fa-gamepad mr-1"></i> Catalogo
-        </button>
-        <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white">
-          <i class="fa-solid fa-circle-info mr-1"></i> Info Noleggio
-        </button>
-        <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white">
-          <i class="fa-solid fa-location-dot mr-1"></i> Sede & Contatti
-        </button>
-      </nav>
     </div>
-  </header>
 
-  <!-- BARRA RICERCA E FILTRI ANCORATA (SUBITO SOTTO L'HEADER SENZA SCOMPARIRE) -->
-  <div id="stickySearchContainer" class="sticky top-[72px] sm:top-[64px] z-40 bg-amber-50/95 backdrop-blur-md py-1.5 shadow-sm border-b border-amber-200/60">
-    <div class="max-w-6xl mx-auto px-3 md:px-4">
-      <div class="bg-white p-1.5 md:p-2 rounded-xl shadow-sm border border-amber-200/80">
-        
-        <!-- RIGA PRINCIPALE: RICERCA + PULSANTE FILTRI + PULSANTE AZZERA -->
-        <div class="flex items-center gap-1.5 md:gap-2">
-          <div class="relative flex-grow">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
-            <input type="text" id="searchInput" placeholder="Cerca un gioco per nome..." 
-                   class="w-full pl-8 md:pl-9 pr-3 py-1.5 md:py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
-          </div>
-
-          <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-amber-100/80 hover:bg-amber-200/80 text-slate-800 font-bold text-xs md:text-sm px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 border border-amber-300/50">
-            <i class="fa-solid fa-sliders text-orange-600"></i>
-            <span class="hidden sm:inline">Filtri</span>
-            <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
-            <i id="filterToggleIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-500 transition-transform duration-300"></i>
-          </button>
-
-          <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-white hover:bg-orange-50 text-orange-600 border border-slate-300 font-semibold text-xs md:text-sm px-2.5 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1 shrink-0">
-            <i class="fa-solid fa-rotate-left text-xs"></i>
-            <span class="hidden md:inline">Azzera</span>
-          </button>
-        </div>
-
-        <!-- PANNELLO FILTRI A TENDINA -->
-        <div id="filterOptionsContainer" class="hidden pt-2 mt-2 border-t border-slate-100 space-y-2">
-          <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-            <div>
-              <select id="playersFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700 font-semibold">
-                <option value="">👥 N. Giocatori (Tutti)</option>
-                <option value="1">1 Giocatore (Solo)</option>
-                <option value="2">2 Giocatori</option>
-                <option value="3">3 Giocatori</option>
-                <option value="4">4 Giocatori</option>
-                <option value="5">5 Giocatori</option>
-                <option value="6">6 Giocatori</option>
-                <option value="7">7 Giocatori</option>
-                <option value="8+">8+ Giocatori (Party)</option>
-              </select>
-            </div>
-
-            <div>
-              <select id="categoryFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
-                <option value="">Tutti i Tipi</option>
-              </select>
-            </div>
-
-            <div>
-              <select id="statusFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
-                <option value="">Tutti gli Stati</option>
-                <option value="disponibile">Solo Disponibili</option>
-                <option value="noleggiato">Solo Noleggiati</option>
-              </select>
-            </div>
-
-            <div>
-              <select id="difficultyFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
-                <option value="">🧠 Difficoltà (Tutte)</option>
-                <option value="semplice">Semplice</option>
-                <option value="media">Media</option>
-                <option value="elevata">Elevata</option>
-              </select>
-            </div>
-
-            <div class="col-span-2 md:col-span-1">
-              <select id="timeFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
-                <option value="">⏱️ Durata (Tutte)</option>
-                <option value="15">Max 15 min</option>
-                <option value="30">Max 30 min</option>
-                <option value="60">Max 1 ora</option>
-                <option value="90">Max 1,5 ore</option>
-                <option value="120+">Più di 2 ore</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between pt-1">
-            <span class="text-[11px] text-slate-400 font-medium">Ordina risultati per:</span>
-            <select id="sortOrder" class="py-1 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white font-semibold text-orange-700">
-              <option value="recenti">✨ Ultimi inseriti</option>
-              <option value="az">🔤 Ordine A-Z</option>
-              <option value="za">🔤 Ordine Z-A</option>
-              <option value="voto">⭐ Voto più alto</option>
-            </select>
-          </div>
-        </div>
-
-      </div>
-    </div>
   </div>
 
-  <main class="max-w-6xl mx-auto px-3 md:px-4 pt-2 pb-6 flex-grow w-full">
+  <main class="max-w-6xl mx-auto px-3 md:px-4 pt-3 pb-6 flex-grow w-full">
     
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo">
