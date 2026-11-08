@@ -41,61 +41,81 @@
     
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo">
-      <div class="bg-white p-3 md:p-6 rounded-2xl shadow-sm border border-amber-200/60 mb-6 space-y-3">
+      
+      <!-- CONTENITORE FILTRI STICKY -->
+      <div id="filterSection" class="bg-white p-3 md:p-5 rounded-2xl shadow-sm border border-amber-200/60 mb-6 transition-all duration-300 sticky top-[68px] z-40">
         
-        <!-- RIGA 1 FILTRI -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
-          <div class="relative col-span-2 md:col-span-1">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
-            <input type="text" id="searchInput" placeholder="Cerca un gioco..." 
-                   class="w-full pl-8 md:pl-9 pr-3 py-1.5 md:py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
-          </div>
+        <!-- INTESTAZIONE FILTRI CON BOTTONE RESETA E ACCORDEON -->
+        <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+          <button onclick="toggleFiltriMobile()" class="flex items-center gap-2 text-xs md:text-sm font-extrabold text-slate-800">
+            <i class="fa-solid fa-sliders text-orange-600"></i> 
+            <span>Filtri & Ricerca</span>
+            <i id="filterToggleIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-400 md:hidden ml-1"></i>
+          </button>
 
-          <div>
-            <select id="categoryFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white">
-              <option value="">Tutti i Tipi</option>
-            </select>
-          </div>
-
-          <div>
-            <select id="statusFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white">
-              <option value="">Tutti gli Stati</option>
-              <option value="disponibile">Solo Disponibili</option>
-              <option value="noleggiato">Solo Noleggiati</option>
-            </select>
-          </div>
-
-          <div class="col-span-2 md:col-span-1">
-            <select id="sortOrder" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-semibold text-orange-700">
-              <option value="recenti">✨ Ultimi inseriti</option>
-              <option value="az">🔤 Ordine A-Z</option>
-              <option value="za">🔤 Ordine Z-A</option>
-              <option value="voto">⭐ Voto più alto</option>
-            </select>
-          </div>
+          <button onclick="azzeraFiltri()" class="text-xs font-semibold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-1 rounded-xl transition-colors flex items-center gap-1">
+            <i class="fa-solid fa-rotate-left text-[10px]"></i> Azzera Filtri
+          </button>
         </div>
 
-        <!-- RIGA 2 FILTRI (DIFFICOLTÀ E TEMPO) -->
-        <div class="grid grid-cols-2 md:grid-cols-2 gap-2.5 md:gap-4 pt-1">
-          <div>
-            <select id="difficultyFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-medium text-slate-700">
-              <option value="">🧠 Tutte le Difficoltà</option>
-              <option value="facile">Facile</option>
-              <option value="media">Media</option>
-              <option value="difficile">Difficile</option>
-            </select>
+        <!-- GRIGLIA OPZIONI FILTRO (COLLASSABILE SU MOBILE SE SI SCORRE) -->
+        <div id="filterOptionsContainer" class="space-y-3">
+          
+          <!-- RIGA 1 FILTRI -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
+            <div class="relative col-span-2 md:col-span-1">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
+              <input type="text" id="searchInput" placeholder="Cerca un gioco..." 
+                     class="w-full pl-8 md:pl-9 pr-3 py-1.5 md:py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
+            </div>
+
+            <div>
+              <select id="categoryFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white">
+                <option value="">Tutti i Tipi</option>
+              </select>
+            </div>
+
+            <div>
+              <select id="statusFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white">
+                <option value="">Tutti gli Stati</option>
+                <option value="disponibile">Solo Disponibili</option>
+                <option value="noleggiato">Solo Noleggiati</option>
+              </select>
+            </div>
+
+            <div class="col-span-2 md:col-span-1">
+              <select id="sortOrder" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-semibold text-orange-700">
+                <option value="recenti">✨ Ultimi inseriti</option>
+                <option value="az">🔤 Ordine A-Z</option>
+                <option value="za">🔤 Ordine Z-A</option>
+                <option value="voto">⭐ Voto più alto</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <select id="timeFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-medium text-slate-700">
-              <option value="">⏱️ Tutte le Durate</option>
-              <option value="15">Max 15 min</option>
-              <option value="30">Max 30 min</option>
-              <option value="60">Max 1 ora</option>
-              <option value="90">Max 1,5 ore (90 min)</option>
-              <option value="120+">Più di 2 ore (+120 min)</option>
-            </select>
+          <!-- RIGA 2 FILTRI (DIFFICOLTÀ E TEMPO) -->
+          <div class="grid grid-cols-2 md:grid-cols-2 gap-2.5 md:gap-4 pt-1">
+            <div>
+              <select id="difficultyFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-medium text-slate-700">
+                <option value="">🧠 Tutte le Difficoltà</option>
+                <option value="semplice">Semplice</option>
+                <option value="media">Media</option>
+                <option value="elevata">Elevata</option>
+              </select>
+            </div>
+
+            <div>
+              <select id="timeFilter" class="w-full py-1.5 md:py-2 px-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm bg-white font-medium text-slate-700">
+                <option value="">⏱️ Tutte le Durate</option>
+                <option value="15">Max 15 min</option>
+                <option value="30">Max 30 min</option>
+                <option value="60">Max 1 ora</option>
+                <option value="90">Max 1,5 ore (90 min)</option>
+                <option value="120+">Più di 2 ore (+120 min)</option>
+              </select>
+            </div>
           </div>
+
         </div>
 
       </div>
@@ -284,6 +304,28 @@
       }
     });
 
+    function toggleFiltriMobile() {
+      const container = document.getElementById('filterOptionsContainer');
+      const icon = document.getElementById('filterToggleIcon');
+      if (container.classList.contains('hidden')) {
+        container.classList.remove('hidden');
+        if (icon) icon.className = "fa-solid fa-chevron-up text-[10px] text-slate-400 md:hidden ml-1";
+      } else {
+        container.classList.add('hidden');
+        if (icon) icon.className = "fa-solid fa-chevron-down text-[10px] text-slate-400 md:hidden ml-1";
+      }
+    }
+
+    function azzeraFiltri() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('categoryFilter').value = '';
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('sortOrder').value = 'recenti';
+      document.getElementById('difficultyFilter').value = '';
+      document.getElementById('timeFilter').value = '';
+      applicaFiltri();
+    }
+
     function generaSlug(testo) {
       return testo.toLowerCase()
         .replace(/[^\w\s-]/g, '')
@@ -341,12 +383,10 @@
       return '';
     }
 
-    // Funzione helper per estrarre la durata massima in minuti dal testo del foglio
     function estraiMinuti(tempoStr) {
       if (!tempoStr) return 0;
       let str = tempoStr.toLowerCase();
       
-      // Se contiene ore (es. "1-2 ore", "1.5 ore", "2 h")
       if (str.includes('h') || str.includes('ora') || str.includes('ore')) {
         let matches = str.match(/(\d+[\.,]?\d*)/g);
         if (matches && matches.length > 0) {
@@ -355,7 +395,6 @@
         }
       }
 
-      // Estrae il numero massimo di minuti presente nella stringa (es. "30-45" -> 45)
       let numMatches = str.match(/\d+/g);
       if (numMatches && numMatches.length > 0) {
         return Math.max(...numMatches.map(n => parseInt(n, 10)));
@@ -616,7 +655,14 @@
 
         let matchDiff = true;
         if (diffQuery !== '') {
-          matchDiff = g.difficolta.toLowerCase().indexOf(diffQuery) !== -1;
+          let diffStr = g.difficolta.toLowerCase();
+          if (diffQuery === 'semplice') {
+            matchDiff = diffStr.includes('semplice') || diffStr.includes('facile');
+          } else if (diffQuery === 'media') {
+            matchDiff = diffStr.includes('medi');
+          } else if (diffQuery === 'elevata') {
+            matchDiff = diffStr.includes('elevat') || diffStr.includes('difficile') || diffStr.includes('alta');
+          }
         }
 
         let matchTime = true;
