@@ -9,65 +9,77 @@
 </head>
 <body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <!-- BLOCCO FISSO IN ALTO (HEADER + BARRA RICERCA) -->
-  <div class="sticky top-0 z-50 shadow-md">
-    
-    <!-- HEADER ARANCIONE -->
-    <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white border-b border-orange-700/40">
-      <div class="max-w-6xl mx-auto px-3 md:px-4 py-2 flex flex-row justify-between items-center gap-2">
-        <div class="cursor-pointer flex items-center gap-2" onclick="cambiaSezione('catalogo')">
-          <div class="bg-white text-orange-600 p-1 rounded-xl shadow-md font-black text-lg flex items-center justify-center w-8 h-8 shrink-0">
-            🎲
-          </div>
-          <div>
-            <h1 class="text-lg md:text-xl font-black tracking-wider uppercase leading-none">GIOCALTA</h1>
-            <p class="text-amber-100 text-[10px] font-medium tracking-wide leading-tight">Noleggio Giochi da Tavolo • Caltagirone</p>
-          </div>
+  <!-- HEADER ORIGINALE (RIPRISTINATO) -->
+  <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="cursor-pointer text-center sm:text-left flex items-center gap-2.5" onclick="cambiaSezione('catalogo')">
+        <div class="bg-white text-orange-600 p-2 rounded-2xl shadow-md font-black text-xl tracking-wider flex items-center justify-center w-10 h-10">
+          🎲
         </div>
-
-        <!-- NAVIGAZIONE PAGINE -->
-        <nav class="flex items-center gap-1 bg-orange-700/60 p-1 rounded-xl text-xs backdrop-blur-sm border border-orange-500/30 shrink-0">
-          <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-2.5 py-1 rounded-lg font-bold transition-colors bg-white text-orange-600 shadow-sm text-[11px] md:text-xs">
-            <i class="fa-solid fa-gamepad mr-1"></i> Catalogo
-          </button>
-          <button onclick="cambiaSezione('info')" id="nav-info" class="px-2.5 py-1 rounded-lg font-medium transition-colors text-amber-100 hover:text-white text-[11px] md:text-xs">
-            <i class="fa-solid fa-circle-info mr-1"></i> Info
-          </button>
-          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-2.5 py-1 rounded-lg font-medium transition-colors text-amber-100 hover:text-white text-[11px] md:text-xs">
-            <i class="fa-solid fa-location-dot mr-1"></i> Contatti
-          </button>
-        </nav>
+        <div>
+          <h1 class="text-2xl font-black tracking-wider uppercase">GIOCALTA</h1>
+          <p class="text-amber-100 text-[11px] font-medium tracking-wide">Noleggio Giochi da Tavolo • Caltagirone</p>
+        </div>
       </div>
-    </header>
 
-    <!-- BARRA RICERCA E FILTRI (SUBITO SOTTO L'HEADER SENZA SPAZI) -->
-    <div id="stickySearchContainer" class="bg-white py-2 px-3 md:px-4 border-b border-amber-200/80">
-      <div class="max-w-6xl mx-auto">
+      <!-- NAVIGAZIONE PAGINE -->
+      <nav class="flex items-center gap-1 bg-orange-700/60 p-1 rounded-xl text-xs backdrop-blur-sm border border-orange-500/30">
+        <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3 py-1.5 rounded-lg font-bold transition-colors bg-white text-orange-600 shadow-sm">
+          <i class="fa-solid fa-gamepad mr-1"></i> Catalogo
+        </button>
+        <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white">
+          <i class="fa-solid fa-circle-info mr-1"></i> Info Noleggio
+        </button>
+        <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white">
+          <i class="fa-solid fa-location-dot mr-1"></i> Sede & Contatti
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- BARRA RICERCA E FILTRI ANCORATA (STICKY SUBITO SOTTO L'HEADER) -->
+  <div id="stickySearchContainer" class="sticky top-[68px] sm:top-[64px] z-40 bg-amber-50/95 backdrop-blur-md py-1.5 shadow-sm border-b border-amber-200/60">
+    <div class="max-w-6xl mx-auto px-3 md:px-4">
+      <div class="bg-white p-1.5 md:p-2 rounded-xl shadow-sm border border-amber-200/80">
         
-        <!-- RIGA PRINCIPALE: RICERCA + FILTRI + AZZERA -->
+        <!-- RIGA PRINCIPALE: RICERCA + PULSANTE FILTRI + PULSANTE AZZERA -->
         <div class="flex items-center gap-1.5 md:gap-2">
           <div class="relative flex-grow">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
             <input type="text" id="searchInput" placeholder="Cerca un gioco per nome..." 
-                   class="w-full pl-8 pr-3 py-1.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
+                   class="w-full pl-8 md:pl-9 pr-3 py-1.5 md:py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
           </div>
 
-          <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-amber-100/80 hover:bg-amber-200/80 text-slate-800 font-bold text-xs px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 border border-amber-300/50">
+          <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-amber-100/80 hover:bg-amber-200/80 text-slate-800 font-bold text-xs md:text-sm px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 border border-amber-300/50">
             <i class="fa-solid fa-sliders text-orange-600"></i>
             <span class="hidden sm:inline">Filtri</span>
             <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
             <i id="filterToggleIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-500 transition-transform duration-300"></i>
           </button>
 
-          <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-white hover:bg-orange-50 text-orange-600 border border-slate-300 font-semibold text-xs px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 shrink-0">
+          <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-white hover:bg-orange-50 text-orange-600 border border-slate-300 font-semibold text-xs md:text-sm px-2.5 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1 shrink-0">
             <i class="fa-solid fa-rotate-left text-xs"></i>
             <span class="hidden md:inline">Azzera</span>
           </button>
         </div>
 
-        <!-- PANNELLO A TENDINA OPZIONALE (TENDINA FILTRI) -->
+        <!-- PANNELLO FILTRI A TENDINA (INCLUSO NUOVO FILTRO GIOCATORI) -->
         <div id="filterOptionsContainer" class="hidden pt-2 mt-2 border-t border-slate-100 space-y-2">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+            <div>
+              <select id="playersFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700 font-semibold">
+                <option value="">👥 N. Giocatori (Tutti)</option>
+                <option value="1">1 Giocatore (Solo)</option>
+                <option value="2">2 Giocatori</option>
+                <option value="3">3 Giocatori</option>
+                <option value="4">4 Giocatori</option>
+                <option value="5">5 Giocatori</option>
+                <option value="6">6 Giocatori</option>
+                <option value="7">7 Giocatori</option>
+                <option value="8+">8+ Giocatori (Party)</option>
+              </select>
+            </div>
+
             <div>
               <select id="categoryFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
                 <option value="">Tutti i Tipi</option>
@@ -91,7 +103,7 @@
               </select>
             </div>
 
-            <div>
+            <div class="col-span-2 md:col-span-1">
               <select id="timeFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
                 <option value="">⏱️ Durata (Tutte)</option>
                 <option value="15">Max 15 min</option>
@@ -116,10 +128,9 @@
 
       </div>
     </div>
-
   </div>
 
-  <main class="max-w-6xl mx-auto px-3 md:px-4 pt-3 pb-6 flex-grow w-full">
+  <main class="max-w-6xl mx-auto px-3 md:px-4 pt-2 pb-6 flex-grow w-full">
     
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo">
@@ -330,6 +341,7 @@
 
     function azzeraFiltri() {
       document.getElementById('searchInput').value = '';
+      document.getElementById('playersFilter').value = '';
       document.getElementById('categoryFilter').value = '';
       document.getElementById('statusFilter').value = '';
       document.getElementById('sortOrder').value = 'recenti';
@@ -413,6 +425,28 @@
       }
 
       return 0;
+    }
+
+    function verificaCompatibilitaGiocatori(personeStr, reqCount) {
+      if (!personeStr || personeStr === '-') return true;
+      let target = parseInt(reqCount, 10);
+      let numbers = personeStr.match(/\d+/g);
+      if (!numbers || numbers.length === 0) return true;
+
+      let nums = numbers.map(n => parseInt(n, 10));
+      let minP = Math.min(...nums);
+      let maxP = Math.max(...nums);
+
+      if (reqCount === '8+') {
+        return maxP >= 8;
+      }
+
+      if (nums.length === 1) {
+        if (personeStr.includes('+')) return target >= minP;
+        return target === minP;
+      }
+
+      return target >= minP && target <= maxP;
     }
 
     function processGoogleSheetsData(json) {
@@ -655,13 +689,14 @@
 
     function applicaFiltri() {
       const textQuery = document.getElementById('searchInput').value.toLowerCase();
+      const playersQuery = document.getElementById('playersFilter').value;
       const catQuery = document.getElementById('categoryFilter').value;
       const statusQuery = document.getElementById('statusFilter').value;
       const sortQuery = document.getElementById('sortOrder').value;
       const diffQuery = document.getElementById('difficultyFilter').value.toLowerCase();
       const timeQuery = document.getElementById('timeFilter').value;
 
-      const hasActiveFilters = catQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
+      const hasActiveFilters = playersQuery !== '' || catQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
       const badge = document.getElementById('activeFiltersBadge');
       if (hasActiveFilters) {
         badge.classList.remove('hidden');
@@ -671,6 +706,7 @@
 
       let filtrati = giochiData.filter(function(g) {
         const matchTitle = g.titolo.toLowerCase().indexOf(textQuery) !== -1;
+        const matchPlayers = playersQuery === '' || verificaCompatibilitaGiocatori(g.persone, playersQuery);
         const matchCat = catQuery === '' || g.tipo === catQuery;
         
         let matchStatus = true;
@@ -699,7 +735,7 @@
           }
         }
 
-        return matchTitle && matchCat && matchStatus && matchDiff && matchTime;
+        return matchTitle && matchPlayers && matchCat && matchStatus && matchDiff && matchTime;
       });
 
       if (sortQuery === 'recenti') {
@@ -716,6 +752,7 @@
     }
 
     document.getElementById('searchInput').addEventListener('input', applicaFiltri);
+    document.getElementById('playersFilter').addEventListener('change', applicaFiltri);
     document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
     document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
     document.getElementById('sortOrder').addEventListener('change', applicaFiltri);
