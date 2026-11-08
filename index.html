@@ -251,7 +251,6 @@
       window.scrollTo(0, savedScrollPosition);
     }
 
-    // Gestione della pressione del tasto "Indietro" fisicamente sul telefono/browser
     window.addEventListener('popstate', function(e) {
       const hash = window.location.hash.replace('#', '');
       if (hash && giochiData.some(g => g.id === hash)) {
@@ -344,24 +343,27 @@
             return pulisciValore(val);
           }
 
-          let idFisso = parseInt(getFormattedVal(0), 10) || 0; 
-          let rawFoto = (c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : ''; 
+          let idFisso = parseInt(getFormattedVal(0), 10) || 0;     // Colonna A: ID
+          let rawFoto = (c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : ''; // Colonna B: Immagine
           let foto = pulisciUrlFoto(rawFoto);
-          let titolo = getFormattedVal(2);          
-          let persone = getFormattedVal(3);         
-          let tempo = getFormattedVal(4) || '-';    
-          let difficolta = getFormattedVal(5);     
-          let tipo = getFormattedVal(6) || 'Generico'; 
-          let tutorial = ottieniLinkTutorial(c[7], titolo); 
-          let eta = getFormattedVal(8);            
-          let voto = getFormattedVal(9);           
-          let peso = getFormattedVal(10);          
-          let dispStr = getFormattedVal(11).toUpperCase(); 
-          let descrizione = getFormattedVal(12);   
+          let titolo = getFormattedVal(2);          // Colonna C: Titolo
+          let persone = getFormattedVal(3);         // Colonna D: Persone
+          let topPersone = getFormattedVal(4);      // Colonna E: Top Persone
+          let tempo = getFormattedVal(5) || '-';    // Colonna F: Tempo
+          let difficolta = getFormattedVal(6);     // Colonna G: Difficoltà
+          let tipo = getFormattedVal(7) || 'Generico'; // Colonna H: Tipo
+          let tutorial = ottieniLinkTutorial(c[8], titolo); // Colonna I: Tutorial
+          let eta = getFormattedVal(9);            // Colonna J: Età
+          let voto = getFormattedVal(10);          // Colonna K: Voto
+          let peso = getFormattedVal(11);          // Colonna L: Peso (Complessità)
+          let dispStr = getFormattedVal(12).trim().toUpperCase(); // Colonna M: Disponibilità (SI/NO)
+          let descrizione = getFormattedVal(13);   // Colonna N: Descrizione
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
-          const isDisp = dispStr === '' || ['SI', 'SÌ', 'TRUE', 'DISPONIBILE', 'OK', '1'].indexOf(dispStr) !== -1;
+          // Legge la Colonna M: SI = Disponibile, NO = Noleggiato
+          const noleggiatoParole = ['NO', 'NOLEGGIATO', 'OCCUPATO', 'FALSE', '0', 'NON DISPONIBILE'];
+          const isDisp = dispStr === '' || !noleggiatoParole.includes(dispStr);
 
           giochiData.push({
             id: generaSlug(titolo),
@@ -369,6 +371,7 @@
             titolo: titolo,
             tipo: tipo,
             persone: persone || '-',
+            topPersone: topPersone,
             tempo: tempo,
             difficolta: difficolta,
             tutorial: tutorial,
@@ -479,9 +482,11 @@
         ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors"><i class="fa-brands fa-youtube text-lg text-red-600"></i> Guarda Tutorial Su YouTube</a>'
         : '';
 
+      let infoTopPersone = gioco.topPersone ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Giocatori Ideali</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-user-check text-orange-600 mr-1"></i>' + gioco.topPersone + '</span></div>' : '';
       let infoEta = gioco.eta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Età cons.</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-child text-orange-600 mr-1"></i>' + gioco.eta + '+ anni</span></div>' : '';
       let infoDiff = gioco.difficolta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Difficoltà</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-brain text-orange-600 mr-1"></i>' + gioco.difficolta + '</span></div>' : '';
       let infoVoto = gioco.voto ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Voto</span><span class="font-bold text-slate-800 text-xs md:text-sm">⭐ ' + gioco.voto + ' / 10</span></div>' : '';
+      let infoPeso = gioco.peso ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Peso (Complessità)</span><span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-scale-balanced text-orange-600 mr-1"></i>' + gioco.peso + '</span></div>' : '';
 
       container.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
@@ -505,9 +510,11 @@
                   <span class="text-[10px] text-slate-400 block mb-0.5">Durata</span>
                   <span class="font-bold text-slate-800 text-xs md:text-sm"><i class="fa-solid fa-clock text-orange-600 mr-1"></i>${gioco.tempo}</span>
                 </div>
+                ${infoTopPersone}
                 ${infoEta}
                 ${infoDiff}
                 ${infoVoto}
+                ${infoPeso}
               </div>
 
               <div class="border-t border-slate-100 pt-4 space-y-2">
