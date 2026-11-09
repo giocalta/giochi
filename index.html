@@ -82,7 +82,7 @@
 
           </div>
 
-          <!-- PANNELLO FILTRI A TENDINA (GIOCATORI, TIPO, STATO, DIFFICOLTÀ, TEMPO) -->
+          <!-- PANNELLO FILTRI A TENDINA -->
           <div id="filterOptionsContainer" class="hidden pt-2 mt-2 border-t border-slate-100 space-y-2">
             <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
               <div>
@@ -158,7 +158,7 @@
       <div id="gamesGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-6 mb-12"></div>
     </div>
 
-    <!-- SEZIONE 2: INFO & COME FUNZIONA -->
+    <!-- SEZIONE 2: INFO -->
     <div id="viewInfo" class="hidden space-y-6">
       <div class="bg-white rounded-3xl p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
         <div>
@@ -196,7 +196,7 @@
       </div>
     </div>
 
-    <!-- SEZIONE 3: CONTATTI E SEDE -->
+    <!-- SEZIONE 3: CONTATTI -->
     <div id="viewContatti" class="hidden space-y-6">
       <div class="bg-white rounded-3xl p-6 md:p-10 border border-amber-200/60 shadow-sm">
         <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Contatti & Sede 📍</h2>
@@ -250,7 +250,7 @@
 
     <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
     <div id="viewGioco" class="hidden">
-      <button onclick="history.back()" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm">
+      <button onclick="tornaAlCatalogo()" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
         <i class="fa-solid fa-arrow-left"></i> Torna a tutti i giochi
       </button>
 
@@ -264,10 +264,6 @@
   </footer>
 
   <script>
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
-    }
-
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
 
@@ -325,17 +321,9 @@
       document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
       document.getElementById('nav-catalogo').classList.remove('text-amber-100');
 
+      // Riporta l'utente esattamente dove stava prima di cliccare sul gioco!
       window.scrollTo(0, savedScrollPosition);
     }
-
-    window.addEventListener('popstate', function(e) {
-      const hash = window.location.hash.replace('#', '');
-      if (hash && giochiData.some(g => g.id === hash)) {
-        mostraDettaglioGioco(hash, false);
-      } else {
-        tornaAlCatalogo();
-      }
-    });
 
     function toggleFiltri() {
       const container = document.getElementById('filterOptionsContainer');
@@ -486,21 +474,21 @@
             return pulisciValore(val);
           }
 
-          let idFisso = parseInt(getFormattedVal(0), 10) || 0;     // Colonna A: ID
-          let rawFoto = (c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : ''; // Colonna B: Immagine
+          let idFisso = parseInt(getFormattedVal(0), 10) || 0;
+          let rawFoto = (c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : '';
           let foto = pulisciUrlFoto(rawFoto);
-          let titolo = getFormattedVal(2);          // Colonna C: Titolo
-          let persone = getFormattedVal(3);         // Colonna D: Persone
-          let topPersone = getFormattedVal(4);      // Colonna E: Top Persone
-          let tempo = getFormattedVal(5) || '-';    // Colonna F: Tempo
-          let difficolta = getFormattedVal(6) || '-'; // Colonna G: Difficoltà
-          let tipo = getFormattedVal(7) || 'Generico'; // Colonna H: Tipo
-          let tutorial = ottieniLinkTutorial(c[8], titolo); // Colonna I: Tutorial
-          let eta = getFormattedVal(9);            // Colonna J: Età
-          let voto = getFormattedVal(10);          // Colonna K: Voto
-          let peso = getFormattedVal(11);          // Colonna L: Peso (Complessità)
-          let dispStr = getFormattedVal(12).trim().toUpperCase(); // Colonna M: Disponibilità (SI/NO)
-          let descrizione = getFormattedVal(13);   // Colonna N: Descrizione
+          let titolo = getFormattedVal(2);
+          let persone = getFormattedVal(3);
+          let topPersone = getFormattedVal(4);
+          let tempo = getFormattedVal(5) || '-';
+          let difficolta = getFormattedVal(6) || '-';
+          let tipo = getFormattedVal(7) || 'Generico';
+          let tutorial = ottieniLinkTutorial(c[8], titolo);
+          let eta = getFormattedVal(9);
+          let voto = getFormattedVal(10);
+          let peso = getFormattedVal(11);
+          let dispStr = getFormattedVal(12).trim().toUpperCase();
+          let descrizione = getFormattedVal(13);
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
@@ -530,11 +518,6 @@
         loadingEl.classList.add('hidden');
         popolaFiltroCategorie();
         applicaFiltri();
-
-        const hash = window.location.hash.replace('#', '');
-        if (hash && giochiData.some(g => g.id === hash)) {
-          mostraDettaglioGioco(hash, false);
-        }
 
       } catch (err) {
         console.error(err);
@@ -567,9 +550,9 @@
         const card = document.createElement('div');
         card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0";
         card.onclick = function() { 
+          // Salva esattamente a che punto della pagina si trova l'utente PRIMA di aprire il gioco
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-          history.pushState({ giocoId: g.id }, '', '#' + g.id);
-          mostraDettaglioGioco(g.id, true); 
+          mostraDettaglioGioco(g.id); 
         };
         
         card.innerHTML = 
@@ -600,7 +583,7 @@
       });
     }
 
-    function mostraDettaglioGioco(idGioco, scrollUp) {
+    function mostraDettaglioGioco(idGioco) {
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) return;
 
@@ -638,7 +621,7 @@
       container.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
           <div class="md:col-span-5 bg-slate-100 relative min-h-[250px] md:min-h-[400px]">
-            <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
+            <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w500&q=80'">
           </div>
           <div class="md:col-span-7 p-5 md:p-8 flex flex-col justify-between space-y-5">
             <div>
@@ -678,9 +661,8 @@
         </div>
       `;
       
-      if (scrollUp) {
-        window.scrollTo(0, 0);
-      }
+      // Quando apriamo il dettaglio, scrolliamo in cima alla pagina del gioco
+      window.scrollTo(0, 0);
     }
 
     function popolaFiltroCategorie() {
