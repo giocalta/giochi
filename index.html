@@ -30,7 +30,7 @@
             <span>🎲</span> Catalogo
           </button>
           <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white flex items-center gap-1.5 relative">
-            <span>❤️</span> Preferiti <span id="prefCounterBadge" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold hidden">0</span>
+            <span>♥</span> Preferiti <span id="prefCounterBadge" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold hidden">0</span>
           </button>
           <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white flex items-center gap-1.5">
             <span>📖</span> Info Noleggio
@@ -70,7 +70,7 @@
 
             <!-- PULSANTE APERTURA FILTRI -->
             <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-amber-100/80 hover:bg-amber-200/80 text-slate-800 font-bold text-xs md:text-sm px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 border border-amber-300/50">
-              <span class="text-orange-600">🎛️</span>
+              <span class="text-orange-600">⚙️</span>
               <span class="hidden sm:inline">Filtri</span>
               <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
               <span id="filterToggleIcon" class="text-[10px] text-slate-500 transition-transform duration-300">▼</span>
@@ -78,7 +78,7 @@
 
             <!-- PULSANTE AZZERA -->
             <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-white hover:bg-orange-50 text-orange-600 border border-slate-300 font-semibold text-xs md:text-sm px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1 shrink-0">
-              <span>🔄</span>
+              <span>↺</span>
               <span class="hidden md:inline">Azzera</span>
             </button>
 
@@ -103,13 +103,13 @@
 
               <div>
                 <select id="categoryFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
-                  <option value="">🧩 Tutti i Tipi</option>
+                  <option value="">🏷️ Tutti i Tipi</option>
                 </select>
               </div>
 
               <div>
                 <select id="statusFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
-                  <option value="">🏷️ Tutti gli Stati</option>
+                  <option value="">📋 Tutti gli Stati</option>
                   <option value="disponibile">Solo Disponibili</option>
                   <option value="noleggiato">Solo Noleggiati</option>
                 </select>
@@ -164,7 +164,7 @@
     <div id="viewPreferiti" class="hidden space-y-4">
       <div class="bg-white p-5 rounded-3xl border border-amber-200/60 shadow-sm flex items-center justify-between">
         <div>
-          <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">I tuoi Giochi Preferiti ❤️</h2>
+          <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">I tuoi Giochi Preferiti ♥</h2>
           <p class="text-xs text-slate-500 mt-0.5">La tua lista personale salvata su questo dispositivo.</p>
         </div>
         <button onclick="cambiaSezione('catalogo')" class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-2 rounded-xl transition-colors">
@@ -308,15 +308,12 @@
       localStorage.setItem('giocalta_preferiti', JSON.stringify(preferitiIds));
       aggiornaContatorePreferiti();
       
-      // Ridisegna la vista corrente se siamo nei preferiti o nel catalogo
       if (!document.getElementById('viewCatalogo').classList.contains('hidden')) {
         applicaFiltri();
       } else if (!document.getElementById('viewPreferiti').classList.contains('hidden')) {
         renderPreferiti();
       } else if (!document.getElementById('viewGioco').classList.contains('hidden')) {
-        // Aggiorna anche il cuoricino nel dettaglio se aperto
-        const giocoCorrente = giochiData.find(g => g.id === idGioco);
-        if (giocoCorrente) mostraDettaglioGioco(idGioco, false);
+        mostraDettaglioGioco(idGioco, false);
       }
     }
 
@@ -619,19 +616,19 @@
 
       lista.forEach(function(g) {
         const isPref = preferitiIds.includes(g.id);
-        const heartIcon = isPref ? '❤️' : '🤍';
+        const heartSymbol = isPref ? '♥' : '♡';
         const heartTitle = isPref ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti';
 
         const statusBadge = g.disponibile 
-          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 py-0.5 md:py-1 rounded-full font-semibold inline-flex items-center gap-1">✅ Disp.</span>'
-          : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 py-0.5 md:py-1 rounded-full font-semibold inline-flex items-center gap-1">⏳ Nol.</span>';
+          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 py-0.5 md:py-1 rounded-full font-semibold shadow-sm">Disponibile</span>'
+          : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 py-0.5 md:py-1 rounded-full font-semibold shadow-sm">Noleggiato</span>';
 
         const tutorialIcon = g.tutorial 
-          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" onclick="event.stopPropagation();" class="absolute top-1 left-1 md:top-2 md:left-2 bg-red-600 text-white w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow z-10 text-xs md:text-sm">▶️</a>' 
+          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" onclick="event.stopPropagation();" class="absolute top-1 left-1 md:top-2 md:left-2 bg-red-600 text-white w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow z-10 text-xs md:text-sm font-bold">▶</a>' 
           : '';
 
-        let badgeVotoMobile = g.voto ? '<span class="text-xs font-bold text-amber-500 ml-1.5 md:hidden">⭐ ' + g.voto + '</span>' : '';
-        let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded font-bold">⭐ ' + g.voto + '</div>' : '';
+        let badgeVotoMobile = g.voto ? '<span class="text-xs font-bold text-amber-500 ml-1.5 md:hidden">★ ' + g.voto + '</span>' : '';
+        let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded font-bold">★ ' + g.voto + '</div>' : '';
 
         const card = document.createElement('div');
         card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0 relative";
@@ -646,22 +643,21 @@
           '<div class="w-24 md:w-full h-full md:h-44 bg-slate-200 overflow-hidden relative rounded-lg md:rounded-none shrink-0">' +
             '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\'">' +
             tutorialIcon +
-            '<button onclick="togglePreferito(\'' + g.id + '\', event)" title="' + heartTitle + '" class="absolute top-1 right-1 md:top-2 md:right-2 bg-white/90 hover:bg-white w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow z-20 text-sm md:text-base transition-transform active:scale-125">' + heartIcon + '</button>' +
-            '<div class="hidden md:block absolute top-3 left-3">' + statusBadge + '</div>' +
+            '<button onclick="togglePreferito(\'' + g.id + '\', event)" title="' + heartTitle + '" class="absolute bottom-1.5 right-1.5 md:bottom-2 md:right-2 bg-white/90 hover:bg-white w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow z-20 text-sm md:text-base font-bold text-rose-500 transition-transform active:scale-125">' + heartSymbol + '</button>' +
+            '<div class="absolute top-1.5 right-1.5 md:top-3 md:right-3 z-10">' + statusBadge + '</div>' +
             badgeVotoDesktop +
           '</div>' +
           '<div class="flex-grow min-w-0 flex flex-col justify-between h-full md:h-auto p-0 md:p-4 py-0.5 md:py-4 pr-1 md:pr-4">' +
             '<div>' +
               '<div class="flex items-center justify-between gap-1 mb-0.5 md:mb-1">' +
-                '<span class="text-[9px] md:text-xs font-bold text-orange-600 uppercase tracking-tight truncate">🧩 ' + g.tipo + '</span>' +
-                '<div class="md:hidden">' + statusBadge + '</div>' +
+                '<span class="text-[9px] md:text-xs font-bold text-orange-600 uppercase tracking-tight truncate">' + g.tipo + '</span>' +
               '</div>' +
               '<h3 class="text-xs md:text-base font-bold text-slate-800 leading-tight group-hover:text-orange-600 transition-colors truncate md:whitespace-normal">' + g.titolo + badgeVotoMobile + '</h3>' +
             '</div>' +
             '<div class="flex items-center justify-between text-[10px] md:text-xs text-slate-500 pt-1 md:pt-3 border-t border-slate-100 md:mt-3">' +
               '<div class="flex items-center gap-1.5 md:gap-2.5 truncate pr-1">' +
                 '<span class="shrink-0" title="Giocatori">👥 ' + g.persone + '</span>' +
-                '<span class="shrink-0" title="Durata">⏱️ ' + g.tempo + '</span>' +
+                '<span class="shrink-0" title="Durata">⏱ ' + g.tempo + '</span>' +
                 '<span class="truncate" title="Difficoltà">🎯 ' + g.difficolta + '</span>' +
               '</div>' +
               '<span class="text-[10px] md:text-xs font-bold text-orange-600 group-hover:underline flex items-center shrink-0">Dettagli ➔</span>' +
@@ -695,10 +691,10 @@
 
       const container = document.getElementById('dettaglioGiocoContainer');
       const isPref = preferitiIds.includes(gioco.id);
-      const heartText = isPref ? '❤️ Rimuovi dai Preferiti' : '🤍 Aggiungi ai Preferiti';
+      const heartText = isPref ? '♥ Rimuovi dai Preferiti' : '♡ Aggiungi ai Preferiti';
 
       const statusBadge = gioco.disponibile 
-        ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5">✅ Disponibile per il noleggio</span>'
+        ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5">✓ Disponibile per il noleggio</span>'
         : '<span class="bg-rose-100 text-rose-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5">⏳ Attualmente noleggiato</span>';
 
       const msgWA = encodeURIComponent('Ciao Giuseppe! Vorrei noleggiare il gioco "' + gioco.titolo + '". È disponibile?');
@@ -709,13 +705,13 @@
         : '<button disabled class="w-full bg-slate-200 text-slate-400 font-bold py-3 px-6 rounded-2xl cursor-not-allowed flex items-center justify-center gap-2 text-sm md:text-base">🚫 Attualmente Noleggiato</button>';
 
       const tutorialBtn = gioco.tutorial
-        ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">▶️ Guarda Tutorial Su YouTube</a>'
+        ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">▶ Guarda Tutorial Su YouTube</a>'
         : '';
 
       let infoTopPersone = gioco.topPersone ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Giocatori Ideali</span><span class="font-bold text-slate-800 text-xs md:text-sm">👥 ' + gioco.topPersone + '</span></div>' : '';
       let infoEta = gioco.eta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Età cons.</span><span class="font-bold text-slate-800 text-xs md:text-sm">👶 ' + gioco.eta + '+ anni</span></div>' : '';
       let infoDiff = gioco.difficolta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Difficoltà</span><span class="font-bold text-slate-800 text-xs md:text-sm">🎯 ' + gioco.difficolta + '</span></div>' : '';
-      let infoVoto = gioco.voto ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Voto</span><span class="font-bold text-slate-800 text-xs md:text-sm">⭐ ' + gioco.voto + ' / 10</span></div>' : '';
+      let infoVoto = gioco.voto ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Voto</span><span class="font-bold text-slate-800 text-xs md:text-sm">★ ' + gioco.voto + ' / 10</span></div>' : '';
       let infoPeso = gioco.peso ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Peso (Complessità)</span><span class="font-bold text-slate-800 text-xs md:text-sm">⚖️ ' + gioco.peso + '</span></div>' : '';
 
       container.innerHTML = `
@@ -726,7 +722,7 @@
           <div class="md:col-span-7 p-5 md:p-8 flex flex-col justify-between space-y-5">
             <div>
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3 py-1 rounded-lg">🧩 ${gioco.tipo}</span>
+                <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3 py-1 rounded-lg">${gioco.tipo}</span>
                 <div class="flex items-center gap-2">
                   <button onclick="togglePreferito('${gioco.id}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full transition-colors">
                     ${heartText}
@@ -743,7 +739,7 @@
                 </div>
                 <div class="bg-amber-50/60 p-2.5 rounded-xl">
                   <span class="text-[10px] text-slate-400 block mb-0.5">Durata</span>
-                  <span class="font-bold text-slate-800 text-xs md:text-sm">⏱️ ${gioco.tempo}</span>
+                  <span class="font-bold text-slate-800 text-xs md:text-sm">⏱ ${gioco.tempo}</span>
                 </div>
                 ${infoTopPersone}
                 ${infoEta}
@@ -753,7 +749,7 @@
               </div>
 
               <div class="border-t border-slate-100 pt-4 space-y-2">
-                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">📜 Descrizione</h3>
+                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Descrizione</h3>
                 <p class="text-slate-600 text-xs md:text-sm leading-relaxed whitespace-pre-line">${gioco.descrizione}</p>
               </div>
             </div>
@@ -773,7 +769,7 @@
 
     function popolaFiltroCategorie() {
       const select = document.getElementById('categoryFilter');
-      select.innerHTML = '<option value="">🧩 Tutti i Tipi</option>';
+      select.innerHTML = '<option value="">🏷️ Tutti i Tipi</option>';
       const catSet = {};
       
       giochiData.forEach(function(g) {
@@ -793,7 +789,7 @@
       categorieOrdinate.forEach(function(cat) {
         const opt = document.createElement('option');
         opt.value = cat.toLowerCase();
-        opt.textContent = '🧩 ' + cat;
+        opt.textContent = cat;
         select.appendChild(opt);
       });
     }
@@ -801,7 +797,7 @@
     function applicaFiltri() {
       const textQuery = document.getElementById('searchInput').value.toLowerCase();
       const playersQuery = document.getElementById('playersFilter').value;
-      const catQuery = document.getElementById('categoryFilter').value.toLowerCase().replace('🧩 ', '');
+      const catQuery = document.getElementById('categoryFilter').value.toLowerCase();
       const statusQuery = document.getElementById('statusFilter').value;
       const sortQuery = document.getElementById('sortOrder').value;
       const diffQuery = document.getElementById('difficultyFilter').value.toLowerCase();
@@ -856,7 +852,7 @@
       } else if (sortQuery === 'az') {
         filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo));
       } else if (sortQuery === 'za') {
-        filtrati.sort((a, b) => b.titolo.localeCompare(b.titolo));
+        filtrati.sort((a, b) => b.titolo.localeCompare(a.titolo));
       } else if (sortQuery === 'voto') {
         filtrati.sort((a, b) => (parseFloat(b.voto) || 0) - (parseFloat(a.voto) || 0));
       }
