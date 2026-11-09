@@ -25,9 +25,12 @@
         </div>
 
         <!-- NAVIGAZIONE PAGINE -->
-        <nav class="flex items-center gap-1 bg-orange-700/60 p-1 rounded-xl text-xs backdrop-blur-sm border border-orange-500/30">
+        <nav class="flex items-center gap-1 bg-orange-700/60 p-1 rounded-xl text-xs backdrop-blur-sm border border-orange-500/30 flex-wrap justify-center">
           <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3 py-1.5 rounded-lg font-bold transition-colors bg-white text-orange-600 shadow-sm flex items-center gap-1.5">
             <span>🎲</span> Catalogo
+          </button>
+          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white flex items-center gap-1.5 relative">
+            <span>❤️</span> Preferiti <span id="prefCounterBadge" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold hidden">0</span>
           </button>
           <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white flex items-center gap-1.5">
             <span>📖</span> Info Noleggio
@@ -157,6 +160,20 @@
       <div id="gamesGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-6 mb-12"></div>
     </div>
 
+    <!-- SEZIONE 1.5: PREFERITI -->
+    <div id="viewPreferiti" class="hidden space-y-4">
+      <div class="bg-white p-5 rounded-3xl border border-amber-200/60 shadow-sm flex items-center justify-between">
+        <div>
+          <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">I tuoi Giochi Preferiti ❤️</h2>
+          <p class="text-xs text-slate-500 mt-0.5">La tua lista personale salvata su questo dispositivo.</p>
+        </div>
+        <button onclick="cambiaSezione('catalogo')" class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-2 rounded-xl transition-colors">
+          + Aggiungi altri giochi
+        </button>
+      </div>
+      <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-6 mb-12"></div>
+    </div>
+
     <!-- SEZIONE 2: INFO -->
     <div id="viewInfo" class="hidden space-y-6">
       <div class="bg-white rounded-3xl p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
@@ -250,7 +267,7 @@
     <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
     <div id="viewGioco" class="hidden">
       <button onclick="tornaAlCatalogo(true)" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
-        ⬅️ Torna a tutti i giochi
+        ⬅️ Torna indietro
       </button>
 
       <div id="dettaglioGiocoContainer" class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden"></div>
@@ -268,19 +285,56 @@
 
     let giochiData = [];
     let savedScrollPosition = 0;
+    let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
+
+    function aggiornaContatorePreferiti() {
+      const badge = document.getElementById('prefCounterBadge');
+      if (preferitiIds.length > 0) {
+        badge.textContent = preferitiIds.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function togglePreferito(idGioco, event) {
+      if (event) event.stopPropagation();
+      const index = preferitiIds.indexOf(idGioco);
+      if (index > -1) {
+        preferitiIds.splice(index, 1);
+      } else {
+        preferitiIds.push(idGioco);
+      }
+      localStorage.setItem('giocalta_preferiti', JSON.stringify(preferitiIds));
+      aggiornaContatorePreferiti();
+      
+      // Ridisegna la vista corrente se siamo nei preferiti o nel catalogo
+      if (!document.getElementById('viewCatalogo').classList.contains('hidden')) {
+        applicaFiltri();
+      } else if (!document.getElementById('viewPreferiti').classList.contains('hidden')) {
+        renderPreferiti();
+      } else if (!document.getElementById('viewGioco').classList.contains('hidden')) {
+        // Aggiorna anche il cuoricino nel dettaglio se aperto
+        const giocoCorrente = giochiData.find(g => g.id === idGioco);
+        if (giocoCorrente) mostraDettaglioGioco(idGioco, false);
+      }
+    }
 
     function cambiaSezione(nomeSezione) {
       document.getElementById('viewCatalogo').classList.add('hidden');
+      document.getElementById('viewPreferiti').classList.add('hidden');
       document.getElementById('viewInfo').classList.add('hidden');
       document.getElementById('viewContatti').classList.add('hidden');
       document.getElementById('viewGioco').classList.add('hidden');
 
       const stickyContainer = document.getElementById('stickySearchContainer');
 
-      ['catalogo', 'info', 'contatti'].forEach(s => {
+      ['catalogo', 'preferiti', 'info', 'contatti'].forEach(s => {
         const btn = document.getElementById('nav-' + s);
-        btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
-        btn.classList.add('text-amber-100');
+        if (btn) {
+          btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
+          btn.classList.add('text-amber-100');
+        }
       });
 
       if (nomeSezione === 'catalogo') {
@@ -288,6 +342,13 @@
         document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-catalogo').classList.remove('text-amber-100');
         if (stickyContainer) stickyContainer.classList.remove('hidden');
+      } else if (nomeSezione === 'preferiti') {
+        document.getElementById('viewPreferiti').classList.remove('hidden');
+        document.getElementById('nav-preferiti').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
+        document.getElementById('nav-preferiti').classList.remove('text-amber-100');
+        if (stickyContainer) stickyContainer.classList.add('hidden');
+        renderPreferiti();
+        window.scrollTo(0, 0);
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
         document.getElementById('nav-info').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
@@ -310,6 +371,7 @@
         document.getElementById('viewGioco').classList.add('hidden');
         document.getElementById('viewInfo').classList.add('hidden');
         document.getElementById('viewContatti').classList.add('hidden');
+        document.getElementById('viewPreferiti').classList.add('hidden');
         document.getElementById('viewCatalogo').classList.remove('hidden');
         const stickyContainer = document.getElementById('stickySearchContainer');
         if (stickyContainer) stickyContainer.classList.remove('hidden');
@@ -324,15 +386,18 @@
         document.getElementById('viewGioco').classList.add('hidden');
         document.getElementById('viewInfo').classList.add('hidden');
         document.getElementById('viewContatti').classList.add('hidden');
+        document.getElementById('viewPreferiti').classList.add('hidden');
         document.getElementById('viewCatalogo').classList.remove('hidden');
 
         const stickyContainer = document.getElementById('stickySearchContainer');
         if (stickyContainer) stickyContainer.classList.remove('hidden');
 
-        ['catalogo', 'info', 'contatti'].forEach(s => {
+        ['catalogo', 'preferiti', 'info', 'contatti'].forEach(s => {
           const btn = document.getElementById('nav-' + s);
-          btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
-          btn.classList.add('text-amber-100');
+          if (btn) {
+            btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
+            btn.classList.add('text-amber-100');
+          }
         });
         document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
         document.getElementById('nav-catalogo').classList.remove('text-amber-100');
@@ -532,6 +597,7 @@
         });
 
         loadingEl.classList.add('hidden');
+        aggiornaContatorePreferiti();
         popolaFiltroCategorie();
         applicaFiltri();
 
@@ -542,16 +608,20 @@
       }
     }
 
-    function renderGiochi(lista) {
-      const gridEl = document.getElementById('gamesGrid');
+    function renderGrigliaGiochi(lista, containerId) {
+      const gridEl = document.getElementById(containerId);
       gridEl.innerHTML = '';
 
       if (lista.length === 0) {
-        gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-6 text-xs">Nessun gioco trovato con questi filtri.</p>';
+        gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-10 text-xs">Nessun gioco trovato in questa sezione.</p>';
         return;
       }
 
       lista.forEach(function(g) {
+        const isPref = preferitiIds.includes(g.id);
+        const heartIcon = isPref ? '❤️' : '🤍';
+        const heartTitle = isPref ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti';
+
         const statusBadge = g.disponibile 
           ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 py-0.5 md:py-1 rounded-full font-semibold inline-flex items-center gap-1">✅ Disp.</span>'
           : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 py-0.5 md:py-1 rounded-full font-semibold inline-flex items-center gap-1">⏳ Nol.</span>';
@@ -564,7 +634,8 @@
         let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded font-bold">⭐ ' + g.voto + '</div>' : '';
 
         const card = document.createElement('div');
-        card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0";
+        card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0 relative";
+        
         card.onclick = function() { 
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
           window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
@@ -575,7 +646,8 @@
           '<div class="w-24 md:w-full h-full md:h-44 bg-slate-200 overflow-hidden relative rounded-lg md:rounded-none shrink-0">' +
             '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\'">' +
             tutorialIcon +
-            '<div class="hidden md:block absolute top-3 right-3">' + statusBadge + '</div>' +
+            '<button onclick="togglePreferito(\'' + g.id + '\', event)" title="' + heartTitle + '" class="absolute top-1 right-1 md:top-2 md:right-2 bg-white/90 hover:bg-white w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow z-20 text-sm md:text-base transition-transform active:scale-125">' + heartIcon + '</button>' +
+            '<div class="hidden md:block absolute top-3 left-3">' + statusBadge + '</div>' +
             badgeVotoDesktop +
           '</div>' +
           '<div class="flex-grow min-w-0 flex flex-col justify-between h-full md:h-auto p-0 md:p-4 py-0.5 md:py-4 pr-1 md:pr-4">' +
@@ -599,11 +671,21 @@
       });
     }
 
+    function renderGiochi(lista) {
+      renderGrigliaGiochi(lista, 'gamesGrid');
+    }
+
+    function renderPreferiti() {
+      const listaPreferiti = giochiData.filter(g => preferitiIds.includes(g.id));
+      renderGrigliaGiochi(listaPreferiti, 'preferitiGrid');
+    }
+
     function mostraDettaglioGioco(idGioco, scrollInCima) {
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) return;
 
       document.getElementById('viewCatalogo').classList.add('hidden');
+      document.getElementById('viewPreferiti').classList.add('hidden');
       document.getElementById('viewInfo').classList.add('hidden');
       document.getElementById('viewContatti').classList.add('hidden');
       document.getElementById('viewGioco').classList.remove('hidden');
@@ -612,6 +694,8 @@
       if (stickyContainer) stickyContainer.classList.add('hidden');
 
       const container = document.getElementById('dettaglioGiocoContainer');
+      const isPref = preferitiIds.includes(gioco.id);
+      const heartText = isPref ? '❤️ Rimuovi dai Preferiti' : '🤍 Aggiungi ai Preferiti';
 
       const statusBadge = gioco.disponibile 
         ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5">✅ Disponibile per il noleggio</span>'
@@ -643,7 +727,12 @@
             <div>
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3 py-1 rounded-lg">🧩 ${gioco.tipo}</span>
-                ${statusBadge}
+                <div class="flex items-center gap-2">
+                  <button onclick="togglePreferito('${gioco.id}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full transition-colors">
+                    ${heartText}
+                  </button>
+                  ${statusBadge}
+                </div>
               </div>
               <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4 leading-tight">${gioco.titolo}</h2>
 
@@ -779,7 +868,7 @@
     document.getElementById('playersFilter').addEventListener('change', applicaFiltri);
     document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
     document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
-    document.getElementById('sortOrder').addEventListener('change', applicaFittri || applicaFiltri);
+    document.getElementById('sortOrder').addEventListener('change', applicaFiltri);
     document.getElementById('difficultyFilter').addEventListener('change', applicaFiltri);
     document.getElementById('timeFilter').addEventListener('change', applicaFiltri);
 
