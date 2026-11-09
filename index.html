@@ -250,7 +250,7 @@
 
     <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
     <div id="viewGioco" class="hidden">
-      <button onclick="tornaAlCatalogo()" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
+      <button onclick="tornaAlCatalogo(true)" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
         <i class="fa-solid fa-arrow-left"></i> Torna a tutti i giochi
       </button>
 
@@ -304,25 +304,45 @@
       }
     }
 
-    function tornaAlCatalogo() {
-      document.getElementById('viewGioco').classList.add('hidden');
-      document.getElementById('viewInfo').classList.add('hidden');
-      document.getElementById('viewContatti').classList.add('hidden');
-      document.getElementById('viewCatalogo').classList.remove('hidden');
+    // Gestione del tasto indietro del browser
+    window.addEventListener('popstate', function(e) {
+      // Se lo stato della cronologia indica che eravamo nel dettaglio, chiudilo e torna alla lista
+      if (e.state && e.state.vista === 'dettaglio') {
+        mostraDettaglioGioco(e.state.giocoId, false);
+      } else {
+        // Altrimenti mostra il catalogo pulito nella posizione salvata
+        document.getElementById('viewGioco').classList.add('hidden');
+        document.getElementById('viewInfo').classList.add('hidden');
+        document.getElementById('viewContatti').classList.add('hidden');
+        document.getElementById('viewCatalogo').classList.remove('hidden');
+        const stickyContainer = document.getElementById('stickySearchContainer');
+        if (stickyContainer) stickyContainer.classList.remove('hidden');
+        window.scrollTo(0, savedScrollPosition);
+      }
+    });
 
-      const stickyContainer = document.getElementById('stickySearchContainer');
-      if (stickyContainer) stickyContainer.classList.remove('hidden');
+    function tornaAlCatalogo(usaHistoryBack) {
+      if (usaHistoryBack) {
+        window.history.back();
+      } else {
+        document.getElementById('viewGioco').classList.add('hidden');
+        document.getElementById('viewInfo').classList.add('hidden');
+        document.getElementById('viewContatti').classList.add('hidden');
+        document.getElementById('viewCatalogo').classList.remove('hidden');
 
-      ['catalogo', 'info', 'contatti'].forEach(s => {
-        const btn = document.getElementById('nav-' + s);
-        btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
-        btn.classList.add('text-amber-100');
-      });
-      document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
-      document.getElementById('nav-catalogo').classList.remove('text-amber-100');
+        const stickyContainer = document.getElementById('stickySearchContainer');
+        if (stickyContainer) stickyContainer.classList.remove('hidden');
 
-      // Riporta l'utente esattamente dove stava prima di cliccare sul gioco!
-      window.scrollTo(0, savedScrollPosition);
+        ['catalogo', 'info', 'contatti'].forEach(s => {
+          const btn = document.getElementById('nav-' + s);
+          btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
+          btn.classList.add('text-amber-100');
+        });
+        document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
+        document.getElementById('nav-catalogo').classList.remove('text-amber-100');
+
+        window.scrollTo(0, savedScrollPosition);
+      }
     }
 
     function toggleFiltri() {
@@ -550,9 +570,11 @@
         const card = document.createElement('div');
         card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0";
         card.onclick = function() { 
-          // Salva esattamente a che punto della pagina si trova l'utente PRIMA di aprire il gioco
+          // Salva la posizione dello scroll prima di aprire il gioco
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-          mostraDettaglioGioco(g.id); 
+          // Registra lo stato nella cronologia del browser senza cambiare link
+          window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
+          mostraDettaglioGioco(g.id, true); 
         };
         
         card.innerHTML = 
@@ -583,7 +605,7 @@
       });
     }
 
-    function mostraDettaglioGioco(idGioco) {
+    function mostraDettaglioGioco(idGioco, scrollInCima) {
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) return;
 
@@ -621,7 +643,7 @@
       container.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
           <div class="md:col-span-5 bg-slate-100 relative min-h-[250px] md:min-h-[400px]">
-            <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w500&q=80'">
+            <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
           </div>
           <div class="md:col-span-7 p-5 md:p-8 flex flex-col justify-between space-y-5">
             <div>
@@ -661,8 +683,9 @@
         </div>
       `;
       
-      // Quando apriamo il dettaglio, scrolliamo in cima alla pagina del gioco
-      window.scrollTo(0, 0);
+      if (scrollInCima) {
+        window.scrollTo(0, 0);
+      }
     }
 
     function popolaFiltroCategorie() {
