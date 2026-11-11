@@ -6,7 +6,6 @@
   <title>GIOCALTA - Noleggio Giochi da Tavolo Caltagirone</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Stile personalizzato per richiamare la geometria e la pulizia del logo */
     body {
       letter-spacing: -0.01em;
     }
@@ -595,7 +594,7 @@
             tutorial: tutorial,
             eta: eta,
             voto: voto,
-            peso: peso,
+            peso: peso ? peso + ' / 5' : '',
             disponibile: isDisp,
             descrizione: descrizione || 'Nessuna descrizione dettagliata disponibile al momento.',
             foto: foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'
@@ -629,8 +628,8 @@
         const heartTitle = isPref ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti';
 
         const statusBadge = g.disponibile 
-          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold shadow-sm">Disponibile</span>'
-          : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold shadow-sm">Noleggiato</span>';
+          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 md:px-2.5 py-1 rounded-full font-bold shadow-sm"><span class="md:hidden">Disp.</span><span class="hidden md:inline">Disponibile</span></span>'
+          : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 md:px-2.5 py-1 rounded-full font-bold shadow-sm"><span class="md:hidden">Noleggiato</span><span class="hidden md:inline">Noleggiato</span></span>';
 
         const tutorialIcon = g.tutorial 
           ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 hover:bg-red-700 text-white w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow-md z-10 text-xs md:text-sm font-bold transition-transform hover:scale-110">▶</a>' 
