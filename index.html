@@ -140,15 +140,14 @@
 
   </div>
 
-  <main class="max-w-6xl mx-auto px-3 md:px-4 pt-3 pb-8 flex-grow w-full space-y-6">
+  <main class="max-w-6xl mx-auto px-0 md:px-4 pt-3 pb-8 flex-grow w-full space-y-6">
     
     <!-- SEZIONE 0: HOME / AGENDA & IN VETRINA -->
     <div id="viewHome" class="space-y-6">
       
-      <!-- BANNER DI BENVENUTO CON LOGO SCONTORNATO (SENZA CERCHIO) -->
+      <!-- BANNER DI BENVENUTO CON LOGO SCONTORNATO -->
       <div class="bg-gradient-to-r from-orange-600 to-amber-600 p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="space-y-3 text-center md:text-left z-10 flex flex-col md:flex-row items-center gap-4">
-          <!-- Logo scontornato pulito senza cerchio -->
           <div class="shrink-0">
             <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-12 md:h-16 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
           </div>
@@ -164,9 +163,9 @@
         </div>
       </div>
 
-      <!-- CAROSELLO 1: EVENTI & AGENDA (RIQUADRI SQUADRATI) -->
-      <div class="bg-white p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
-        <div class="flex items-center justify-between">
+      <!-- CAROSELLO 1: EVENTI & AGENDA (SENZA MARGINI ESTERNI, SQUADRATI) -->
+      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
+        <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
             <span class="text-orange-600">
               <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -177,19 +176,19 @@
         </div>
 
         <div class="relative group">
-          <button onclick="scorriCarosello('agendaGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
+          <button onclick="scorriCarosello('agendaGrid', -300)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
           
-          <div id="agendaGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
-            <p class="text-slate-400 text-xs py-4">Caricamento eventi dall'agenda...</p>
+          <div id="agendaGrid" class="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
+            <p class="text-slate-400 text-xs py-4 px-2">Caricamento eventi dall'agenda...</p>
           </div>
 
-          <button onclick="scorriCarosello('agendaGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
+          <button onclick="scorriCarosello('agendaGrid', 300)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
         </div>
       </div>
 
-      <!-- CAROSELLO 2: ULTIMI GIOCHI INSERITI (RIQUADRI SQUADRATI) -->
-      <div class="bg-white p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
-        <div class="flex items-center justify-between">
+      <!-- CAROSELLO 2: ULTIMI GIOCHI INSERITI (SENZA MARGINI ESTERNI, SQUADRATI) -->
+      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
+        <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
             <span class="text-orange-600">
               <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
@@ -202,19 +201,19 @@
         </div>
 
         <div class="relative group">
-          <button onclick="scorriCarosello('homeRecentGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
+          <button onclick="scorriCarosello('homeRecentGrid', -300)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
           
-          <div id="homeRecentGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
+          <div id="homeRecentGrid" class="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
             <!-- Caricati dinamicamente -->
           </div>
 
-          <button onclick="scorriCarosello('homeRecentGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
+          <button onclick="scorriCarosello('homeRecentGrid', 300)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
         </div>
       </div>
 
-      <!-- CAROSELLO 3: GIOCHI PIÙ PREFERITI (RIQUADRI SQUADRATI) -->
-      <div class="bg-white p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
-        <div class="flex items-center justify-between">
+      <!-- CAROSELLO 3: GIOCHI PIÙ PREFERITI (SENZA MARGINI ESTERNI, SQUADRATI) -->
+      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
+        <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
             <span class="text-rose-500">♥</span>
             I Più Amati & Preferiti
@@ -225,13 +224,13 @@
         </div>
 
         <div class="relative group">
-          <button onclick="scorriCarosello('homeFavoritesGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
+          <button onclick="scorriCarosello('homeFavoritesGrid', -300)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
           
-          <div id="homeFavoritesGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
+          <div id="homeFavoritesGrid" class="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
             <!-- Caricati dinamicamente -->
           </div>
 
-          <button onclick="scorriCarosello('homeFavoritesGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
+          <button onclick="scorriCarosello('homeFavoritesGrid', 300)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
         </div>
       </div>
 
@@ -756,7 +755,7 @@
       }
     }
 
-    // 2. CARICAMENTO DATI SECONDO FOGLIO (AGENDA / EVENTI)
+    // 2. CARICAMENTO DATI SECONDO FOGLIO (AGENDA / EVENTI CON FOTO)
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -775,10 +774,12 @@
           let titolo = getVal(2);
           let descrizione = getVal(3);
           let tipo = getVal(4) || 'Evento';
+          let rawFoto = (c[5] && (c[5].f || c[5].v)) ? String(c[5].f || c[5].v) : '';
+          let foto = pulisciUrlFoto(rawFoto);
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
-          eventiData.push({ giorno, mese, titolo, descrizione, tipo });
+          eventiData.push({ giorno, mese, titolo, descrizione, tipo, foto });
         });
 
         renderAgenda();
@@ -799,16 +800,24 @@
 
       eventiData.forEach(function(ev) {
         const item = document.createElement('div');
-        item.className = "bg-amber-50/70 border border-amber-200/80 p-4 flex items-start gap-3.5 shadow-sm min-w-[280px] md:min-w-[320px] max-w-[360px] shrink-0";
-        item.innerHTML = `
-          <div class="bg-orange-600 text-white font-black text-center p-2.5 shrink-0 w-14 shadow">
-            <span class="block text-[10px] uppercase tracking-wide">${ev.mese || 'ORA'}</span>
-            <span class="block text-xl">${ev.giorno || '•'}</span>
-          </div>
-          <div class="min-w-0">
-            <span class="text-[10px] font-bold text-orange-700 bg-orange-100/90 px-2 py-0.5">${ev.tipo}</span>
-            <h3 class="font-bold text-slate-800 text-sm mt-1 truncate">${ev.titolo}</h3>
-            <p class="text-xs text-slate-600 mt-0.5 line-clamp-2">${ev.descrizione}</p>
+        item.className = "bg-white border border-amber-200/80 shadow-sm min-w-[260px] md:min-w-[300px] max-w-[300px] shrink-0 flex flex-col overflow-hidden";
+        
+        let bannerFoto = '';
+        if (ev.foto) {
+          bannerFoto = '<div class="h-32 bg-slate-100 overflow-hidden relative"><img src="' + ev.foto + '" alt="' + ev.titolo + '" class="w-full h-full object-cover"></div>';
+        }
+
+        item.innerHTML = bannerFoto + `
+          <div class="p-3.5 flex items-start gap-3">
+            <div class="bg-orange-600 text-white font-black text-center p-2 shrink-0 w-12 shadow">
+              <span class="block text-[9px] uppercase tracking-wide">${ev.mese || 'ORA'}</span>
+              <span class="block text-lg">${ev.giorno || '•'}</span>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[10px] font-bold text-orange-700 bg-orange-100/90 px-2 py-0.5">${ev.tipo}</span>
+              <h3 class="font-bold text-slate-800 text-sm mt-1 truncate">${ev.titolo}</h3>
+              <p class="text-xs text-slate-600 mt-0.5 line-clamp-2">${ev.descrizione}</p>
+            </div>
           </div>
         `;
         grid.appendChild(item);
@@ -818,7 +827,7 @@
     function renderHomeContenuti() {
       renderAgenda();
 
-      // Ultimi Arrivi (Carosello riquadri squadrati)
+      // Ultimi Arrivi (Carosello riquadri squadrati senza margini esterni)
       const gridRecent = document.getElementById('homeRecentGrid');
       if (gridRecent) {
         gridRecent.innerHTML = '';
@@ -849,7 +858,7 @@
         }
       }
 
-      // Giochi Preferiti in Home (Carosello riquadri squadrati)
+      // Giochi Preferiti in Home (Carosello riquadri squadrati senza margini esterni)
       const gridFav = document.getElementById('homeFavoritesGrid');
       if (gridFav) {
         gridFav.innerHTML = '';
