@@ -5,87 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GIOCALTA - Noleggio Giochi da Tavolo Caltagirone</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Stile personalizzato per richiamare la geometria e la pulizia del logo */
+    body {
+      letter-spacing: -0.01em;
+    }
+  </style>
 </head>
 <body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <!-- UNICO BLOCCO FISSO IN ALTO (HEADER + BARRA RICERCA ANCORATI INSIEME) -->
+  <!-- UNICO BLOCCO FISSO IN ALTO (HEADER + BARRA RICERCA) -->
   <div class="sticky top-0 z-50 shadow-md">
     
-    <!-- HEADER -->
-    <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white border-b border-orange-700/30">
-      <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-col sm:flex-row justify-between items-center gap-3">
-        <!-- LOGO LOCALE CARICATO SU GITHUB -->
-        <div class="cursor-pointer text-center sm:text-left flex items-center gap-2.5" onclick="cambiaSezione('catalogo')">
-          <div class="flex items-center justify-center">
-            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-10 md:h-14 w-auto object-contain drop-shadow" loading="eager" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
+    <!-- HEADER BRANDIZZATO GIOCALTA -->
+    <header class="bg-gradient-to-r from-orange-600 via-orange-600 to-amber-600 text-white border-b border-orange-700/40">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+        
+        <!-- TUO LOGO UFFICIALE (LOGO-BIANCO.PNG) -->
+        <div class="cursor-pointer text-center sm:text-left flex items-center gap-3 group" onclick="cambiaSezione('catalogo')">
+          <div class="flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-11 md:h-14 w-auto object-contain drop-shadow-md" loading="eager" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
           </div>
         </div>
 
-        <!-- NAVIGAZIONE PAGINE -->
-        <nav class="flex items-center gap-1 bg-orange-700/60 p-1 rounded-xl text-xs backdrop-blur-sm border border-orange-500/30 flex-wrap justify-center">
-          <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3 py-1.5 rounded-lg font-bold transition-colors bg-white text-orange-600 shadow-sm flex items-center gap-1.5">
-            <span>🎲</span> Catalogo
+        <!-- NAVIGAZIONE STILE GEOMETRICO PULITO -->
+        <nav class="flex items-center gap-1.5 bg-orange-900/30 p-1.5 rounded-2xl text-xs backdrop-blur-md border border-white/10 flex-wrap justify-center shadow-inner">
+          <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3.5 py-2 rounded-xl font-bold transition-all bg-white text-orange-600 shadow-sm flex items-center gap-1.5">
+            <span class="text-sm">🎲</span> <span>Catalogo</span>
           </button>
-          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white flex items-center gap-1.5 relative">
-            <span>♥</span> Preferiti <span id="prefCounterBadge" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold hidden">0</span>
+          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-3.5 py-2 rounded-xl font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 relative">
+            <span class="text-rose-400 text-sm">♥</span> <span>Preferiti</span> 
+            <span id="prefCounterBadge" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black hidden shadow">0</span>
           </button>
-          <button onclick="cambiaSezione('info')" id="nav-info" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white flex items-center gap-1.5">
-            <span>📖</span> Info Noleggio
+          <button onclick="cambiaSezione('info')" id="nav-info" class="px-3.5 py-2 rounded-xl font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
+            <span class="text-sm">📖</span> <span>Info</span>
           </button>
-          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3 py-1.5 rounded-lg font-medium transition-colors text-amber-100 hover:text-white flex items-center gap-1.5">
-            <span>📍</span> Sede & Contatti
+          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3.5 py-2 rounded-xl font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
+            <span class="text-sm">📍</span> <span>Contatti</span>
           </button>
         </nav>
       </div>
     </header>
 
-    <!-- BARRA RICERCA E FILTRI CON ORDINAMENTO SULLA STESSA RIGA -->
-    <div id="stickySearchContainer" class="bg-amber-50/95 backdrop-blur-md py-2 border-b border-amber-200/80">
+    <!-- BARRA RICERCA E FILTRI STILE SCHEDA MODERNA -->
+    <div id="stickySearchContainer" class="bg-amber-50/95 backdrop-blur-md py-2.5 border-b border-amber-200/80">
       <div class="max-w-6xl mx-auto px-3 md:px-4">
-        <div class="bg-white p-1.5 md:p-2 rounded-xl shadow-sm border border-amber-200/80">
+        <div class="bg-white p-2 rounded-2xl shadow-sm border border-amber-200/80">
           
-          <!-- RIGA PRINCIPALE: RICERCA + ORDINAMENTO + FILTRI + AZZERA -->
-          <div class="flex items-center gap-1.5 md:gap-2">
+          <!-- RIGA PRINCIPALE -->
+          <div class="flex items-center gap-2">
             
             <!-- CAMPO DI RICERCA -->
             <div class="relative flex-grow min-w-0">
-              <span class="absolute left-2.5 md:left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm">🔍</span>
-              <input type="text" id="searchInput" placeholder="Cerca gioco..." 
-                     class="w-full pl-7 md:pl-9 pr-2 md:pr-3 py-1.5 md:py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs md:text-sm">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
+              <input type="text" id="searchInput" placeholder="Cerca gioco per nome o genere..." 
+                     class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white text-xs md:text-sm transition-all font-medium">
             </div>
 
             <!-- MENU TENDINA ORDINAMENTO -->
             <div class="shrink-0 flex items-center gap-1">
-              <span class="hidden md:inline text-xs font-semibold text-slate-500 whitespace-nowrap">Ordina:</span>
-              <select id="sortOrder" class="py-1.5 md:py-2 px-1.5 md:px-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white font-semibold text-orange-700 max-w-[110px] sm:max-w-none">
-                <option value="recenti">✨ Ultimi</option>
-                <option value="az">🔤 A-Z</option>
-                <option value="za">🔤 Z-A</option>
-                <option value="voto">⭐ Voto</option>
+              <select id="sortOrder" class="py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-bold text-orange-700">
+                <option value="recenti">✨ Ultimi arrivi</option>
+                <option value="az">🔤 Nome (A-Z)</option>
+                <option value="za">🔤 Nome (Z-A)</option>
+                <option value="voto">⭐ Voto BGG</option>
               </select>
             </div>
 
             <!-- PULSANTE APERTURA FILTRI -->
-            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-amber-100/80 hover:bg-amber-200/80 text-slate-800 font-bold text-xs md:text-sm px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 border border-amber-300/50">
-              <span class="text-orange-600">⚙️</span>
+            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs md:text-sm px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 shrink-0 border border-orange-200/60 shadow-sm">
+              <span>⚙️</span>
               <span class="hidden sm:inline">Filtri</span>
               <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
-              <span id="filterToggleIcon" class="text-[10px] text-slate-500 transition-transform duration-300">▼</span>
+              <span id="filterToggleIcon" class="text-[10px] text-orange-600 transition-transform duration-300">▼</span>
             </button>
 
             <!-- PULSANTE AZZERA -->
-            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-white hover:bg-orange-50 text-orange-600 border border-slate-300 font-semibold text-xs md:text-sm px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors flex items-center gap-1 shrink-0">
+            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2.5 py-2 rounded-xl transition-all flex items-center gap-1 shrink-0">
               <span>↺</span>
               <span class="hidden md:inline">Azzera</span>
             </button>
 
           </div>
 
-          <!-- PANNELLO FILTRI A TENDINA -->
-          <div id="filterOptionsContainer" class="hidden pt-2 mt-2 border-t border-slate-100 space-y-2">
+          <!-- PANNELLO FILTRI ESPANSIBILE -->
+          <div id="filterOptionsContainer" class="hidden pt-2.5 mt-2.5 border-t border-slate-100 space-y-2">
             <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
               <div>
-                <select id="playersFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700 font-semibold">
+                <select id="playersFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs text-slate-700 font-semibold">
                   <option value="">👥 Giocatori (Tutti)</option>
                   <option value="1">1 Giocatore (Solo)</option>
                   <option value="2">2 Giocatori</option>
@@ -99,13 +106,13 @@
               </div>
 
               <div>
-                <select id="categoryFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
+                <select id="categoryFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
                   <option value="">🏷️ Tutti i Tipi</option>
                 </select>
               </div>
 
               <div>
-                <select id="statusFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white">
+                <select id="statusFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
                   <option value="">📋 Tutti gli Stati</option>
                   <option value="disponibile">Solo Disponibili</option>
                   <option value="noleggiato">Solo Noleggiati</option>
@@ -113,7 +120,7 @@
               </div>
 
               <div>
-                <select id="difficultyFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
+                <select id="difficultyFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
                   <option value="">🎯 Difficoltà (Tutte)</option>
                   <option value="semplice">Semplice</option>
                   <option value="media">Media</option>
@@ -122,7 +129,7 @@
               </div>
 
               <div class="col-span-2 md:col-span-1">
-                <select id="timeFilter" class="w-full py-1.5 px-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs bg-white text-slate-700">
+                <select id="timeFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
                   <option value="">⏱️ Durata (Tutte)</option>
                   <option value="15">Max 15 min</option>
                   <option value="30">Max 30 min</option>
@@ -140,21 +147,21 @@
 
   </div>
 
-  <main class="max-w-6xl mx-auto px-3 md:px-4 pt-3 pb-6 flex-grow w-full">
+  <main class="max-w-6xl mx-auto px-3 md:px-4 pt-3 pb-8 flex-grow w-full">
     
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo">
-      <div id="loading" class="text-center py-10">
-        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-amber-200 border-t-orange-600 mb-2"></div>
-        <p class="text-slate-500 text-xs md:text-sm">Caricamento catalogo GIOCALTA...</p>
+      <div id="loading" class="text-center py-16">
+        <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-amber-200 border-t-orange-600 mb-3"></div>
+        <p class="text-slate-500 text-xs md:text-sm font-medium">Caricamento catalogo GIOCALTA in corso...</p>
       </div>
 
-      <div id="errorMessage" class="hidden text-center py-10 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-4">
-        <p class="font-semibold text-xs md:text-sm mb-1">Impossibile caricare i dati dal foglio Google.</p>
-        <p class="text-[10px] text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
+      <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-6">
+        <p class="font-bold text-sm mb-1">Impossibile caricare i dati dal foglio Google.</p>
+        <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
       </div>
 
-      <div id="gamesGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-6 mb-12"></div>
+      <div id="gamesGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
     </div>
 
     <!-- SEZIONE 1.5: PREFERITI -->
@@ -164,11 +171,11 @@
           <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">I tuoi Giochi Preferiti ♥</h2>
           <p class="text-xs text-slate-500 mt-0.5">La tua lista personale salvata su questo dispositivo.</p>
         </div>
-        <button onclick="cambiaSezione('catalogo')" class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-2 rounded-xl transition-colors">
+        <button onclick="cambiaSezione('catalogo')" class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3.5 py-2 rounded-xl transition-colors">
           + Aggiungi altri giochi
         </button>
       </div>
-      <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-6 mb-12"></div>
+      <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
     </div>
 
     <!-- SEZIONE 2: INFO -->
@@ -326,33 +333,37 @@
       ['catalogo', 'preferiti', 'info', 'contatti'].forEach(s => {
         const btn = document.getElementById('nav-' + s);
         if (btn) {
-          btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
-          btn.classList.add('text-amber-100');
+          btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+          btn.classList.add('text-amber-100', 'font-semibold');
         }
       });
 
       if (nomeSezione === 'catalogo') {
         document.getElementById('viewCatalogo').classList.remove('hidden');
-        document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
-        document.getElementById('nav-catalogo').classList.remove('text-amber-100');
+        const btn = document.getElementById('nav-catalogo');
+        btn.classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+        btn.classList.remove('text-amber-100', 'font-semibold');
         if (stickyContainer) stickyContainer.classList.remove('hidden');
       } else if (nomeSezione === 'preferiti') {
         document.getElementById('viewPreferiti').classList.remove('hidden');
-        document.getElementById('nav-preferiti').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
-        document.getElementById('nav-preferiti').classList.remove('text-amber-100');
+        const btn = document.getElementById('nav-preferiti');
+        btn.classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+        btn.classList.remove('text-amber-100', 'font-semibold');
         if (stickyContainer) stickyContainer.classList.add('hidden');
         renderPreferiti();
         window.scrollTo(0, 0);
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
-        document.getElementById('nav-info').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
-        document.getElementById('nav-info').classList.remove('text-amber-100');
+        const btn = document.getElementById('nav-info');
+        btn.classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+        btn.classList.remove('text-amber-100', 'font-semibold');
         if (stickyContainer) stickyContainer.classList.add('hidden');
         window.scrollTo(0, 0);
       } else if (nomeSezione === 'contatti') {
         document.getElementById('viewContatti').classList.remove('hidden');
-        document.getElementById('nav-contatti').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
-        document.getElementById('nav-contatti').classList.remove('text-amber-100');
+        const btn = document.getElementById('nav-contatti');
+        btn.classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+        btn.classList.remove('text-amber-100', 'font-semibold');
         if (stickyContainer) stickyContainer.classList.add('hidden');
         window.scrollTo(0, 0);
       }
@@ -389,12 +400,13 @@
         ['catalogo', 'preferiti', 'info', 'contatti'].forEach(s => {
           const btn = document.getElementById('nav-' + s);
           if (btn) {
-            btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
-            btn.classList.add('text-amber-100');
+            btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+            btn.classList.add('text-amber-100', 'font-semibold');
           }
         });
-        document.getElementById('nav-catalogo').classList.add('bg-white', 'text-orange-600', 'shadow-sm');
-        document.getElementById('nav-catalogo').classList.remove('text-amber-100');
+        const btnCat = document.getElementById('nav-catalogo');
+        btnCat.classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+        btnCat.classList.remove('text-amber-100', 'font-semibold');
 
         window.scrollTo(0, savedScrollPosition);
       }
@@ -607,7 +619,7 @@
       gridEl.innerHTML = '';
 
       if (lista.length === 0) {
-        gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-10 text-xs">Nessun gioco trovato in questa sezione.</p>';
+        gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12 text-xs font-medium">Nessun gioco trovato in questa sezione.</p>';
         return;
       }
 
@@ -617,18 +629,18 @@
         const heartTitle = isPref ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti';
 
         const statusBadge = g.disponibile 
-          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 py-0.5 md:py-1 rounded-full font-semibold shadow-sm">Disponibile</span>'
-          : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 py-0.5 md:py-1 rounded-full font-semibold shadow-sm">Noleggiato</span>';
+          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold shadow-sm">Disponibile</span>'
+          : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold shadow-sm">Noleggiato</span>';
 
         const tutorialIcon = g.tutorial 
-          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" onclick="event.stopPropagation();" class="absolute top-1 left-1 md:top-2 md:left-2 bg-red-600 text-white w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow z-10 text-xs md:text-sm font-bold">▶</a>' 
+          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 hover:bg-red-700 text-white w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow-md z-10 text-xs md:text-sm font-bold transition-transform hover:scale-110">▶</a>' 
           : '';
 
         let badgeVotoMobile = g.voto ? '<span class="text-xs font-bold text-amber-500 ml-1.5 md:hidden">★ ' + g.voto + '</span>' : '';
-        let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded font-bold">★ ' + g.voto + '</div>' : '';
+        let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2.5 left-2.5 bg-slate-900/85 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-xl font-bold shadow">★ ' + g.voto + '</div>' : '';
 
         const card = document.createElement('div');
-        card.className = "bg-white rounded-xl md:rounded-2xl shadow-sm border border-amber-200/50 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-md transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-2.5 md:gap-0 relative";
+        card.className = "bg-white rounded-2xl shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-3 md:gap-0 relative";
         
         card.onclick = function() { 
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
@@ -637,27 +649,26 @@
         };
         
         card.innerHTML = 
-          '<div class="w-24 md:w-full h-full md:h-44 bg-slate-200 overflow-hidden relative rounded-lg md:rounded-none shrink-0">' +
+          '<div class="w-24 md:w-full h-full md:h-48 bg-slate-200 overflow-hidden relative rounded-xl md:rounded-none shrink-0">' +
             '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\'">' +
             tutorialIcon +
-            '<button onclick="togglePreferito(\'' + g.id + '\', event)" title="' + heartTitle + '" class="absolute bottom-1.5 right-1.5 md:bottom-2 md:right-2 bg-white/90 hover:bg-white w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow z-20 text-sm md:text-base font-bold text-rose-500 transition-transform active:scale-125">' + heartSymbol + '</button>' +
-            '<div class="absolute top-1.5 right-1.5 md:top-3 md:right-3 z-10">' + statusBadge + '</div>' +
+            '<button onclick="togglePreferito(\'' + g.id + '\', event)" title="' + heartTitle + '" class="absolute bottom-2 right-2 md:bottom-2.5 md:right-2.5 bg-white/95 hover:bg-white w-8 h-8 rounded-full flex items-center justify-center shadow-md z-20 text-base font-bold text-rose-500 transition-transform active:scale-125"><span>' + heartSymbol + '</span></button>' +
+            '<div class="absolute top-2 right-2 md:top-2.5 md:right-2.5 z-10">' + statusBadge + '</div>' +
             badgeVotoDesktop +
           '</div>' +
-          '<div class="flex-grow min-w-0 flex flex-col justify-between h-full md:h-auto p-0 md:p-4 py-0.5 md:py-4 pr-1 md:pr-4">' +
+          '<div class="flex-grow min-w-0 flex flex-col justify-between h-full md:h-auto p-0 md:p-4 py-1 md:py-4 pr-2 md:pr-4">' +
             '<div>' +
-              '<div class="flex items-center justify-between gap-1 mb-0.5 md:mb-1">' +
-                '<span class="text-[9px] md:text-xs font-bold text-orange-600 uppercase tracking-tight truncate">' + g.tipo + '</span>' +
+              '<div class="flex items-center justify-between gap-1 mb-1">' +
+                '<span class="text-[10px] md:text-xs font-bold text-orange-600 uppercase tracking-wide truncate">' + g.tipo + '</span>' +
               '</div>' +
-              '<h3 class="text-xs md:text-base font-bold text-slate-800 leading-tight group-hover:text-orange-600 transition-colors truncate md:whitespace-normal">' + g.titolo + badgeVotoMobile + '</h3>' +
+              '<h3 class="text-xs md:text-base font-extrabold text-slate-800 leading-snug group-hover:text-orange-600 transition-colors truncate md:whitespace-normal">' + g.titolo + badgeVotoMobile + '</h3>' +
             '</div>' +
-            '<div class="flex items-center justify-between text-[10px] md:text-xs text-slate-500 pt-1 md:pt-3 border-t border-slate-100 md:mt-3">' +
-              '<div class="flex items-center gap-1.5 md:gap-2.5 truncate pr-1">' +
+            '<div class="flex items-center justify-between text-[11px] md:text-xs text-slate-500 pt-2 border-t border-slate-100 md:mt-3">' +
+              '<div class="flex items-center gap-2 truncate pr-1 font-medium">' +
                 '<span class="shrink-0" title="Giocatori">👥 ' + g.persone + '</span>' +
                 '<span class="shrink-0" title="Durata">⏱ ' + g.tempo + '</span>' +
-                '<span class="truncate" title="Difficoltà">🎯 ' + g.difficolta + '</span>' +
               '</div>' +
-              '<span class="text-[10px] md:text-xs font-bold text-orange-600 group-hover:underline flex items-center shrink-0">Dettagli ➔</span>' +
+              '<span class="text-xs font-bold text-orange-600 group-hover:translate-x-0.5 transition-transform flex items-center shrink-0">Dettagli ➔</span>' +
             '</div>' +
           '</div>';
         gridEl.appendChild(card);
@@ -691,52 +702,52 @@
       const heartText = isPref ? '♥ Rimuovi dai Preferiti' : '♡ Aggiungi ai Preferiti';
 
       const statusBadge = gioco.disponibile 
-        ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5">✓ Disponibile per il noleggio</span>'
-        : '<span class="bg-rose-100 text-rose-800 text-xs px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5">⏳ Attualmente noleggiato</span>';
+        ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3.5 py-1.5 rounded-full font-bold inline-flex items-center gap-1.5 shadow-sm">✓ Disponibile per il noleggio</span>'
+        : '<span class="bg-rose-100 text-rose-800 text-xs px-3.5 py-1.5 rounded-full font-bold inline-flex items-center gap-1.5 shadow-sm">⏳ Attualmente noleggiato</span>';
 
       const msgWA = encodeURIComponent('Ciao Giuseppe! Vorrei noleggiare il gioco "' + gioco.titolo + '". È disponibile?');
       const urlWA = 'https://wa.me/' + NUMERO_WHATSAPP + '?text=' + msgWA;
 
       const btnWA = gioco.disponibile
-        ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-2xl flex items-center justify-center gap-2 transition-colors shadow-sm text-sm md:text-base">💬 Prenota su WhatsApp</a>'
-        : '<button disabled class="w-full bg-slate-200 text-slate-400 font-bold py-3 px-6 rounded-2xl cursor-not-allowed flex items-center justify-center gap-2 text-sm md:text-base">🚫 Attualmente Noleggiato</button>';
+        ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 transition-all shadow-md hover:shadow-lg text-sm md:text-base">💬 Prenota su WhatsApp</a>'
+        : '<button disabled class="w-full bg-slate-200 text-slate-400 font-bold py-3.5 px-6 rounded-2xl cursor-not-allowed flex items-center justify-center gap-2.5 text-sm md:text-base">🚫 Attualmente Noleggiato</button>';
 
       const tutorialBtn = gioco.tutorial
-        ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">▶ Guarda Tutorial Su YouTube</a>'
+        ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-all shadow-sm">▶ Guarda Tutorial Su YouTube</a>'
         : '';
 
-      let infoTopPersone = gioco.topPersone ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Giocatori Ideali</span><span class="font-bold text-slate-800 text-xs md:text-sm">👥 ' + gioco.topPersone + '</span></div>' : '';
-      let infoEta = gioco.eta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Età cons.</span><span class="font-bold text-slate-800 text-xs md:text-sm">👶 ' + gioco.eta + '+ anni</span></div>' : '';
-      let infoDiff = gioco.difficolta ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Difficoltà</span><span class="font-bold text-slate-800 text-xs md:text-sm">🎯 ' + gioco.difficolta + '</span></div>' : '';
-      let infoVoto = gioco.voto ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Voto</span><span class="font-bold text-slate-800 text-xs md:text-sm">★ ' + gioco.voto + ' / 10</span></div>' : '';
-      let infoPeso = gioco.peso ? '<div class="bg-amber-50/60 p-2.5 rounded-xl"><span class="text-[10px] text-slate-400 block mb-0.5">Peso (Complessità)</span><span class="font-bold text-slate-800 text-xs md:text-sm">⚖️ ' + gioco.peso + '</span></div>' : '';
+      let infoTopPersone = gioco.topPersone ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Giocatori Ideali</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">👥 ' + gioco.topPersone + '</span></div>' : '';
+      let infoEta = gioco.eta ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Età consigliata</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">👶 ' + gioco.eta + '+ anni</span></div>' : '';
+      let infoDiff = gioco.difficolta ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Difficoltà</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">🎯 ' + gioco.difficolta + '</span></div>' : '';
+      let infoVoto = gioco.voto ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Voto BGG</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">★ ' + gioco.voto + ' / 10</span></div>' : '';
+      let infoPeso = gioco.peso ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Complessità</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">⚖️ ' + gioco.peso + '</span></div>' : '';
 
       container.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
-          <div class="md:col-span-5 bg-slate-100 relative min-h-[250px] md:min-h-[400px]">
+          <div class="md:col-span-5 bg-slate-100 relative min-h-[300px] md:min-h-[450px]">
             <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
           </div>
-          <div class="md:col-span-7 p-5 md:p-8 flex flex-col justify-between space-y-5">
+          <div class="md:col-span-7 p-6 md:p-8 flex flex-col justify-between space-y-6">
             <div>
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3 py-1 rounded-lg">${gioco.tipo}</span>
+                <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-xl border border-orange-100">${gioco.tipo}</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="togglePreferito('${gioco.id}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full transition-colors">
+                  <button onclick="togglePreferito('${gioco.id}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3.5 py-2 rounded-xl transition-colors shadow-sm">
                     ${heartText}
                   </button>
                   ${statusBadge}
                 </div>
               </div>
-              <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4 leading-tight">${gioco.titolo}</h2>
+              <h2 class="text-2xl md:text-4xl font-black text-slate-900 mb-5 leading-tight">${gioco.titolo}</h2>
 
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center mb-5">
-                <div class="bg-amber-50/60 p-2.5 rounded-xl">
-                  <span class="text-[10px] text-slate-400 block mb-0.5">Giocatori</span>
-                  <span class="font-bold text-slate-800 text-xs md:text-sm">👥 ${gioco.persone}</span>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-6">
+                <div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100">
+                  <span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Giocatori</span>
+                  <span class="font-extrabold text-slate-800 text-xs md:text-sm">👥 ${gioco.persone}</span>
                 </div>
-                <div class="bg-amber-50/60 p-2.5 rounded-xl">
-                  <span class="text-[10px] text-slate-400 block mb-0.5">Durata</span>
-                  <span class="font-bold text-slate-800 text-xs md:text-sm">⏱ ${gioco.tempo}</span>
+                <div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100">
+                  <span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Durata</span>
+                  <span class="font-extrabold text-slate-800 text-xs md:text-sm">⏱ ${gioco.tempo}</span>
                 </div>
                 ${infoTopPersone}
                 ${infoEta}
@@ -746,12 +757,12 @@
               </div>
 
               <div class="border-t border-slate-100 pt-4 space-y-2">
-                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Descrizione</h3>
+                <h3 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Descrizione</h3>
                 <p class="text-slate-600 text-xs md:text-sm leading-relaxed whitespace-pre-line">${gioco.descrizione}</p>
               </div>
             </div>
 
-            <div class="space-y-2.5 pt-4 border-t border-slate-100">
+            <div class="space-y-3 pt-5 border-t border-slate-100">
               ${btnWA}
               ${tutorialBtn}
             </div>
