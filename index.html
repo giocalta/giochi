@@ -14,7 +14,6 @@
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
     }
-    /* Nascondi la barra di scorrimento nei caroselli grandi ma mantieni il trascinamento fluido */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -41,21 +40,21 @@
         </div>
 
         <!-- NAVIGAZIONE ORIZZONTALE -->
-        <nav class="flex items-center gap-1 bg-orange-900/30 p-1 rounded-xl text-[11px] md:text-xs backdrop-blur-md border border-white/10 shadow-inner">
-          <button onclick="cambiaSezione('home')" id="nav-home" class="px-2.5 py-1.5 rounded-lg font-bold transition-all bg-white text-orange-600 shadow-sm flex items-center gap-1">
+        <nav class="flex items-center gap-1 bg-orange-900/30 p-1 rounded-md text-[11px] md:text-xs backdrop-blur-md border border-white/10 shadow-inner">
+          <button onclick="cambiaSezione('home')" id="nav-home" class="px-2.5 py-1.5 rounded font-bold transition-all bg-white text-orange-600 shadow-sm flex items-center gap-1">
             <span>🏠</span> <span class="hidden sm:inline">Home</span>
           </button>
-          <button onclick="apriCatalogoPuro()" id="nav-catalogo" class="px-2.5 py-1.5 rounded-lg font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1">
+          <button onclick="apriCatalogoPuro()" id="nav-catalogo" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1">
             <span>🎲</span> <span class="hidden sm:inline">Catalogo</span>
           </button>
-          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-2.5 py-1.5 rounded-lg font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1 relative">
+          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1 relative">
             <span class="text-rose-400">♥</span> <span class="hidden sm:inline">Preferiti</span> 
             <span id="prefCounterBadge" class="bg-rose-500 text-white text-[9px] px-1 py-0.1 rounded-full font-black hidden shadow">0</span>
           </button>
-          <button onclick="cambiaSezione('info')" id="nav-info" class="px-2.5 py-1.5 rounded-lg font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1">
+          <button onclick="cambiaSezione('info')" id="nav-info" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1">
             <span>📖</span> <span class="hidden sm:inline">Info</span>
           </button>
-          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-2.5 py-1.5 rounded-lg font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1">
+          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1">
             <span>📍</span> <span class="hidden sm:inline">Contatti</span>
           </button>
         </nav>
@@ -65,28 +64,28 @@
     <!-- BARRA RICERCA (VISIBILE SOLO NEL CATALOGO) -->
     <div id="stickySearchContainer" class="hidden bg-amber-50/95 backdrop-blur-md py-2 border-b border-amber-200/80">
       <div class="max-w-6xl mx-auto px-2.5 md:px-4">
-        <div class="bg-white p-1.5 md:p-2 rounded-2xl shadow-sm border border-amber-200/80">
+        <div class="bg-white p-1.5 md:p-2 shadow-sm border border-amber-200/80">
           <div class="flex items-center gap-1.5 md:gap-2">
             <div class="relative flex-grow min-w-0">
               <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm">🔍</span>
               <input type="text" id="searchInput" placeholder="Cerca gioco..." 
-                     class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white text-xs md:text-sm transition-all font-medium">
+                     class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white text-xs md:text-sm transition-all font-medium">
             </div>
             <div class="shrink-0 flex items-center">
-              <select id="sortOrder" class="py-1.5 md:py-2 px-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-[11px] md:text-xs font-bold text-orange-700">
+              <select id="sortOrder" class="py-1.5 md:py-2 px-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 text-[11px] md:text-xs font-bold text-orange-700">
                 <option value="recenti">✨ Ultimi</option>
                 <option value="az">🔤 A-Z</option>
                 <option value="za">🔤 Z-A</option>
                 <option value="voto">⭐ Voto</option>
               </select>
             </div>
-            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs px-3 py-1.5 md:py-2 rounded-xl transition-all flex items-center gap-1 shrink-0 border border-orange-200/60 shadow-sm">
+            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs px-3 py-1.5 md:py-2 transition-all flex items-center gap-1 shrink-0 border border-orange-200/60 shadow-sm">
               <span>⚙️</span>
               <span class="hidden sm:inline">Filtri</span>
               <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
               <span id="filterToggleIcon" class="text-[10px] text-orange-600 transition-transform duration-300">▼</span>
             </button>
-            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2 py-1.5 md:py-2 rounded-xl transition-all flex items-center shrink-0">
+            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2 py-1.5 md:py-2 transition-all flex items-center shrink-0">
               <span>↺</span>
             </button>
           </div>
@@ -95,7 +94,7 @@
           <div id="filterOptionsContainer" class="hidden pt-2 mt-2 border-t border-slate-100 space-y-2">
             <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
               <div>
-                <select id="playersFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 font-semibold">
+                <select id="playersFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs text-slate-700 font-semibold">
                   <option value="">👥 Giocatori (Tutti)</option>
                   <option value="1">1 Giocatore</option>
                   <option value="2">2 Giocatori</option>
@@ -106,19 +105,19 @@
                 </select>
               </div>
               <div>
-                <select id="categoryFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700">
+                <select id="categoryFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
                   <option value="">🏷️ Tutti i Tipi</option>
                 </select>
               </div>
               <div>
-                <select id="statusFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700">
+                <select id="statusFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
                   <option value="">📋 Tutti gli Stati</option>
                   <option value="disponibile">Solo Disponibili</option>
                   <option value="noleggiato">Solo Noleggiati</option>
                 </select>
               </div>
               <div>
-                <select id="difficultyFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700">
+                <select id="difficultyFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
                   <option value="">🎯 Difficoltà</option>
                   <option value="semplice">Semplice</option>
                   <option value="media">Media</option>
@@ -126,7 +125,7 @@
                 </select>
               </div>
               <div class="col-span-2 md:col-span-1">
-                <select id="timeFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700">
+                <select id="timeFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
                   <option value="">⏱️ Durata</option>
                   <option value="30">Max 30 min</option>
                   <option value="60">Max 1 ora</option>
@@ -146,28 +145,27 @@
     <!-- SEZIONE 0: HOME / AGENDA & IN VETRINA -->
     <div id="viewHome" class="space-y-6">
       
-      <!-- BANNER DI BENVENUTO CON LOGO NEL CERCHIO -->
-      <div class="bg-gradient-to-r from-orange-600 to-amber-600 rounded-3xl p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
+      <!-- BANNER DI BENVENUTO CON LOGO SCONTORNATO (SENZA CERCHIO) -->
+      <div class="bg-gradient-to-r from-orange-600 to-amber-600 p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="space-y-3 text-center md:text-left z-10 flex flex-col md:flex-row items-center gap-4">
-          <!-- Logo inserito dentro un cerchio elegante -->
-          <div class="w-20 h-20 md:w-24 md:h-24 bg-white/15 border-2 border-white/30 rounded-full flex items-center justify-center p-3 shrink-0 shadow-inner backdrop-blur-sm">
-            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="w-full h-full object-contain drop-shadow" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
+          <!-- Logo scontornato pulito senza cerchio -->
+          <div class="shrink-0">
+            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-12 md:h-16 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
           </div>
           <div>
-            <h1 class="text-2xl md:text-4xl font-black tracking-tight">GIOCALTA 🎲</h1>
-            <p class="text-amber-100 text-xs md:text-sm max-w-xl mt-1">Noleggio giochi da tavolo a Caltagirone. Scegli il tuo titolo preferito e prenota su WhatsApp!</p>
+            <p class="text-amber-100 text-xs md:text-sm max-w-xl font-medium">Noleggio giochi da tavolo a Caltagirone. Scegli il tuo titolo preferito e prenota su WhatsApp!</p>
           </div>
         </div>
         <div class="flex gap-3 z-10 shrink-0">
-          <button onclick="apriCatalogoPuro()" class="bg-white text-orange-600 hover:bg-amber-50 font-extrabold text-xs md:text-sm px-5 py-3 rounded-2xl shadow transition-transform hover:scale-105 flex items-center gap-2">
+          <button onclick="apriCatalogoPuro()" class="bg-white text-orange-600 hover:bg-amber-50 font-extrabold text-xs md:text-sm px-5 py-3 shadow transition-transform hover:scale-105 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             Sfoglia Catalogo
           </button>
         </div>
       </div>
 
-      <!-- CAROSELLO 1: EVENTI & AGENDA (RIQUADRI GRANDI STILE GOBLETS) -->
-      <div class="bg-white rounded-3xl p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
+      <!-- CAROSELLO 1: EVENTI & AGENDA (RIQUADRI SQUADRATI) -->
+      <div class="bg-white p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
             <span class="text-orange-600">
@@ -175,22 +173,22 @@
             </span> 
             Agenda & Prossimi Eventi
           </h2>
-          <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">In Sede</span>
+          <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1">In Sede</span>
         </div>
 
         <div class="relative group">
-          <button onclick="scorriCarosello('agendaGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 rounded-full shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
+          <button onclick="scorriCarosello('agendaGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
           
           <div id="agendaGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
             <p class="text-slate-400 text-xs py-4">Caricamento eventi dall'agenda...</p>
           </div>
 
-          <button onclick="scorriCarosello('agendaGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 rounded-full shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
+          <button onclick="scorriCarosello('agendaGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
         </div>
       </div>
 
-      <!-- CAROSELLO 2: ULTIMI GIOCHI INSERITI (RIQUADRI GRANDI) -->
-      <div class="bg-white rounded-3xl p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
+      <!-- CAROSELLO 2: ULTIMI GIOCHI INSERITI (RIQUADRI SQUADRATI) -->
+      <div class="bg-white p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
             <span class="text-orange-600">
@@ -204,18 +202,18 @@
         </div>
 
         <div class="relative group">
-          <button onclick="scorriCarosello('homeRecentGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 rounded-full shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
+          <button onclick="scorriCarosello('homeRecentGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
           
           <div id="homeRecentGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
             <!-- Caricati dinamicamente -->
           </div>
 
-          <button onclick="scorriCarosello('homeRecentGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 rounded-full shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
+          <button onclick="scorriCarosello('homeRecentGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
         </div>
       </div>
 
-      <!-- CAROSELLO 3: GIOCHI PIÙ PREFERITI (RIQUADRI GRANDI) -->
-      <div class="bg-white rounded-3xl p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
+      <!-- CAROSELLO 3: GIOCHI PIÙ PREFERITI (RIQUADRI SQUADRATI) -->
+      <div class="bg-white p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
             <span class="text-rose-500">♥</span>
@@ -227,13 +225,13 @@
         </div>
 
         <div class="relative group">
-          <button onclick="scorriCarosello('homeFavoritesGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 rounded-full shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
+          <button onclick="scorriCarosello('homeFavoritesGrid', -300)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
           
           <div id="homeFavoritesGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
             <!-- Caricati dinamicamente -->
           </div>
 
-          <button onclick="scorriCarosello('homeFavoritesGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 rounded-full shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
+          <button onclick="scorriCarosello('homeFavoritesGrid', 300)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
         </div>
       </div>
 
@@ -246,7 +244,7 @@
         <p class="text-slate-500 text-xs md:text-sm font-medium">Caricamento catalogo GIOCALTA in corso...</p>
       </div>
 
-      <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 rounded-2xl border border-red-200 p-6">
+      <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 border border-red-200 p-6">
         <p class="font-bold text-sm mb-1">Impossibile caricare i dati dal foglio Google.</p>
         <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
       </div>
@@ -256,12 +254,12 @@
 
     <!-- SEZIONE 1.5: PREFERITI -->
     <div id="viewPreferiti" class="hidden space-y-4">
-      <div class="bg-white p-5 rounded-3xl border border-amber-200/60 shadow-sm flex items-center justify-between">
+      <div class="bg-white p-5 border border-amber-200/60 shadow-sm flex items-center justify-between">
         <div>
           <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">I tuoi Giochi Preferiti ♥</h2>
           <p class="text-xs text-slate-500 mt-0.5">La tua lista personale salvata su questo dispositivo.</p>
         </div>
-        <button onclick="apriCatalogoPuro()" class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3.5 py-2 rounded-xl transition-colors">
+        <button onclick="apriCatalogoPuro()" class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3.5 py-2 transition-colors">
           + Aggiungi altri giochi
         </button>
       </div>
@@ -270,27 +268,27 @@
 
     <!-- SEZIONE 2: INFO -->
     <div id="viewInfo" class="hidden space-y-6">
-      <div class="bg-white rounded-3xl p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
+      <div class="bg-white p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
         <div>
           <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">Come funziona GIOCALTA 🎲</h2>
           <p class="text-slate-600 text-sm">Noleggio giochi da tavolo a Caltagirone per serate in compagnia, eventi e famiglie.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-100">
-            <div class="w-10 h-10 bg-orange-600 text-white rounded-xl flex items-center justify-center font-bold mb-3 shadow-sm text-lg">🎯</div>
+          <div class="bg-amber-50/60 p-5 border border-amber-100">
+            <div class="w-10 h-10 bg-orange-600 text-white flex items-center justify-center font-bold mb-3 shadow-sm text-lg">🎯</div>
             <h3 class="font-bold text-slate-800 mb-1">Scegli dal catalogo</h3>
             <p class="text-xs text-slate-600">Sfoglia i giochi disponibili, controlla durata, età consigliata e guarda il video tutorial.</p>
           </div>
 
-          <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-100">
-            <div class="w-10 h-10 bg-orange-600 text-white rounded-xl flex items-center justify-center font-bold mb-3 shadow-sm text-lg">💬</div>
+          <div class="bg-amber-50/60 p-5 border border-amber-100">
+            <div class="w-10 h-10 bg-orange-600 text-white flex items-center justify-center font-bold mb-3 shadow-sm text-lg">💬</div>
             <h3 class="font-bold text-slate-800 mb-1">Prenota via WhatsApp</h3>
             <p class="text-xs text-slate-600">Clicca su "Prenota su WhatsApp" per verificare la disponibilità e fissare l'orario del ritiro.</p>
           </div>
 
-          <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-100">
-            <div class="w-10 h-10 bg-orange-600 text-white rounded-xl flex items-center justify-center font-bold mb-3 shadow-sm text-lg">🏆</div>
+          <div class="bg-amber-50/60 p-5 border border-amber-100">
+            <div class="w-10 h-10 bg-orange-600 text-white flex items-center justify-center font-bold mb-3 shadow-sm text-lg">🏆</div>
             <h3 class="font-bold text-slate-800 mb-1">Gioca e Restituisci</h3>
             <p class="text-xs text-slate-600">Ritira il gioco completo a Caltagirone, divertiti e restituiscilo integro entro la data stabilita.</p>
           </div>
@@ -308,13 +306,13 @@
 
     <!-- SEZIONE 3: CONTATTI -->
     <div id="viewContatti" class="hidden space-y-6">
-      <div class="bg-white rounded-3xl p-6 md:p-10 border border-amber-200/60 shadow-sm">
+      <div class="bg-white p-6 md:p-10 border border-amber-200/60 shadow-sm">
         <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Contatti & Sede 📍</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div class="space-y-6">
             <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center shrink-0 font-bold text-lg">
+              <div class="w-10 h-10 bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 font-bold text-lg">
                 📍
               </div>
               <div>
@@ -325,7 +323,7 @@
             </div>
 
             <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center shrink-0 font-bold text-lg">
+              <div class="w-10 h-10 bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 font-bold text-lg">
                 💬
               </div>
               <div>
@@ -338,7 +336,7 @@
             </div>
 
             <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center shrink-0 font-bold text-lg">
+              <div class="w-10 h-10 bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 font-bold text-lg">
                 ⏱️
               </div>
               <div>
@@ -348,7 +346,7 @@
             </div>
           </div>
 
-          <div class="rounded-2xl overflow-hidden border border-slate-200 h-64 md:h-auto min-h-[250px]">
+          <div class="overflow-hidden border border-slate-200 h-64 md:h-auto min-h-[250px]">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25438.455648834615!2d14.500000000000002!3d37.23333333333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x131102e3b8b1a45d%3A0x400b047c2096ee0!2s95041%20Caltagirone%20CT!5e0!3m2!1sit!2sit!4v1680000000000!5m2!1sit!2sit" 
               width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
@@ -364,7 +362,7 @@
         ⬅️ Torna indietro
       </button>
 
-      <div id="dettaglioGiocoContainer" class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden"></div>
+      <div id="dettaglioGiocoContainer" class="bg-white shadow-sm border border-slate-200 overflow-hidden"></div>
     </div>
 
   </main>
@@ -801,14 +799,14 @@
 
       eventiData.forEach(function(ev) {
         const item = document.createElement('div');
-        item.className = "bg-amber-50/70 border border-amber-200/80 p-4 rounded-2xl flex items-start gap-3.5 shadow-sm min-w-[280px] md:min-w-[320px] max-w-[360px] shrink-0";
+        item.className = "bg-amber-50/70 border border-amber-200/80 p-4 flex items-start gap-3.5 shadow-sm min-w-[280px] md:min-w-[320px] max-w-[360px] shrink-0";
         item.innerHTML = `
-          <div class="bg-orange-600 text-white font-black text-center p-2.5 rounded-xl shrink-0 w-14 shadow">
+          <div class="bg-orange-600 text-white font-black text-center p-2.5 shrink-0 w-14 shadow">
             <span class="block text-[10px] uppercase tracking-wide">${ev.mese || 'ORA'}</span>
             <span class="block text-xl">${ev.giorno || '•'}</span>
           </div>
           <div class="min-w-0">
-            <span class="text-[10px] font-bold text-orange-700 bg-orange-100/90 px-2 py-0.5 rounded">${ev.tipo}</span>
+            <span class="text-[10px] font-bold text-orange-700 bg-orange-100/90 px-2 py-0.5">${ev.tipo}</span>
             <h3 class="font-bold text-slate-800 text-sm mt-1 truncate">${ev.titolo}</h3>
             <p class="text-xs text-slate-600 mt-0.5 line-clamp-2">${ev.descrizione}</p>
           </div>
@@ -820,7 +818,7 @@
     function renderHomeContenuti() {
       renderAgenda();
 
-      // Ultimi Arrivi (Carosello grandi riquadri)
+      // Ultimi Arrivi (Carosello riquadri squadrati)
       const gridRecent = document.getElementById('homeRecentGrid');
       if (gridRecent) {
         gridRecent.innerHTML = '';
@@ -830,16 +828,16 @@
         } else {
           recenti.forEach(function(g) {
             const card = document.createElement('div');
-            card.className = "bg-white rounded-2xl p-2.5 border border-amber-200/70 shadow-sm cursor-pointer group hover:shadow-md transition-all flex flex-col justify-between min-w-[180px] md:min-w-[210px] max-w-[210px] shrink-0";
+            card.className = "bg-white p-2.5 border border-amber-200/70 shadow-sm cursor-pointer group hover:shadow-md transition-all flex flex-col justify-between min-w-[180px] md:min-w-[210px] max-w-[210px] shrink-0";
             card.onclick = function() {
               savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
               window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
               mostraDettaglioGioco(g.id, true);
             };
             card.innerHTML = `
-              <div class="h-36 md:h-44 bg-slate-100 rounded-xl overflow-hidden relative mb-2 shadow-inner">
+              <div class="h-36 md:h-44 bg-slate-100 overflow-hidden relative mb-2 shadow-inner">
                 <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
-                ${g.voto ? '<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 rounded-lg font-bold">★ ' + g.voto + '</span>' : ''}
+                ${g.voto ? '<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 font-bold">★ ' + g.voto + '</span>' : ''}
               </div>
               <div>
                 <span class="text-[10px] font-bold text-orange-600 uppercase block truncate">${g.tipo}</span>
@@ -851,7 +849,7 @@
         }
       }
 
-      // Giochi Preferiti in Home (Carosello grandi riquadri)
+      // Giochi Preferiti in Home (Carosello riquadri squadrati)
       const gridFav = document.getElementById('homeFavoritesGrid');
       if (gridFav) {
         gridFav.innerHTML = '';
@@ -861,17 +859,17 @@
         } else {
           preferitiLista.forEach(function(g) {
             const card = document.createElement('div');
-            card.className = "bg-white rounded-2xl p-2.5 border border-amber-200/70 shadow-sm cursor-pointer group hover:shadow-md transition-all flex flex-col justify-between min-w-[180px] md:min-w-[210px] max-w-[210px] shrink-0";
+            card.className = "bg-white p-2.5 border border-amber-200/70 shadow-sm cursor-pointer group hover:shadow-md transition-all flex flex-col justify-between min-w-[180px] md:min-w-[210px] max-w-[210px] shrink-0";
             card.onclick = function() {
               savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
               window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
               mostraDettaglioGioco(g.id, true);
             };
             card.innerHTML = `
-              <div class="h-36 md:h-44 bg-slate-100 rounded-xl overflow-hidden relative mb-2 shadow-inner">
+              <div class="h-36 md:h-44 bg-slate-100 overflow-hidden relative mb-2 shadow-inner">
                 <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
-                <button onclick="togglePreferito('${g.id}', event)" class="absolute top-2 right-2 bg-white/95 w-7 h-7 rounded-full flex items-center justify-center text-rose-500 font-bold shadow">♥</button>
-                ${g.voto ? '<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 rounded-lg font-bold">★ ' + g.voto + '</span>' : ''}
+                <button onclick="togglePreferito('${g.id}', event)" class="absolute top-2 right-2 bg-white/95 w-7 h-7 flex items-center justify-center text-rose-500 font-bold shadow">♥</button>
+                ${g.voto ? '<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 font-bold">★ ' + g.voto + '</span>' : ''}
               </div>
               <div>
                 <span class="text-[10px] font-bold text-orange-600 uppercase block truncate">${g.tipo}</span>
@@ -899,18 +897,18 @@
         const heartTitle = isPref ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti';
 
         const statusBadge = g.disponibile 
-          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 md:px-2.5 py-1 rounded-full font-bold shadow-sm"><span class="md:hidden">Disp.</span><span class="hidden md:inline">Disponibile</span></span>'
-          : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 md:px-2.5 py-1 rounded-full font-bold shadow-sm"><span class="md:hidden">Noleggiato</span><span class="hidden md:inline">Noleggiato</span></span>';
+          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 md:px-2.5 py-1 font-bold shadow-sm"><span class="md:hidden">Disp.</span><span class="hidden md:inline">Disponibile</span></span>'
+          : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 md:px-2.5 py-1 font-bold shadow-sm"><span class="md:hidden">Noleggiato</span><span class="hidden md:inline">Noleggiato</span></span>';
 
         const tutorialIcon = g.tutorial 
-          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 hover:bg-red-700 text-white w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow-md z-10 text-xs md:text-sm font-bold transition-transform hover:scale-110">▶</a>' 
+          ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" title="Guarda Tutorial" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 hover:bg-red-700 text-white w-7 h-7 md:w-8 md:h-8 flex items-center justify-center shadow-md z-10 text-xs md:text-sm font-bold transition-transform hover:scale-110">▶</a>' 
           : '';
 
         let badgeVotoMobile = g.voto ? '<span class="text-xs font-bold text-amber-500 ml-1.5 md:hidden">★ ' + g.voto + '</span>' : '';
-        let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2.5 left-2.5 bg-slate-900/85 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-xl font-bold shadow">★ ' + g.voto + '</div>' : '';
+        let badgeVotoDesktop = g.voto ? '<div class="hidden md:block absolute bottom-2.5 left-2.5 bg-slate-900/85 backdrop-blur-sm text-white text-xs px-2.5 py-1 font-bold shadow">★ ' + g.voto + '</div>' : '';
 
         const card = document.createElement('div');
-        card.className = "bg-white rounded-2xl shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-3 md:gap-0 relative";
+        card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-3 md:gap-0 relative";
         
         card.onclick = function() { 
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
@@ -919,10 +917,10 @@
         };
         
         card.innerHTML = 
-          '<div class="w-24 md:w-full h-full md:h-48 bg-slate-200 overflow-hidden relative rounded-xl md:rounded-none shrink-0">' +
+          '<div class="w-24 md:w-full h-full md:h-48 bg-slate-200 overflow-hidden relative shrink-0">' +
             '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\';">' +
             tutorialIcon +
-            '<button onclick="togglePreferito(\'' + g.id + '\', event)" title="' + heartTitle + '" class="absolute bottom-2 right-2 md:bottom-2.5 md:right-2.5 bg-white/95 hover:bg-white w-8 h-8 rounded-full flex items-center justify-center shadow-md z-20 text-base font-bold text-rose-500 transition-transform active:scale-125"><span>' + heartSymbol + '</span></button>' +
+            '<button onclick="togglePreferito(\'' + g.id + '\', event)" title="' + heartTitle + '" class="absolute bottom-2 right-2 md:bottom-2.5 md:right-2.5 bg-white/95 hover:bg-white w-8 h-8 flex items-center justify-center shadow-md z-20 text-base font-bold text-rose-500 transition-transform active:scale-125"><span>' + heartSymbol + '</span></button>' +
             '<div class="absolute top-2 right-2 md:top-2.5 md:right-2.5 z-10">' + statusBadge + '</div>' +
             badgeVotoDesktop +
           '</div>' +
@@ -973,25 +971,25 @@
       const heartText = isPref ? '♥ Rimuovi dai Preferiti' : '♡ Aggiungi ai Preferiti';
 
       const statusBadge = gioco.disponibile 
-        ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3.5 py-1.5 rounded-full font-bold inline-flex items-center gap-1.5 shadow-sm">✓ Disponibile per il noleggio</span>'
-        : '<span class="bg-rose-100 text-rose-800 text-xs px-3.5 py-1.5 rounded-full font-bold inline-flex items-center gap-1.5 shadow-sm">⏳ Attualmente noleggiato</span>';
+        ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3.5 py-1.5 font-bold inline-flex items-center gap-1.5 shadow-sm">✓ Disponibile per il noleggio</span>'
+        : '<span class="bg-rose-100 text-rose-800 text-xs px-3.5 py-1.5 font-bold inline-flex items-center gap-1.5 shadow-sm">⏳ Attualmente noleggiato</span>';
 
       const msgWA = encodeURIComponent('Ciao Giuseppe! Vorrei noleggiare il gioco "' + gioco.titolo + '". È disponibile?');
       const urlWA = 'https://wa.me/' + NUMERO_WHATSAPP + '?text=' + msgWA;
 
       const btnWA = gioco.disponibile
-        ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 transition-all shadow-md hover:shadow-lg text-sm md:text-base">💬 Prenota su WhatsApp</a>'
-        : '<button disabled class="w-full bg-slate-200 text-slate-400 font-bold py-3.5 px-6 rounded-2xl cursor-not-allowed flex items-center justify-center gap-2.5 text-sm md:text-base">🚫 Attualmente Noleggiato</button>';
+        ? '<a href="' + urlWA + '" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 flex items-center justify-center gap-2.5 transition-all shadow-md hover:shadow-lg text-sm md:text-base">💬 Prenota su WhatsApp</a>'
+        : '<button disabled class="w-full bg-slate-200 text-slate-400 font-bold py-3.5 px-6 cursor-not-allowed flex items-center justify-center gap-2.5 text-sm md:text-base">🚫 Attualmente Noleggiato</button>';
 
       const tutorialBtn = gioco.tutorial
-        ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-all shadow-sm">▶ Guarda Tutorial Su YouTube</a>'
+        ? '<a href="' + gioco.tutorial + '" target="_blank" rel="noopener noreferrer" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold py-3.5 px-4 flex items-center justify-center gap-2 text-sm transition-all shadow-sm">▶ Guarda Tutorial Su YouTube</a>'
         : '';
 
-      let infoTopPersone = gioco.topPersone ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Giocatori Ideali</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">👥 ' + gioco.topPersone + '</span></div>' : '';
-      let infoEta = gioco.eta ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Età consigliata</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">👶 ' + gioco.eta + '+ anni</span></div>' : '';
-      let infoDiff = gioco.difficolta ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Difficoltà</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">🎯 ' + gioco.difficolta + '</span></div>' : '';
-      let infoVoto = gioco.voto ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Voto BGG</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">★ ' + gioco.voto + ' / 10</span></div>' : '';
-      let infoPeso = gioco.peso ? '<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Complessità</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">⚖️ ' + gioco.peso + '</span></div>' : '';
+      let infoTopPersone = gioco.topPersone ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Giocatori Ideali</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">👥 ' + gioco.topPersone + '</span></div>' : '';
+      let infoEta = gioco.eta ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Età consigliata</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">👶 ' + gioco.eta + '+ anni</span></div>' : '';
+      let infoDiff = gioco.difficolta ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Difficoltà</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">🎯 ' + gioco.difficolta + '</span></div>' : '';
+      let infoVoto = gioco.voto ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Voto BGG</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">★ ' + gioco.voto + ' / 10</span></div>' : '';
+      let infoPeso = gioco.peso ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Complessità</span><span class="font-extrabold text-slate-800 text-xs md:text-sm">⚖️ ' + gioco.peso + '</span></div>' : '';
 
       container.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
@@ -1001,9 +999,9 @@
           <div class="md:col-span-7 p-6 md:p-8 flex flex-col justify-between space-y-6">
             <div>
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-xl border border-orange-100">${gioco.tipo}</span>
+                <span class="text-xs font-bold tracking-wider uppercase text-orange-600 bg-orange-50 px-3.5 py-1.5 border border-orange-100">${gioco.tipo}</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="togglePreferito('${gioco.id}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3.5 py-2 rounded-xl transition-colors shadow-sm">
+                  <button onclick="togglePreferito('${gioco.id}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3.5 py-2 transition-colors shadow-sm">
                     ${heartText}
                   </button>
                   ${statusBadge}
@@ -1012,11 +1010,11 @@
               <h2 class="text-2xl md:text-4xl font-black text-slate-900 mb-5 leading-tight">${gioco.titolo}</h2>
 
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-6">
-                <div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100">
+                <div class="bg-amber-50/70 p-3 border border-amber-100">
                   <span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Giocatori</span>
                   <span class="font-extrabold text-slate-800 text-xs md:text-sm">👥 ${gioco.persone}</span>
                 </div>
-                <div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100">
+                <div class="bg-amber-50/70 p-3 border border-amber-100">
                   <span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Durata</span>
                   <span class="font-extrabold text-slate-800 text-xs md:text-sm">⏱ ${gioco.tempo}</span>
                 </div>
