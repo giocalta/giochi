@@ -743,7 +743,6 @@
       return target >= minP && target <= maxP;
     }
 
-    // CONVERTITORE DATA PER ORDINAMENTO CRONOLOGICO (GIORNO, MESE, ANNO)
     function convertiDataInTimestamp(giorno, mese, anno) {
       let g = parseInt(giorno, 10) || 1;
       let a = parseInt(anno, 10) || 2026;
@@ -756,7 +755,7 @@
       return new Date(a, m, g).getTime();
     }
 
-    // 1. CARICAMENTO DATI CATALOGO GIOCHI
+    // 1. CARICAMENTO CATALOGO GIOCHI
     function processGoogleSheetsData(json) {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
@@ -837,7 +836,7 @@
       }
     }
 
-    // 2. CARICAMENTO AGENDA & EVENTI CON ANNO E ORDINAMENTO CRONOLOGICO
+    // 2. CARICAMENTO AGENDA & GALLERIA (FOTO HOME vs FOTO GALLERIA)
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -851,16 +850,17 @@
             return c[idx].f !== null && c[idx].f !== undefined ? String(c[idx].f).trim() : (c[idx].v !== null && c[idx].v !== undefined ? String(c[idx].v).trim() : '');
           }
 
-          let giorno = getVal(0);
-          let mese = getVal(1);
-          let anno = getVal(2) || '2026'; // Colonna C per l'anno
-          let titolo = getVal(3);         // Colonna D per il titolo
-          let descrizione = getVal(4);    // Colonna E per la descrizione
-          let tipo = getVal(5) || 'Evento'; // Colonna F per il tipo
-          let rawFoto = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Colonna G per foto principale
-          let fotoPrincipaleAgenda = pulisciUrlFoto(rawFoto);
+          let giorno = getVal(0);       // Col A
+          let mese = getVal(1);         // Col B
+          let anno = getVal(2) || '2026'; // Col C
+          let titolo = getVal(3);       // Col D
+          let descrizione = getVal(4);  // Col E
+          let tipo = getVal(5) || 'Evento'; // Col F
           
-          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Colonna H per altre foto
+          let rawFotoHome = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Col G (Foto Home)
+          let fotoHome = pulisciUrlFoto(rawFotoHome);
+          
+          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Col H (Altre foto separate da virgola)
           let altreFotoList = [];
           if (rawAltreFoto) {
             altreFotoList = rawAltreFoto.split(',').map(link => pulisciUrlFoto(link)).filter(link => link !== '');
@@ -868,7 +868,8 @@
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
-          let fotoAnteprimaGrid = (altreFotoList.length > 0) ? altreFotoList[0] : fotoPrincipaleAgenda;
+          // LA FOTO PER LA GALLERIA È LA PRIMA DELLA COLONNA H (dopo la virgola), se vuota usa quella della Home
+          let fotoGalleriaCopertina = (altreFotoList.length > 0) ? altreFotoList[0] : fotoHome;
           let timestamp = convertiDataInTimestamp(giorno, mese, anno);
 
           eventiData.push({
@@ -880,13 +881,13 @@
             titolo,
             descrizione,
             tipo,
-            foto: fotoPrincipaleAgenda,
-            fotoAnteprima: fotoAnteprimaGrid,
-            altreFoto: altreFotoList
+            fotoHome: fotoHome,             // Per l'agenda in home
+            fotoGalleria: fotoGalleriaCopertina, // Per la copertina in galleria
+            altreFoto: altreFotoList        // Tutte le foto per il dettaglio
           });
         });
 
-        // Ordina gli eventi in ordine cronologico (dal più recente al meno recente)
+        // Ordinamento cronologico dal più recente al meno recente
         eventiData.sort((a, b) => b.timestamp - a.timestamp);
 
         renderAgenda();
@@ -919,7 +920,7 @@
         };
         
         let bannerFoto = '';
-        let fotoMostrata = ev.fotoAnteprima || ev.foto;
+        let fotoMostrata = ev.fotoHome || ev.fotoGalleria;
         if (fotoMostrata) {
           bannerFoto = '<div class="h-32 bg-slate-100 overflow-hidden relative"><img src="' + fotoMostrata + '" alt="' + ev.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>';
         }
@@ -964,7 +965,7 @@
           mostraDettaglioEvento(ev.id, true);
         };
 
-        let fotoGrid = ev.fotoAnteprima || ev.foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';
+        let fotoGrid = ev.fotoGalleria || ev.fotoHome || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';
 
         card.innerHTML = `
           <div class="h-64 md:h-72 bg-slate-100 overflow-hidden relative">
@@ -1044,7 +1045,7 @@
           </div>
         </div>
 
-        ${evento.foto ? '<div class="h-64 md:h-96 bg-slate-100 overflow-hidden shadow-inner"><img src="' + evento.foto + '" alt="' + evento.titolo + '" class="w-full h-full object-cover"></div>' : ''}
+        ${evento.fotoGalleria ? '<div class="h-64 md:h-96 bg-slate-100 overflow-hidden shadow-inner"><img src="' + evento.fotoGalleria + '" alt="' + evento.titolo + '" class="w-full h-full object-cover"></div>' : ''}
 
         <div class="space-y-2">
           <h3 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Dettagli Serata</h3>
