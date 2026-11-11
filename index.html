@@ -64,7 +64,7 @@
       </div>
     </header>
 
-    <!-- BARRA RICERCA (VISIBILE SOLO NEL CATALOGO) -->
+    <!-- BARRA RICERCA & PULSANTE FILTRI (VISIBILE SOLO NEL CATALOGO) -->
     <div id="stickySearchContainer" class="hidden bg-amber-50/95 backdrop-blur-md py-2 border-b border-amber-200/80">
       <div class="max-w-6xl mx-auto px-2.5 md:px-4">
         <div class="bg-white p-1.5 md:p-2 shadow-sm border border-amber-200/80">
@@ -74,73 +74,133 @@
               <input type="text" id="searchInput" placeholder="Cerca gioco..." 
                      class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white text-xs md:text-sm transition-all font-medium">
             </div>
-            <div class="shrink-0 flex items-center">
-              <select id="sortOrder" class="py-1.5 md:py-2 px-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 text-[11px] md:text-xs font-bold text-orange-700">
-                <option value="recenti">✨ Ultimi arrivi</option>
-                <option value="az">🔤 Ordine A-Z</option>
-                <option value="za">🔤 Ordine Z-A</option>
-                <option value="voto">⭐ Voto BGG</option>
-              </select>
-            </div>
-            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs px-3 py-1.5 md:py-2 transition-all flex items-center gap-1 shrink-0 border border-orange-200/60 shadow-sm">
-              <span>⚙️</span>
-              <span class="hidden sm:inline">Filtri</span>
-              <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
-              <span id="filterToggleIcon" class="text-[10px] text-orange-600 transition-transform duration-300">▼</span>
+            <button onclick="toggleFiltriModale()" id="btnToggleFiltri" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-1.5 md:py-2 transition-all flex items-center gap-1.5 shrink-0 shadow-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.172a1 1 0 01-.553.894l-4 2A1 1 0 017 18.28v-5.172a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z"></path></svg>
+              <span>Filtri</span>
+              <span id="activeFiltersBadge" class="hidden bg-white text-orange-600 text-[10px] px-1.5 py-0.2 rounded-full font-black ml-1">!</span>
             </button>
-            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2 py-1.5 md:py-2 transition-all flex items-center shrink-0">
+            <button onclick="azzeraFiltri()" title="Azzera Ricerca" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2.5 py-1.5 md:py-2 transition-all flex items-center shrink-0">
               <span>↺</span>
             </button>
-          </div>
-
-          <!-- PANNELLO FILTRI -->
-          <div id="filterOptionsContainer" class="hidden pt-2 mt-2 border-t border-slate-100 space-y-2">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-              <div>
-                <select id="playersFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs text-slate-700 font-semibold">
-                  <option value="">👥 Giocatori (Tutti)</option>
-                  <option value="1">1 Giocatore</option>
-                  <option value="2">2 Giocatori</option>
-                  <option value="3">3 Giocatori</option>
-                  <option value="4">4 Giocatori</option>
-                  <option value="5">5 Giocatori</option>
-                  <option value="6">6+ Giocatori</option>
-                </select>
-              </div>
-              <div>
-                <select id="categoryFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
-                  <option value="">🏷️ Tutti i Tipi</option>
-                </select>
-              </div>
-              <div>
-                <select id="statusFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
-                  <option value="">📋 Tutti gli Stati</option>
-                  <option value="disponibile">Solo Disponibili</option>
-                  <option value="noleggiato">Solo Noleggiati</option>
-                </select>
-              </div>
-              <div>
-                <select id="difficultyFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
-                  <option value="">🎯 Difficoltà</option>
-                  <option value="semplice">Semplice</option>
-                  <option value="media">Media</option>
-                  <option value="elevata">Elevata</option>
-                </select>
-              </div>
-              <div class="col-span-2 md:col-span-1">
-                <select id="timeFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
-                  <option value="">⏱️ Durata</option>
-                  <option value="30">Max 30 min</option>
-                  <option value="60">Max 1 ora</option>
-                  <option value="120+">Più di 2 ore</option>
-                </select>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
 
+  </div>
+
+  <!-- PANNELLO FILTRI A SCHERMATA / MODALE (stile app pulito con icone a sinistra) -->
+  <div id="filterModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex flex-col justify-end md:justify-center md:items-center p-0 md:p-4">
+    <div class="bg-white w-full md:max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Intestazione Modale -->
+      <div class="bg-orange-600 text-white p-4 flex items-center justify-between shadow">
+        <h3 class="font-black text-base flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.172a1 1 0 01-.553.894l-4 2A1 1 0 017 18.28v-5.172a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z"></path></svg>
+          Filtri Ludoteca
+        </h3>
+        <button onclick="toggleFiltriModale()" class="text-white hover:bg-orange-700 w-8 h-8 flex items-center justify-center font-bold text-lg">✕</button>
+      </div>
+
+      <!-- Corpo con le righe dei filtri e le icone a sinistra -->
+      <div class="p-4 md:p-6 space-y-4 overflow-y-auto divide-y divide-slate-100">
+        
+        <!-- 1. Giocatori -->
+        <div class="pt-3 first:pt-0 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
+            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <span>Giocatori</span>
+          </div>
+          <select id="playersFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
+            <option value="">Tutti</option>
+            <option value="1">1 Giocatore</option>
+            <option value="2">2 Giocatori</option>
+            <option value="3">3 Giocatori</option>
+            <option value="4">4 Giocatori</option>
+            <option value="5">5 Giocatori</option>
+            <option value="6">6+ Giocatori</option>
+          </select>
+        </div>
+
+        <!-- 2. Tempo -->
+        <div class="pt-3 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
+            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Tempo</span>
+          </div>
+          <select id="timeFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
+            <option value="">Tutti</option>
+            <option value="30">Max 30 min</option>
+            <option value="60">Max 1 ora</option>
+            <option value="120+">Più di 2 ore</option>
+          </select>
+        </div>
+
+        <!-- 3. Complessità -->
+        <div class="pt-3 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
+            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span>Complessità</span>
+          </div>
+          <select id="difficultyFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
+            <option value="">Tutti</option>
+            <option value="semplice">Semplice</option>
+            <option value="media">Media</option>
+            <option value="elevata">Elevata</option>
+          </select>
+        </div>
+
+        <!-- 4. Tipo di gioco -->
+        <div class="pt-3 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
+            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            <span>Tipo di gioco</span>
+          </div>
+          <select id="categoryFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
+            <option value="">Tutti</option>
+          </select>
+        </div>
+
+        <!-- 5. Stato (Disponibilità) -->
+        <div class="pt-3 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
+            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            <span>Stato</span>
+          </div>
+          <select id="statusFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
+            <option value="">Tutti</option>
+            <option value="disponibile">Solo Disponibili</option>
+            <option value="noleggiato">Solo Noleggiati</option>
+          </select>
+        </div>
+
+        <!-- 6. Ordina per -->
+        <div class="pt-3 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
+            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+            <span>Ordina per</span>
+          </div>
+          <select id="sortOrder" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-orange-700 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
+            <option value="recenti">✨ Ultimi arrivi</option>
+            <option value="az">🔤 Ordine A-Z</option>
+            <option value="za">🔤 Ordine Z-A</option>
+            <option value="voto">⭐ Voto BGG</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Pulsanti in basso (Cancella / Applica) -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex gap-3">
+        <button onclick="azzeraFiltriModal()" class="flex-1 bg-white hover:bg-slate-100 text-rose-600 border border-rose-200 font-bold py-2.5 px-4 text-sm transition-all shadow-sm">
+          Cancella
+        </button>
+        <button onclick="applicaFiltriModal()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 px-4 text-sm transition-all shadow-md">
+          Applica
+        </button>
+      </div>
+
+    </div>
   </div>
 
   <main class="max-w-6xl mx-auto px-0 md:px-4 pt-3 pb-8 flex-grow w-full space-y-6">
@@ -166,13 +226,11 @@
         </div>
       </div>
 
-      <!-- CAROSELLO 1: EVENTI & AGENDA (SENZA MARGINI ESTERNI, SQUADRATI) -->
+      <!-- CAROSELLO 1: EVENTI & AGENDA -->
       <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
-            <span class="text-orange-600">
-              <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            </span> 
+            <span class="text-orange-600">📅</span> 
             Agenda & Prossimi Eventi
           </h2>
           <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1">In Sede</span>
@@ -189,13 +247,11 @@
         </div>
       </div>
 
-      <!-- CAROSELLO 2: ULTIMI GIOCHI INSERITI (SENZA MARGINI ESTERNI, SQUADRATI) -->
+      <!-- CAROSELLO 2: ULTIMI GIOCHI INSERITI -->
       <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
-            <span class="text-orange-600">
-              <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-            </span>
+            <span class="text-orange-600">🎲</span>
             Ultimi Giochi Inseriti
           </h2>
           <button onclick="apriCatalogoPuro()" class="text-xs font-bold text-orange-600 hover:underline">
@@ -214,7 +270,7 @@
         </div>
       </div>
 
-      <!-- CAROSELLO 3: GIOCHI PIÙ PREFERITI (SENZA MARGINI ESTERNI, SQUADRATI) -->
+      <!-- CAROSELLO 3: GIOCHI PIÙ PREFERITI -->
       <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
@@ -415,18 +471,7 @@
     }
 
     function apriCatalogoPuro() {
-      azzeraFiltriSenzaRidisegnare();
       cambiaSezione('catalogo');
-    }
-
-    function azzeraFiltriSenzaRidisegnare() {
-      document.getElementById('searchInput').value = '';
-      document.getElementById('playersFilter').value = '';
-      document.getElementById('categoryFilter').value = '';
-      document.getElementById('statusFilter').value = '';
-      document.getElementById('sortOrder').value = 'recenti';
-      document.getElementById('difficultyFilter').value = '';
-      document.getElementById('timeFilter').value = '';
     }
 
     function scorriCarosello(idElemento, quantita) {
@@ -554,27 +599,32 @@
       }
     }
 
-    function toggleFiltri() {
-      const container = document.getElementById('filterOptionsContainer');
-      const icon = document.getElementById('filterToggleIcon');
-      
-      if (container.classList.contains('hidden')) {
-        container.classList.remove('hidden');
-        icon.style.transform = 'rotate(180deg)';
+    function toggleFiltriModale() {
+      const modal = document.getElementById('filterModal');
+      if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
       } else {
-        container.classList.add('hidden');
-        icon.style.transform = 'rotate(0deg)';
+        modal.classList.add('hidden');
       }
+    }
+
+    function applicaFiltriModal() {
+      toggleFiltriModale();
+      applicaFiltri();
+    }
+
+    function azzeraFiltriModal() {
+      document.getElementById('playersFilter').value = '';
+      document.getElementById('timeFilter').value = '';
+      document.getElementById('difficultyFilter').value = '';
+      document.getElementById('categoryFilter').value = '';
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('sortOrder').value = 'recenti';
     }
 
     function azzeraFiltri() {
       document.getElementById('searchInput').value = '';
-      document.getElementById('playersFilter').value = '';
-      document.getElementById('categoryFilter').value = '';
-      document.getElementById('statusFilter').value = '';
-      document.getElementById('sortOrder').value = 'recenti';
-      document.getElementById('difficultyFilter').value = '';
-      document.getElementById('timeFilter').value = '';
+      azzeraFiltriModal();
       applicaFiltri();
     }
 
@@ -758,7 +808,7 @@
       }
     }
 
-    // 2. CARICAMENTO DATI SECONDO FOGLIO (AGENDA / EVENTI CON FOTO)
+    // 2. CARICAMENTO DATI SECONDO FOGLIO (AGENDA)
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -830,7 +880,6 @@
     function renderHomeContenuti() {
       renderAgenda();
 
-      // Ultimi Arrivi (Carosello riquadri squadrati senza margini esterni)
       const gridRecent = document.getElementById('homeRecentGrid');
       if (gridRecent) {
         gridRecent.innerHTML = '';
@@ -861,7 +910,6 @@
         }
       }
 
-      // Giochi Preferiti in Home (Carosello riquadri squadrati senza margini esterni)
       const gridFav = document.getElementById('homeFavoritesGrid');
       if (gridFav) {
         gridFav.innerHTML = '';
@@ -1058,7 +1106,7 @@
 
     function popolaFiltroCategorie() {
       const select = document.getElementById('categoryFilter');
-      select.innerHTML = '<option value="">🏷️ Tutti i Tipi</option>';
+      select.innerHTML = '<option value="">Tutti</option>';
       const catSet = {};
       
       giochiData.forEach(function(g) {
@@ -1150,12 +1198,6 @@
     }
 
     document.getElementById('searchInput').addEventListener('input', applicaFiltri);
-    document.getElementById('playersFilter').addEventListener('change', applicaFiltri);
-    document.getElementById('categoryFilter').addEventListener('change', applicaFiltri);
-    document.getElementById('statusFilter').addEventListener('change', applicaFiltri);
-    document.getElementById('sortOrder').addEventListener('change', applicaFiltri);
-    document.getElementById('difficultyFilter').addEventListener('change', applicaFiltri);
-    document.getElementById('timeFilter').addEventListener('change', applicaFiltri);
 
     // CARICAMENTO SCRIPT GOOGLE SHEETS (GIOCHI)
     const scriptGiochi = document.createElement('script');
@@ -1166,7 +1208,7 @@
     };
     document.body.appendChild(scriptGiochi);
 
-    // CARICAMENTO SCRIPT GOOGLE SHEETS (AGENDA - SECONDO FOGLIO)
+    // CARICAMENTO SCRIPT GOOGLE SHEETS (AGENDA)
     const scriptAgenda = document.createElement('script');
     scriptAgenda.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?sheet=Agenda&tqx=responseHandler:processAgendaData';
     document.body.appendChild(scriptAgenda);
