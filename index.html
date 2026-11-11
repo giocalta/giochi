@@ -319,7 +319,7 @@
     let giochiData = [];
     let eventiData = [];
     let savedScrollPosition = 0;
-    let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti'] || '[]');
+    let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
 
     function aggiornaContatorePreferiti() {
       const badge = document.getElementById('prefCounterBadge');
@@ -789,7 +789,7 @@
         
         card.innerHTML = 
           '<div class="w-24 md:w-full h-full md:h-48 bg-slate-200 overflow-hidden relative rounded-xl md:rounded-none shrink-0">' +
-            '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\'">' +
+            '<img src="' + g.foto + '" alt="' + g.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80\';">' +
             tutorialIcon +
             '<button onclick="togglePreferito(\'' + g.id + '\', event)" title="' + heartTitle + '" class="absolute bottom-2 right-2 md:bottom-2.5 md:right-2.5 bg-white/95 hover:bg-white w-8 h-8 rounded-full flex items-center justify-center shadow-md z-20 text-base font-bold text-rose-500 transition-transform active:scale-125"><span>' + heartSymbol + '</span></button>' +
             '<div class="absolute top-2 right-2 md:top-2.5 md:right-2.5 z-10">' + statusBadge + '</div>' +
@@ -865,7 +865,7 @@
       container.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
           <div class="md:col-span-5 bg-slate-100 relative min-h-[300px] md:min-h-[450px]">
-            <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
+            <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
           </div>
           <div class="md:col-span-7 p-6 md:p-8 flex flex-col justify-between space-y-6">
             <div>
@@ -1027,7 +1027,6 @@
 
     // CARICAMENTO SCRIPT GOOGLE SHEETS (AGENDA - SECONDO FOGLIO)
     const scriptAgenda = document.createElement('script');
-    // sheet=Agenda indica il nome della seconda scheda del foglio
     scriptAgenda.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?sheet=Agenda&tqx=responseHandler:processAgendaData';
     document.body.appendChild(scriptAgenda);
   </script>
