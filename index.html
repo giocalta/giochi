@@ -16,63 +16,63 @@
   <!-- UNICO BLOCCO FISSO IN ALTO (HEADER + BARRA RICERCA) -->
   <div class="sticky top-0 z-50 shadow-md">
     
-    <!-- HEADER BRANDIZZATO GIOCALTA -->
+    <!-- HEADER BRANDIZZATO GIOCALTA (COMPATTO ANCHE SU MOBILE) -->
     <header class="bg-gradient-to-r from-orange-600 via-orange-600 to-amber-600 text-white border-b border-orange-700/40">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="max-w-6xl mx-auto px-2.5 py-2 flex justify-between items-center gap-2">
         
         <!-- TUO LOGO UFFICIALE (LOGO-BIANCO.PNG) -->
-        <div class="cursor-pointer text-center sm:text-left flex items-center gap-3 group" onclick="cambiaSezione('catalogo')">
+        <div class="cursor-pointer flex items-center shrink-0 group" onclick="cambiaSezione('catalogo')">
           <div class="flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
-            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-11 md:h-14 w-auto object-contain drop-shadow-md" loading="eager" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
+            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-8 md:h-12 w-auto object-contain drop-shadow-md" loading="eager" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
           </div>
         </div>
 
-        <!-- NAVIGAZIONE STILE GEOMETRICO PULITO -->
-        <nav class="flex items-center gap-1.5 bg-orange-900/30 p-1.5 rounded-2xl text-xs backdrop-blur-md border border-white/10 flex-wrap justify-center shadow-inner">
-          <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-3.5 py-2 rounded-xl font-bold transition-all bg-white text-orange-600 shadow-sm flex items-center gap-1.5">
-            <span class="text-sm">🎲</span> <span>Catalogo</span>
+        <!-- NAVIGAZIONE ORIZZONTALE COMPATTA -->
+        <nav class="flex items-center gap-1 bg-orange-900/30 p-1 rounded-xl text-[11px] md:text-xs backdrop-blur-md border border-white/10 shadow-inner">
+          <button onclick="cambiaSezione('catalogo')" id="nav-catalogo" class="px-2.5 py-1.5 rounded-lg font-bold transition-all bg-white text-orange-600 shadow-sm flex items-center gap-1">
+            <span>🎲</span> <span class="hidden sm:inline">Catalogo</span>
           </button>
-          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-3.5 py-2 rounded-xl font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 relative">
-            <span class="text-rose-400 text-sm">♥</span> <span>Preferiti</span> 
-            <span id="prefCounterBadge" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black hidden shadow">0</span>
+          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-2.5 py-1.5 rounded-lg font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1 relative">
+            <span class="text-rose-400">♥</span> <span class="hidden sm:inline">Preferiti</span> 
+            <span id="prefCounterBadge" class="bg-rose-500 text-white text-[9px] px-1 py-0.1 rounded-full font-black hidden shadow">0</span>
           </button>
-          <button onclick="cambiaSezione('info')" id="nav-info" class="px-3.5 py-2 rounded-xl font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
-            <span class="text-sm">📖</span> <span>Info</span>
+          <button onclick="cambiaSezione('info')" id="nav-info" class="px-2.5 py-1.5 rounded-lg font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1">
+            <span>📖</span> <span class="hidden sm:inline">Info</span>
           </button>
-          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-3.5 py-2 rounded-xl font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
-            <span class="text-sm">📍</span> <span>Contatti</span>
+          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-2.5 py-1.5 rounded-lg font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1">
+            <span>📍</span> <span class="hidden sm:inline">Contatti</span>
           </button>
         </nav>
       </div>
     </header>
 
     <!-- BARRA RICERCA E FILTRI STILE SCHEDA MODERNA -->
-    <div id="stickySearchContainer" class="bg-amber-50/95 backdrop-blur-md py-2.5 border-b border-amber-200/80">
-      <div class="max-w-6xl mx-auto px-3 md:px-4">
-        <div class="bg-white p-2 rounded-2xl shadow-sm border border-amber-200/80">
+    <div id="stickySearchContainer" class="bg-amber-50/95 backdrop-blur-md py-2 border-b border-amber-200/80">
+      <div class="max-w-6xl mx-auto px-2.5 md:px-4">
+        <div class="bg-white p-1.5 md:p-2 rounded-2xl shadow-sm border border-amber-200/80">
           
           <!-- RIGA PRINCIPALE -->
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 md:gap-2">
             
             <!-- CAMPO DI RICERCA -->
             <div class="relative flex-grow min-w-0">
-              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
-              <input type="text" id="searchInput" placeholder="Cerca gioco per nome o genere..." 
-                     class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white text-xs md:text-sm transition-all font-medium">
+              <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm">🔍</span>
+              <input type="text" id="searchInput" placeholder="Cerca gioco..." 
+                     class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white text-xs md:text-sm transition-all font-medium">
             </div>
 
             <!-- MENU TENDINA ORDINAMENTO -->
-            <div class="shrink-0 flex items-center gap-1">
-              <select id="sortOrder" class="py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-bold text-orange-700">
-                <option value="recenti">✨ Ultimi arrivi</option>
-                <option value="az">🔤 Nome (A-Z)</option>
-                <option value="za">🔤 Nome (Z-A)</option>
-                <option value="voto">⭐ Voto BGG</option>
+            <div class="shrink-0 flex items-center">
+              <select id="sortOrder" class="py-1.5 md:py-2 px-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-[11px] md:text-xs font-bold text-orange-700">
+                <option value="recenti">✨ Ultimi</option>
+                <option value="az">🔤 A-Z</option>
+                <option value="za">🔤 Z-A</option>
+                <option value="voto">⭐ Voto</option>
               </select>
             </div>
 
             <!-- PULSANTE APERTURA FILTRI -->
-            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs md:text-sm px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 shrink-0 border border-orange-200/60 shadow-sm">
+            <button onclick="toggleFiltri()" id="btnToggleFiltri" class="bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs px-3 py-1.5 md:py-2 rounded-xl transition-all flex items-center gap-1 shrink-0 border border-orange-200/60 shadow-sm">
               <span>⚙️</span>
               <span class="hidden sm:inline">Filtri</span>
               <span id="activeFiltersBadge" class="hidden bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">!</span>
@@ -80,18 +80,17 @@
             </button>
 
             <!-- PULSANTE AZZERA -->
-            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2.5 py-2 rounded-xl transition-all flex items-center gap-1 shrink-0">
+            <button onclick="azzeraFiltri()" title="Azzera Ricerca e Filtri" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2 py-1.5 md:py-2 rounded-xl transition-all flex items-center shrink-0">
               <span>↺</span>
-              <span class="hidden md:inline">Azzera</span>
             </button>
 
           </div>
 
           <!-- PANNELLO FILTRI ESPANSIBILE -->
-          <div id="filterOptionsContainer" class="hidden pt-2.5 mt-2.5 border-t border-slate-100 space-y-2">
+          <div id="filterOptionsContainer" class="hidden pt-2 mt-2 border-t border-slate-100 space-y-2">
             <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
               <div>
-                <select id="playersFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs text-slate-700 font-semibold">
+                <select id="playersFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs text-slate-700 font-semibold">
                   <option value="">👥 Giocatori (Tutti)</option>
                   <option value="1">1 Giocatore (Solo)</option>
                   <option value="2">2 Giocatori</option>
@@ -105,13 +104,13 @@
               </div>
 
               <div>
-                <select id="categoryFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
+                <select id="categoryFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
                   <option value="">🏷️ Tutti i Tipi</option>
                 </select>
               </div>
 
               <div>
-                <select id="statusFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
+                <select id="statusFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
                   <option value="">📋 Tutti gli Stati</option>
                   <option value="disponibile">Solo Disponibili</option>
                   <option value="noleggiato">Solo Noleggiati</option>
@@ -119,7 +118,7 @@
               </div>
 
               <div>
-                <select id="difficultyFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
+                <select id="difficultyFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
                   <option value="">🎯 Difficoltà (Tutte)</option>
                   <option value="semplice">Semplice</option>
                   <option value="media">Media</option>
@@ -128,7 +127,7 @@
               </div>
 
               <div class="col-span-2 md:col-span-1">
-                <select id="timeFilter" class="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
+                <select id="timeFilter" class="w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs font-semibold text-slate-700">
                   <option value="">⏱️ Durata (Tutte)</option>
                   <option value="15">Max 15 min</option>
                   <option value="30">Max 30 min</option>
