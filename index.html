@@ -9,6 +9,12 @@
     body {
       letter-spacing: -0.01em;
     }
+    /* CORREZIONE ANTI-GLITCH: Elimina i riquadri neri durante le animazioni */
+    * {
+      -webkit-font-smoothing: antialiased;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
   </style>
 </head>
 <body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col">
@@ -16,7 +22,7 @@
   <!-- UNICO BLOCCO FISSO IN ALTO (HEADER + BARRA RICERCA) -->
   <div class="sticky top-0 z-50 shadow-md">
     
-    <!-- HEADER BRANDIZZATO GIOCALTA -->
+    <!-- HEADER BRANDIZZATO GIOCALTA CON LOGO CENTRALE NELLA HOME -->
     <header class="bg-gradient-to-r from-orange-600 via-orange-600 to-amber-600 text-white border-b border-orange-700/40">
       <div class="max-w-6xl mx-auto px-2.5 py-2 flex justify-between items-center gap-2">
         
@@ -133,25 +139,31 @@
     <!-- SEZIONE 0: HOME / AGENDA -->
     <div id="viewHome" class="space-y-6">
       
-      <!-- BANNER DI BENVENUTO -->
+      <!-- BANNER DI BENVENUTO CON LOGO -->
       <div class="bg-gradient-to-r from-orange-600 to-amber-600 rounded-3xl p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="space-y-2 text-center md:text-left z-10">
-          <span class="bg-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">📍 Caltagirone</span>
-          <h1 class="text-2xl md:text-4xl font-black tracking-tight">Benvenuti da GIOCALTA 🎲</h1>
-          <p class="text-amber-100 text-xs md:text-sm max-w-xl">Il punto di riferimento per il noleggio di giochi da tavolo a Caltagirone. Scegli il tuo prossimo gioco e prenota comodamente via WhatsApp!</p>
+        <div class="space-y-3 text-center md:text-left z-10">
+          <div class="inline-block bg-white/10 p-2.5 rounded-2xl backdrop-blur-sm mb-1">
+            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-10 md:h-14 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
+          </div>
+          <h1 class="text-2xl md:text-4xl font-black tracking-tight">Noleggio Giochi a Caltagirone 🎲</h1>
+          <p class="text-amber-100 text-xs md:text-sm max-w-xl">Scegli il tuo prossimo gioco dal catalogo e prenota comodamente via WhatsApp!</p>
         </div>
         <div class="flex gap-3 z-10 shrink-0">
-          <button onclick="cambiaSezione('catalogo')" class="bg-white text-orange-600 hover:bg-amber-50 font-extrabold text-xs md:text-sm px-5 py-3 rounded-2xl shadow transition-transform hover:scale-105">
-            Sfoglia Catalogo ➔
+          <button onclick="cambiaSezione('catalogo')" class="bg-white text-orange-600 hover:bg-amber-50 font-extrabold text-xs md:text-sm px-5 py-3 rounded-2xl shadow transition-transform hover:scale-105 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            Sfoglia Catalogo
           </button>
         </div>
       </div>
 
-      <!-- AGENDA ED EVENTI (CARICATI DAL SECONDO FOGLIO) -->
+      <!-- AGENDA ED EVENTI (CON ICONA VETTORIALE PULITA) -->
       <div class="bg-white rounded-3xl p-5 md:p-6 border border-amber-200/60 shadow-sm space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
-            <span>📅</span> Agenda & Prossimi Eventi
+            <span class="text-orange-600">
+              <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </span> 
+            Agenda & Prossimi Eventi
           </h2>
           <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">In Sede</span>
         </div>
@@ -165,7 +177,10 @@
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
-            <span>✨</span> Ultimi Giochi Inseriti
+            <span class="text-orange-600">
+              <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+            </span>
+            Ultimi Giochi Inseriti
           </h2>
           <button onclick="cambiaSezione('catalogo')" class="text-xs font-bold text-orange-600 hover:underline">
             Vedi tutti ➔
