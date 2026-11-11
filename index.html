@@ -52,6 +52,10 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             <span class="hidden sm:inline">Catalogo</span>
           </button>
+          <button onclick="cambiaSezione('galleria')" id="nav-galleria" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span class="hidden sm:inline">Galleria</span>
+          </button>
           <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 relative">
             <svg class="w-3.5 h-3.5 text-rose-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             <span class="hidden sm:inline">Preferiti</span> 
@@ -315,6 +319,20 @@
       <div id="gamesGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
     </div>
 
+    <!-- SEZIONE 1.2: GALLERIA FOTOGRAFICA COMPLETA -->
+    <div id="viewGalleria" class="hidden space-y-6">
+      <div class="bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-black text-slate-900 flex items-center gap-2.5">
+            <svg class="w-7 h-7 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Galleria Eventi & Serate
+          </h2>
+          <p class="text-xs md:text-sm text-slate-500 mt-1">Tutti i ricordi e i momenti più belli delle serate di gioco a Caltagirone.</p>
+        </div>
+      </div>
+      <div id="galleriaGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-12"></div>
+    </div>
+
     <!-- SEZIONE 1.5: PREFERITI -->
     <div id="viewPreferiti" class="hidden space-y-4">
       <div class="bg-white p-5 border border-amber-200/60 shadow-sm flex items-center justify-between">
@@ -434,7 +452,7 @@
     <!-- SEZIONE 5: DETTAGLIO EVENTO & GALLERIA FOTOGRAFICA -->
     <div id="viewEvento" class="hidden space-y-4">
       <button onclick="tornaAllaHome(true)" class="mb-2 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
-        ⬅️ Torna alla Home
+        ⬅️ Torna indietro
       </button>
 
       <div id="dettaglioEventoContainer" class="bg-white shadow-sm border border-slate-200 p-6 md:p-8 space-y-6"></div>
@@ -501,6 +519,7 @@
     function cambiaSezione(nomeSezione) {
       document.getElementById('viewHome').classList.add('hidden');
       document.getElementById('viewCatalogo').classList.add('hidden');
+      document.getElementById('viewGalleria').classList.add('hidden');
       document.getElementById('viewPreferiti').classList.add('hidden');
       document.getElementById('viewInfo').classList.add('hidden');
       document.getElementById('viewContatti').classList.add('hidden');
@@ -509,7 +528,7 @@
 
       const stickyContainer = document.getElementById('stickySearchContainer');
 
-      ['home', 'catalogo', 'preferiti', 'info', 'contatti'].forEach(s => {
+      ['home', 'catalogo', 'galleria', 'preferiti', 'info', 'contatti'].forEach(s => {
         const btn = document.getElementById('nav-' + s);
         if (btn) {
           btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
@@ -532,6 +551,14 @@
         btn.classList.remove('text-amber-100', 'font-semibold');
         if (stickyContainer) stickyContainer.classList.remove('hidden');
         applicaFiltri();
+      } else if (nomeSezione === 'galleria') {
+        document.getElementById('viewGalleria').classList.remove('hidden');
+        const btn = document.getElementById('nav-galleria');
+        btn.classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+        btn.classList.remove('text-amber-100', 'font-semibold');
+        if (stickyContainer) stickyContainer.classList.add('hidden');
+        renderPaginaGalleria();
+        window.scrollTo(0, 0);
       } else if (nomeSezione === 'preferiti') {
         document.getElementById('viewPreferiti').classList.remove('hidden');
         const btn = document.getElementById('nav-preferiti');
@@ -567,6 +594,7 @@
         document.getElementById('viewEvento').classList.add('hidden');
         document.getElementById('viewInfo').classList.add('hidden');
         document.getElementById('viewContatti').classList.add('hidden');
+        document.getElementById('viewGalleria').classList.add('hidden');
         document.getElementById('viewPreferiti').classList.add('hidden');
         document.getElementById('viewHome').classList.remove('hidden');
         window.scrollTo(0, savedScrollPosition);
@@ -798,7 +826,7 @@
       }
     }
 
-    // 2. CARICAMENTO DATI AGENDA & FOTO EXTRA (SEPARATE DA VIRGOLA)
+    // 2. CARICAMENTO DATI AGENDA & FOTO EXTRA (SECONDA FOTO COME ANTEPRIMA PRINCIPALE)
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -818,9 +846,8 @@
           let descrizione = getVal(3);
           let tipo = getVal(4) || 'Evento';
           let rawFoto = (c[5] && (c[5].f || c[5].v)) ? String(c[5].f || c[5].v) : '';
-          let foto = pulisciUrlFoto(rawFoto);
+          let fotoPrincipaleAgenda = pulisciUrlFoto(rawFoto);
           
-          // Colonna G (indice 6) per eventuali foto extra separate da virgola
           let rawAltreFoto = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : '';
           let altreFotoList = [];
           if (rawAltreFoto) {
@@ -829,6 +856,9 @@
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
+          // LA FOTO CHE SI DEVE VEDERE PER PRIMA (GRIGLIA E ANTEPRIMA) È LA SECONDA INSERITA DOPO LA PRIMA VIRGOLA (indice 0 di altreFotoList), altrimenti quella principale dell'agenda
+          let fotoAnteprimaGrid = (altreFotoList.length > 0) ? altreFotoList[0] : fotoPrincipaleAgenda;
+
           eventiData.push({
             id: generaSlug(titolo),
             giorno,
@@ -836,7 +866,8 @@
             titolo,
             descrizione,
             tipo,
-            foto,
+            foto: fotoPrincipaleAgenda,
+            fotoAnteprima: fotoAnteprimaGrid,
             altreFoto: altreFotoList
           });
         });
@@ -868,8 +899,9 @@
         };
         
         let bannerFoto = '';
-        if (ev.foto) {
-          bannerFoto = '<div class="h-32 bg-slate-100 overflow-hidden relative"><img src="' + ev.foto + '" alt="' + ev.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>';
+        let fotoMostrata = ev.fotoAnteprima || ev.foto;
+        if (fotoMostrata) {
+          bannerFoto = '<div class="h-32 bg-slate-100 overflow-hidden relative"><img src="' + fotoMostrata + '" alt="' + ev.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>';
         }
 
         item.innerHTML = bannerFoto + `
@@ -891,12 +923,53 @@
       });
     }
 
+    function renderPaginaGalleria() {
+      const grid = document.getElementById('galleriaGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      if (eventiData.length === 0) {
+        grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12 text-xs font-medium">Nessun evento nella galleria al momento.</p>';
+        return;
+      }
+
+      eventiData.forEach(function(ev) {
+        const card = document.createElement('div');
+        card.className = "bg-white border border-amber-200/80 shadow-sm overflow-hidden cursor-pointer group hover:shadow-xl transition-all relative flex flex-col";
+        
+        card.onclick = function() {
+          savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+          window.history.pushState({ vista: 'evento', eventoId: ev.id }, '', '');
+          mostraDettaglioEvento(ev.id, true);
+        };
+
+        let fotoGrid = ev.fotoAnteprima || ev.foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';
+
+        card.innerHTML = `
+          <div class="h-64 md:h-72 bg-slate-100 overflow-hidden relative">
+            <img src="${fotoGrid}" alt="${ev.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
+            <div class="absolute top-3 left-3 bg-orange-600 text-white font-black text-center px-2.5 py-1.5 shadow-md">
+              <span class="block text-[9px] uppercase tracking-wide leading-none">${ev.mese || ''}</span>
+              <span class="block text-base leading-none mt-0.5">${ev.giorno || '•'}</span>
+            </div>
+            <div class="absolute bottom-3 left-3 right-3 text-white">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-950/60 px-2 py-0.5 backdrop-blur-sm">${ev.tipo}</span>
+              <h3 class="font-black text-base md:text-lg mt-1 leading-snug drop-shadow-md truncate">${ev.titolo}</h3>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
     function mostraDettaglioEvento(idEvento, scrollInCima) {
       const evento = eventiData.find(e => e.id === idEvento);
       if (!evento) return;
 
       document.getElementById('viewHome').classList.add('hidden');
       document.getElementById('viewCatalogo').classList.add('hidden');
+      document.getElementById('viewGalleria').classList.add('hidden');
       document.getElementById('viewPreferiti').classList.add('hidden');
       document.getElementById('viewInfo').classList.add('hidden');
       document.getElementById('viewContatti').classList.add('hidden');
@@ -919,7 +992,7 @@
           <div class="border-t border-slate-100 pt-6 space-y-4">
             <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
               <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-              Galleria Fotografica della Serata
+              Tutte le Foto della Serata
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               ${gridFoto}
@@ -1107,6 +1180,7 @@
 
       document.getElementById('viewHome').classList.add('hidden');
       document.getElementById('viewCatalogo').classList.add('hidden');
+      document.getElementById('viewGalleria').classList.add('hidden');
       document.getElementById('viewPreferiti').classList.add('hidden');
       document.getElementById('viewInfo').classList.add('hidden');
       document.getElementById('viewContatti').classList.add('hidden');
@@ -1298,7 +1372,7 @@
     };
     document.body.appendChild(scriptGiochi);
 
-    // CARICAMENTO SCRIPT GOOGLE SHEETS (AGENDA CON FOTO EXTRA)
+    // CARICAMENTO SCRIPT GOOGLE SHEETS (AGENDA & GALLERIA)
     const scriptAgenda = document.createElement('script');
     scriptAgenda.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?sheet=Agenda&tqx=responseHandler:processAgendaData';
     document.body.appendChild(scriptAgenda);
