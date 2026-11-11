@@ -451,7 +451,7 @@
 
     <!-- SEZIONE 5: DETTAGLIO EVENTO & GALLERIA FOTOGRAFICA -->
     <div id="viewEvento" class="hidden space-y-4">
-      <button onclick="tornaAllaHome(true)" class="mb-2 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
+      <button onclick="tornaIndietroEvento()" class="mb-2 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
         ⬅️ Torna indietro
       </button>
 
@@ -471,6 +471,7 @@
     let giochiData = [];
     let eventiData = [];
     let savedScrollPosition = 0;
+    let ultimaSezioneVisitata = 'home';
     let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
 
     function aggiornaContatorePreferiti() {
@@ -517,6 +518,7 @@
     }
 
     function cambiaSezione(nomeSezione) {
+      ultimaSezioneVisitata = nomeSezione;
       document.getElementById('viewHome').classList.add('hidden');
       document.getElementById('viewCatalogo').classList.add('hidden');
       document.getElementById('viewGalleria').classList.add('hidden');
@@ -609,12 +611,8 @@
       }
     }
 
-    function tornaAllaHome(usaHistoryBack) {
-      if (usaHistoryBack) {
-        window.history.back();
-      } else {
-        cambiaSezione('home');
-      }
+    function tornaIndietroEvento() {
+      cambiaSezione(ultimaSezioneVisitata);
     }
 
     function toggleFiltriModale() {
@@ -745,6 +743,19 @@
       return target >= minP && target <= maxP;
     }
 
+    // CONVERTITORE DATA PER ORDINAMENTO CRONOLOGICO (GIORNO, MESE, ANNO)
+    function convertiDataInTimestamp(giorno, mese, anno) {
+      let g = parseInt(giorno, 10) || 1;
+      let a = parseInt(anno, 10) || 2026;
+      let mesiMap = {
+        'gen': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'mag': 4, 'giu': 5,
+        'lug': 6, 'ago': 7, 'set': 8, 'ott': 9, 'nov': 10, 'dic': 11
+      };
+      let mStr = (mese || '').toLowerCase().substring(0, 3);
+      let m = mesiMap[mStr] !== undefined ? mesiMap[mStr] : 0;
+      return new Date(a, m, g).getTime();
+    }
+
     // 1. CARICAMENTO DATI CATALOGO GIOCHI
     function processGoogleSheetsData(json) {
       const loadingEl = document.getElementById('loading');
@@ -826,7 +837,7 @@
       }
     }
 
-    // 2. CARICAMENTO DATI AGENDA & FOTO EXTRA (SECONDA FOTO COME ANTEPRIMA PRINCIPALE)
+    // 2. CARICAMENTO AGENDA & EVENTI CON ANNO E ORDINAMENTO CRONOLOGICO
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -842,13 +853,14 @@
 
           let giorno = getVal(0);
           let mese = getVal(1);
-          let titolo = getVal(2);
-          let descrizione = getVal(3);
-          let tipo = getVal(4) || 'Evento';
-          let rawFoto = (c[5] && (c[5].f || c[5].v)) ? String(c[5].f || c[5].v) : '';
+          let anno = getVal(2) || '2026'; // Colonna C per l'anno
+          let titolo = getVal(3);         // Colonna D per il titolo
+          let descrizione = getVal(4);    // Colonna E per la descrizione
+          let tipo = getVal(5) || 'Evento'; // Colonna F per il tipo
+          let rawFoto = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Colonna G per foto principale
           let fotoPrincipaleAgenda = pulisciUrlFoto(rawFoto);
           
-          let rawAltreFoto = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : '';
+          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Colonna H per altre foto
           let altreFotoList = [];
           if (rawAltreFoto) {
             altreFotoList = rawAltreFoto.split(',').map(link => pulisciUrlFoto(link)).filter(link => link !== '');
@@ -856,13 +868,15 @@
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
-          // LA FOTO CHE SI DEVE VEDERE PER PRIMA (GRIGLIA E ANTEPRIMA) È LA SECONDA INSERITA DOPO LA PRIMA VIRGOLA (indice 0 di altreFotoList), altrimenti quella principale dell'agenda
           let fotoAnteprimaGrid = (altreFotoList.length > 0) ? altreFotoList[0] : fotoPrincipaleAgenda;
+          let timestamp = convertiDataInTimestamp(giorno, mese, anno);
 
           eventiData.push({
             id: generaSlug(titolo),
             giorno,
             mese,
+            anno,
+            timestamp,
             titolo,
             descrizione,
             tipo,
@@ -872,7 +886,13 @@
           });
         });
 
+        // Ordina gli eventi in ordine cronologico (dal più recente al meno recente)
+        eventiData.sort((a, b) => b.timestamp - a.timestamp);
+
         renderAgenda();
+        if (!document.getElementById('viewGalleria').classList.contains('hidden')) {
+          renderPaginaGalleria();
+        }
       } catch (err) {
         console.error("Errore caricamento agenda:", err);
       }
@@ -907,9 +927,10 @@
         item.innerHTML = bannerFoto + `
           <div class="p-3.5 flex items-start justify-between gap-3">
             <div class="flex items-start gap-3 min-w-0">
-              <div class="bg-orange-600 text-white font-black text-center p-2 shrink-0 w-12 shadow">
-                <span class="block text-[9px] uppercase tracking-wide">${ev.mese || 'ORA'}</span>
-                <span class="block text-lg">${ev.giorno || '•'}</span>
+              <div class="bg-orange-600 text-white font-black text-center p-2 shrink-0 w-14 shadow">
+                <span class="block text-[8px] uppercase tracking-wider">${ev.mese || 'ORA'}</span>
+                <span class="block text-base leading-tight">${ev.giorno || '•'}</span>
+                <span class="block text-[9px] opacity-90 leading-none mt-0.5">${ev.anno || ''}</span>
               </div>
               <div class="min-w-0">
                 <span class="text-[10px] font-bold text-orange-700 bg-orange-100/90 px-2 py-0.5">${ev.tipo}</span>
@@ -952,6 +973,7 @@
             <div class="absolute top-3 left-3 bg-orange-600 text-white font-black text-center px-2.5 py-1.5 shadow-md">
               <span class="block text-[9px] uppercase tracking-wide leading-none">${ev.mese || ''}</span>
               <span class="block text-base leading-none mt-0.5">${ev.giorno || '•'}</span>
+              <span class="block text-[10px] opacity-90 leading-none mt-0.5">${ev.anno || ''}</span>
             </div>
             <div class="absolute bottom-3 left-3 right-3 text-white">
               <span class="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-950/60 px-2 py-0.5 backdrop-blur-sm">${ev.tipo}</span>
@@ -1013,6 +1035,7 @@
             <div class="bg-orange-600 text-white font-black text-center p-3 shrink-0 w-16 shadow">
               <span class="block text-[10px] uppercase tracking-wide">${evento.mese || 'ORA'}</span>
               <span class="block text-2xl">${evento.giorno || '•'}</span>
+              <span class="block text-[11px] opacity-90">${evento.anno || ''}</span>
             </div>
             <div>
               <span class="text-xs font-bold text-orange-700 bg-orange-100 px-2.5 py-1">${evento.tipo}</span>
