@@ -825,7 +825,7 @@
       }
     }
 
-    // 2. CARICAMENTO AGENDA & GALLERIA (SUPPORTO CARTELLE DRIVE E COPERTINA AUTOMATICA)
+    // 2. CARICAMENTO AGENDA & GALLERIA (CON FILTRO "MOSTRA IN GALLERIA": SÌ / NO)
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -849,11 +849,13 @@
           let rawFotoHome = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Col G (Foto Home)
           let fotoHome = pulisciUrlFoto(rawFotoHome);
           
-          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Col H (Altre foto o cartella Drive)
+          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Col H (Altre foto o cartella)
           let altreFotoList = [];
           if (rawAltreFoto) {
             altreFotoList = rawAltreFoto.split(',').map(link => pulisciUrlFoto(link)).filter(link => link !== '');
           }
+
+          let mostraInGalleriaStr = getVal(8).toLowerCase(); // Col I: Si / No per la galleria
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
@@ -864,6 +866,9 @@
 
           let fotoGalleriaCopertina = (altreFotoList.length > 0) ? altreFotoList[0] : fotoHomeDefinitiva;
           let timestamp = convertiDataInTimestamp(giorno, mese, anno);
+
+          // Se la colonna I è vuota o contiene "si" (o "sì"), viene mostrato in galleria. Se c'è "no", viene escluso dalla galleria.
+          let vaInGalleria = mostraInGalleriaStr !== 'no';
 
           eventiData.push({
             id: generaSlug(titolo),
@@ -876,7 +881,8 @@
             tipo,
             fotoHome: fotoHomeDefinitiva,     
             fotoGalleria: fotoGalleriaCopertina, 
-            altreFoto: altreFotoList        
+            altreFoto: altreFotoList,
+            vaInGalleria: vaInGalleria       
           });
         });
 
@@ -942,12 +948,15 @@
       if (!grid) return;
       grid.innerHTML = '';
 
-      if (eventiData.length === 0) {
+      // Filtriamo solo gli eventi che hanno "Sì" (o vuoto) nella colonna dedicata
+      const eventiGalleria = eventiData.filter(e => e.vaInGalleria);
+
+      if (eventiGalleria.length === 0) {
         grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12 text-xs font-medium">Nessun evento nella galleria al momento.</p>';
         return;
       }
 
-      eventiData.forEach(function(ev) {
+      eventiGalleria.forEach(function(ev) {
         const card = document.createElement('div');
         card.className = "bg-white border border-amber-200/80 shadow-sm overflow-hidden cursor-pointer group hover:shadow-xl transition-all relative flex flex-col";
         
@@ -963,6 +972,12 @@
           <div class="h-64 md:h-72 bg-slate-100 overflow-hidden relative">
             <img src="${fotoGrid}" alt="${ev.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
+            
+            <!-- FILIGRANA / LOGO AL CENTRO DELLA FOTO -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30 group-hover:opacity-40 transition-opacity">
+              <img src="logo-bianco.png" alt="GIOCALTA Watermark" class="w-24 md:w-32 h-auto object-contain drop-shadow-lg filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" onerror="this.onerror=null; this.style.display='none';">
+            </div>
+
             <div class="absolute top-3 left-3 bg-orange-600 text-white font-black text-center px-2.5 py-1.5 shadow-md">
               <span class="block text-[9px] uppercase tracking-wide leading-none">${ev.mese || ''}</span>
               <span class="block text-base leading-none mt-0.5">${ev.giorno || '•'}</span>
@@ -1000,7 +1015,13 @@
       if (evento.altreFoto && evento.altreFoto.length > 0) {
         let gridFoto = '';
         evento.altreFoto.forEach(fUrl => {
-          gridFoto += '<div class="h-48 md:h-64 bg-slate-100 overflow-hidden shadow-sm border border-slate-200"><img src="' + fUrl + '" alt="Foto evento" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div>';
+          gridFoto += `
+            <div class="h-48 md:h-64 bg-slate-100 overflow-hidden shadow-sm border border-slate-200 relative group">
+              <img src="${fUrl}" alt="Foto evento" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+                <img src="logo-bianco.png" alt="Watermark" class="w-20 h-auto object-contain">
+              </div>
+            </div>`;
         });
 
         galleriaHtml = `
@@ -1022,6 +1043,17 @@
         `;
       }
 
+      let bannerCopertina = '';
+      if (evento.fotoGalleria) {
+        bannerCopertina = `
+          <div class="h-64 md:h-96 bg-slate-100 overflow-hidden shadow-inner relative">
+            <img src="${evento.fotoGalleria}" alt="${evento.titolo}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+              <img src="logo-bianco.png" alt="Watermark" class="w-28 md:w-40 h-auto object-contain">
+            </div>
+          </div>`;
+      }
+
       container.innerHTML = `
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
           <div class="flex items-center gap-4">
@@ -1037,7 +1069,7 @@
           </div>
         </div>
 
-        ${evento.fotoGalleria ? '<div class="h-64 md:h-96 bg-slate-100 overflow-hidden shadow-inner"><img src="' + evento.fotoGalleria + '" alt="' + evento.titolo + '" class="w-full h-full object-cover"></div>' : ''}
+        ${bannerCopertina}
 
         <div class="space-y-2">
           <h3 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Dettagli Serata</h3>
@@ -1369,7 +1401,7 @@
       } else if (sortQuery === 'az') {
         filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo));
       } else if (sortQuery === 'za') {
-        filtrati.sort((a, b) => b.titolo.localeCompare(a.titolo));
+        filtrati.sort((a, b) => b.titolo.localeCompare(a.tauo) || b.titolo.localeCompare(a.titolo));
       } else if (sortQuery === 'voto') {
         filtrati.sort((a, b) => (parseFloat(b.voto) || 0) - (parseFloat(a.voto) || 0));
       }
