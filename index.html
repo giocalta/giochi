@@ -468,11 +468,11 @@
   <script>
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUuADRwjRN5Yz5MBFMT_afbnfm6fzNvp07xx8V4n6akdztwGYnkQUv2rxX2rvhf20vHQ/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzN31DLfAlKt-yRi3_uHg-Ms8IxQPQYQu6R9PAse3ZX8K8zEVDfmBwT0X8R0EabnQaF/exec';
 
     let giochiData = [];
     let eventiData = [];
-    let preferitiGlobaliMap = {}; // Conserva i voti globali dal foglio
+    let preferitiGlobaliMap = {}; 
     let savedScrollPosition = 0;
     let ultimaSezioneVisitata = 'home';
     let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
@@ -487,7 +487,6 @@
       }
     }
 
-    // Caricamento dei voti globali dei preferiti da Google Apps Script
     function caricaPreferitiGlobali() {
       fetch(APPS_SCRIPT_URL + '?action=getPreferiti')
         .then(res => res.json())
@@ -518,7 +517,6 @@
       localStorage.setItem('giocalta_preferiti', JSON.stringify(preferitiIds));
       aggiornaContatorePreferiti();
 
-      // Invia il voto globale al Google Sheet tramite Apps Script
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({ action: 'votaPreferito', idGioco: idGioco, tipo: aggiungi ? 'aggiungi' : 'rimuovi' })
@@ -537,7 +535,6 @@
       }
     }
 
-    // Caricamento Sondaggi da Apps Script
     function caricaSondaggi() {
       fetch(APPS_SCRIPT_URL + '?action=getSondaggi')
         .then(res => res.json())
@@ -559,7 +556,6 @@
         return;
       }
 
-      // Raggruppiamo per idSondaggio (colonna A)
       let sondaggiMap = {};
       for (let i = 1; i < data.length; i++) {
         let idSond = data[i][0];
@@ -614,7 +610,7 @@
       })
       .then(res => res.json())
       .then(() => {
-        caricaSondaggi(); // Ricarica i risultati aggiornati
+        caricaSondaggi();
       })
       .catch(err => console.error("Errore voto sondaggio:", err));
     }
@@ -868,7 +864,6 @@
       return new Date(a, m, g).getTime();
     }
 
-    // 1. CARICAMENTO CATALOGO GIOCHI
     function processGoogleSheetsData(json) {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
@@ -950,7 +945,6 @@
       }
     }
 
-    // 2. CARICAMENTO AGENDA & GALLERIA
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -1247,17 +1241,15 @@
       const gridFav = document.getElementById('homeFavoritesGrid');
       if (gridFav) {
         gridFav.innerHTML = '';
-        // Ordiniamo i giochi in base ai voti globali ricevuti sul foglio Google
         let giochiOrdinatiPerVoti = [...giochiData].sort((a, b) => {
           let votiA = preferitiGlobaliMap[a.id] || 0;
           let votiB = preferitiGlobaliMap[b.id] || 0;
           return votiB - votiA;
         });
 
-        // Mostriamo quelli con più voti globali
         let preferitiLista = giochiOrdinatiPerVoti.filter(g => (preferitiGlobaliMap[g.id] || 0) > 0).slice(0, 6);
         if (preferitiLista.length === 0) {
-          preferitiLista = giochiData.slice(0, 4); // Fallback se nessuno ha ancora votato
+          preferitiLista = giochiData.slice(0, 4);
         }
 
         preferitiLista.forEach(function(g) {
@@ -1561,7 +1553,6 @@
 
     document.getElementById('searchInput').addEventListener('input', applicaFiltri);
 
-    // CARICAMENTO SCRIPT GOOGLE SHEETS (GIOCHI)
     const scriptGiochi = document.createElement('script');
     scriptGiochi.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
     scriptGiochi.onerror = function() {
@@ -1570,7 +1561,6 @@
     };
     document.body.appendChild(scriptGiochi);
 
-    // CARICAMENTO SCRIPT GOOGLE SHEETS (AGENDA & GALLERIA)
     const scriptAgenda = document.createElement('script');
     scriptAgenda.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?sheet=Agenda&tqx=responseHandler:processAgendaData';
     document.body.appendChild(scriptAgenda);
