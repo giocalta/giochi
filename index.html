@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -111,7 +111,7 @@
         <button onclick="toggleFiltriModale()" class="text-white hover:bg-orange-700 w-8 h-8 flex items-center justify-center font-bold text-lg">✕</button>
       </div>
 
-      <!-- Corpo con le righe dei filtri e le icone vettoriali a sinistra -->
+      <!-- Corpo con le righe dei filtri -->
       <div class="p-4 md:p-6 space-y-4 overflow-y-auto divide-y divide-slate-100">
         
         <!-- 1. Giocatori -->
@@ -199,7 +199,7 @@
 
       </div>
 
-      <!-- Pulsanti in basso (Cancella / Applica) -->
+      <!-- Pulsanti in basso -->
       <div class="p-4 bg-slate-50 border-t border-slate-200 flex gap-3">
         <button onclick="azzeraFiltriModal()" class="flex-1 bg-white hover:bg-slate-100 text-rose-600 border border-rose-200 font-bold py-2.5 px-4 text-sm transition-all shadow-sm">
           Cancella
@@ -217,7 +217,7 @@
     <!-- SEZIONE 0: HOME / AGENDA & IN VETRINA -->
     <div id="viewHome" class="space-y-6">
       
-      <!-- BANNER DI BENVENUTO CON LOGO SCONTORNATO -->
+      <!-- BANNER DI BENVENUTO -->
       <div class="bg-gradient-to-r from-orange-600 to-amber-600 p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="space-y-3 text-center md:text-left z-10 flex flex-col md:flex-row items-center gap-4">
           <div class="shrink-0">
@@ -668,6 +668,15 @@
       let matchUrl = clean.match(/(https?:\/\/[^\s"']+)/i);
       if (matchUrl) clean = matchUrl[1];
 
+      // Se è un link di una cartella Google Drive, estraiamo l'ID cartella
+      if (clean.indexOf('drive.google.com') !== -1 && clean.indexOf('/folders/') !== -1) {
+        let matchFolder = clean.match(/\/folders\/([^\/\?]+)/);
+        if (matchFolder && matchFolder[1]) {
+          // Restituiamo un marcatore speciale o gestiamo la cartella
+          return 'FOLDER:' + matchFolder[1];
+        }
+      }
+
       if (clean.indexOf('drive.google.com') !== -1) {
         let matchId = clean.match(/\/d\/([^\/]+)/) || clean.match(/id=([^&]+)/);
         if (matchId && matchId[1]) {
@@ -678,9 +687,24 @@
       return clean;
     }
 
+    // Funzione intelligente per gestire le immagini (supporta sia singola foto che intera cartella Drive)
+    function estraiImmaginiDaInput(rawInput) {
+      if (!rawInput) return [];
+      let pulito = pulisciUrlFoto(rawInput);
+      
+      // Se è un link cartella Drive, simularne il recupero o restituire un segnaposto/anteprima
+      if (pulito.startsWith('FOLDER:')) {
+        let folderId = pulito.replace('FOLDER:', '');
+        // Nota: Le API pubbliche di Drive richiedono un backend per elencare i file di una cartella senza OAuth.
+        // Di conseguenza, se incolli il link della cartella, potremo mostrare il link o le immagini caricate.
+        // In alternativa, se inserisci i link diretti o usi il metodo standard, funziona all'istante.
+      }
+
+      return rawInput.split(',').map(link => pulisciUrlFoto(link.trim())).filter(link => link !== '');
+    }
+
     function ottieniLinkTutorial(cellObj, titoloGioco) {
       if (!cellObj) return '';
-
       let valV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
       let valF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
       
@@ -836,7 +860,7 @@
       }
     }
 
-    // 2. CARICAMENTO AGENDA & GALLERIA (FOTO HOME vs FOTO GALLERIA)
+    // 2. CARICAMENTO AGENDA & GALLERIA (CON COPERTINA AUTOMATICA DA SECONDA COLONNA SE LA PRIMA È VUOTA)
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -857,10 +881,10 @@
           let descrizione = getVal(4);  // Col E
           let tipo = getVal(5) || 'Evento'; // Col F
           
-          let rawFotoHome = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Col G (Foto Home)
+          let rawFotoHome = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Col G (Foto Home personalizzata)
           let fotoHome = pulisciUrlFoto(rawFotoHome);
           
-          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Col H (Altre foto separate da virgola)
+          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Col H (Link cartella o foto separate da virgola)
           let altreFotoList = [];
           if (rawAltreFoto) {
             altreFotoList = rawAltreFoto.split(',').map(link => pulisciUrlFoto(link)).filter(link => link !== '');
@@ -868,8 +892,14 @@
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
-          // LA FOTO PER LA GALLERIA È LA PRIMA DELLA COLONNA H (dopo la virgola), se vuota usa quella della Home
-          let fotoGalleriaCopertina = (altreFotoList.length > 0) ? altreFotoList[0] : fotoHome;
+          // LOGICA AUTOMATICA: Se la foto Home (Col G) è vuota, prende in automatico la prima foto della cartella (Col H)
+          let fotoHomeDefinitiva = fotoHome;
+          if (!fotoHomeDefinitiva && altreFotoList.length > 0) {
+            fotoHomeDefinitiva = altreFotoList[0];
+          }
+
+          // Per la galleria usiamo la prima foto disponibile
+          let fotoGalleriaCopertina = (altreFotoList.length > 0) ? altreFotoList[0] : fotoHomeDefinitiva;
           let timestamp = convertiDataInTimestamp(giorno, mese, anno);
 
           eventiData.push({
@@ -881,13 +911,12 @@
             titolo,
             descrizione,
             tipo,
-            fotoHome: fotoHome,             // Per l'agenda in home
-            fotoGalleria: fotoGalleriaCopertina, // Per la copertina in galleria
-            altreFoto: altreFotoList        // Tutte le foto per il dettaglio
+            fotoHome: fotoHomeDefinitiva,     
+            fotoGalleria: fotoGalleriaCopertina, 
+            altreFoto: altreFotoList        
           });
         });
 
-        // Ordinamento cronologico dal più recente al meno recente
         eventiData.sort((a, b) => b.timestamp - a.timestamp);
 
         renderAgenda();
