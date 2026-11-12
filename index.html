@@ -867,7 +867,6 @@
           let fotoGalleriaCopertina = (altreFotoList.length > 0) ? altreFotoList[0] : fotoHomeDefinitiva;
           let timestamp = convertiDataInTimestamp(giorno, mese, anno);
 
-          // Se la colonna I è vuota o contiene "si" (o "sì"), viene mostrato in galleria. Se c'è "no", viene escluso dalla galleria.
           let vaInGalleria = mostraInGalleriaStr !== 'no';
 
           eventiData.push({
@@ -920,7 +919,8 @@
         let bannerFoto = '';
         let fotoMostrata = ev.fotoHome || ev.fotoGalleria;
         if (fotoMostrata) {
-          bannerFoto = '<div class="h-32 bg-slate-100 overflow-hidden relative"><img src="' + fotoMostrata + '" alt="' + ev.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>';
+          // Aumentata l'altezza a h-44 / md:h-52 in modo che si estenda bene verso il basso
+          bannerFoto = '<div class="h-44 md:h-52 bg-slate-100 overflow-hidden relative"><img src="' + fotoMostrata + '" alt="' + ev.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>';
         }
 
         item.innerHTML = bannerFoto + `
@@ -948,7 +948,6 @@
       if (!grid) return;
       grid.innerHTML = '';
 
-      // Filtriamo solo gli eventi che hanno "Sì" (o vuoto) nella colonna dedicata
       const eventiGalleria = eventiData.filter(e => e.vaInGalleria);
 
       if (eventiGalleria.length === 0) {
@@ -1096,20 +1095,27 @@
         } else {
           recenti.forEach(function(g) {
             const card = document.createElement('div');
-            card.className = "bg-white p-2.5 border border-amber-200/70 shadow-sm cursor-pointer group hover:shadow-md transition-all flex flex-col justify-between min-w-[180px] md:min-w-[210px] max-w-[210px] shrink-0";
+            // Larghezza e struttura identiche ai riquadri dell'agenda (min-w / max-w coordinati)
+            card.className = "bg-white border border-amber-200/80 shadow-sm min-w-[260px] md:min-w-[300px] max-w-[300px] shrink-0 flex flex-col overflow-hidden cursor-pointer group hover:shadow-md transition-all";
             card.onclick = function() {
               savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
               window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
               mostraDettaglioGioco(g.id, true);
             };
             card.innerHTML = `
-              <div class="h-36 md:h-44 bg-slate-100 overflow-hidden relative mb-2 shadow-inner">
+              <div class="h-44 md:h-52 bg-slate-100 overflow-hidden relative shadow-inner">
                 <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
                 ${g.voto ? '<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 font-bold flex items-center gap-1"><svg class="w-3 h-3 text-amber-400 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.399 8.168-7.333-3.854-7.333 3.854 1.399-8.168-5.934-5.787 8.2-1.192z"/></svg> ' + g.voto + '</span>' : ''}
               </div>
-              <div>
-                <span class="text-[10px] font-bold text-orange-600 uppercase block truncate">${g.tipo}</span>
-                <h4 class="font-extrabold text-slate-800 text-sm truncate group-hover:text-orange-600 transition-colors">${g.titolo}</h4>
+              <div class="p-3.5 flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wide block truncate">${g.tipo}</span>
+                  <h4 class="font-extrabold text-slate-800 text-sm mt-1 truncate group-hover:text-orange-600 transition-colors">${g.titolo}</h4>
+                  <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
+                    <span>👥 ${g.persone}</span>
+                    <span>⏱ ${g.tempo}</span>
+                  </p>
+                </div>
               </div>
             `;
             gridRecent.appendChild(card);
@@ -1126,21 +1132,28 @@
         } else {
           preferitiLista.forEach(function(g) {
             const card = document.createElement('div');
-            card.className = "bg-white p-2.5 border border-amber-200/70 shadow-sm cursor-pointer group hover:shadow-md transition-all flex flex-col justify-between min-w-[180px] md:min-w-[210px] max-w-[210px] shrink-0";
+            // Anche per i preferiti manteniamo la stessa identica struttura e proporzione
+            card.className = "bg-white border border-amber-200/80 shadow-sm min-w-[260px] md:min-w-[300px] max-w-[300px] shrink-0 flex flex-col overflow-hidden cursor-pointer group hover:shadow-md transition-all relative";
             card.onclick = function() {
               savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
               window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
               mostraDettaglioGioco(g.id, true);
             };
             card.innerHTML = `
-              <div class="h-36 md:h-44 bg-slate-100 overflow-hidden relative mb-2 shadow-inner">
+              <div class="h-44 md:h-52 bg-slate-100 overflow-hidden relative shadow-inner">
                 <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
                 <button onclick="togglePreferito('${g.id}', event)" class="absolute top-2 right-2 bg-white/95 w-7 h-7 flex items-center justify-center text-rose-500 font-bold shadow"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
                 ${g.voto ? '<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 font-bold flex items-center gap-1"><svg class="w-3 h-3 text-amber-400 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.399 8.168-7.333-3.854-7.333 3.854 1.399-8.168-5.934-5.787 8.2-1.192z"/></svg> ' + g.voto + '</span>' : ''}
               </div>
-              <div>
-                <span class="text-[10px] font-bold text-orange-600 uppercase block truncate">${g.tipo}</span>
-                <h4 class="font-extrabold text-slate-800 text-sm truncate group-hover:text-orange-600 transition-colors">${g.titolo}</h4>
+              <div class="p-3.5 flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wide block truncate">${g.tipo}</span>
+                  <h4 class="font-extrabold text-slate-800 text-sm mt-1 truncate group-hover:text-orange-600 transition-colors">${g.titolo}</h4>
+                  <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
+                    <span>👥 ${g.persone}</span>
+                    <span>⏱ ${g.tempo}</span>
+                  </p>
+                </div>
               </div>
             `;
             gridFav.appendChild(card);
@@ -1401,7 +1414,7 @@
       } else if (sortQuery === 'az') {
         filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo));
       } else if (sortQuery === 'za') {
-        filtrati.sort((a, b) => b.titolo.localeCompare(a.tauo) || b.titolo.localeCompare(a.titolo));
+        filtrati.sort((a, b) => b.titolo.localeCompare(a.titolo));
       } else if (sortQuery === 'voto') {
         filtrati.sort((a, b) => (parseFloat(b.voto) || 0) - (parseFloat(a.voto) || 0));
       }
