@@ -193,18 +193,18 @@
     <!-- SEZIONE 0: HOME -->
     <div id="viewHome" class="space-y-6">
       
-      <!-- BANNER DI BENVENUTO -->
-      <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="space-y-3 text-center md:text-left z-10 flex flex-col md:flex-row items-center gap-4">
+      <!-- BANNER DI BENVENUTO (Altezza dimezzata/compatta con p-4 md:p-5) -->
+      <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 p-4 md:p-5 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="space-y-1.5 text-center md:text-left z-10 flex flex-col md:flex-row items-center gap-3">
           <div class="shrink-0">
-            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-12 md:h-16 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
+            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-10 md:h-14 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
           </div>
           <div>
             <p class="text-amber-100 text-xs md:text-sm max-w-xl font-medium">Noleggio giochi da tavolo a Caltagirone. Scegli il tuo titolo preferito e prenota su WhatsApp!</p>
           </div>
         </div>
         <div class="flex gap-3 z-10 shrink-0">
-          <button onclick="apriCatalogoPuro()" class="bg-[#1E3A8A] text-white hover:bg-blue-900 font-extrabold text-xs md:text-sm px-4 py-2.5 shadow transition-transform hover:scale-105 flex items-center gap-2">
+          <button onclick="apriCatalogoPuro()" class="bg-[#1E3A8A] text-white hover:bg-blue-900 font-extrabold text-xs md:text-sm px-4 py-2 shadow transition-transform hover:scale-105 flex items-center gap-2">
             <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             Sfoglia Catalogo
           </button>
@@ -533,8 +533,8 @@
         let idOpz = data[i][1];
         let testoOpz = data[i][2];
         let voti = Number(data[i][3]) || 0;
-        let customSfondo = data[i][4] || ''; // Colonna opzionale sfondo sondaggio (Immagine o Colore)
-        let trasparenza = data[i][5] || '';     // Colonna opzionale trasparenza sondaggio
+        let customSfondo = data[i][4] || ''; 
+        let trasparenza = data[i][5] || '';     
 
         if (!sondaggiMap[idSond]) {
           sondaggiMap[idSond] = { titolo: idSond, opzioni: [], customSfondo, trasparenza };
@@ -565,8 +565,7 @@
         let card = document.createElement('div');
         card.className = "p-4 border border-amber-200/80 shadow-sm space-y-3 relative overflow-hidden";
         
-        // Gestione Sfondo e Trasparenza per il Sondaggio
-        let styleBg = 'background-color: rgba(254, 243, 199, 0.5);'; // Default ambrato chiaro
+        let styleBg = 'background-color: rgba(254, 243, 199, 0.5);'; 
         if (sond.customSfondo) {
           let opacita = sond.trasparenza !== '' ? sond.trasparenza : '1';
           card.style.opacity = opacita;
