@@ -566,9 +566,13 @@
         card.className = "p-4 border border-amber-200/80 shadow-sm space-y-3 relative overflow-hidden";
         
         let styleBg = 'background-color: rgba(254, 243, 199, 0.5);'; 
+        let opacityStyle = '';
+
         if (sond.customSfondo) {
-          let opacita = sond.trasparenza !== '' ? sond.trasparenza : '1';
-          card.style.opacity = opacita;
+          let opacitaVal = sond.trasparenza !== '' ? sond.trasparenza : '1';
+          // Applichiamo la trasparenza solo a un livello di sfondo dedicato per non sbiadire i testi
+          opacityStyle = `style="opacity: ${opacitaVal};"`;
+
           let sfondoPulito = pulisciUrlFoto(sond.customSfondo);
           if (sfondoPulito.startsWith('http') || sfondoPulito.includes('drive.google.com') || sfondoPulito.includes('lh3.googleusercontent.com')) {
             styleBg = `background-image: url('${sfondoPulito}'); background-size: cover; background-position: center;`;
@@ -579,7 +583,8 @@
         card.setAttribute('style', styleBg);
 
         card.innerHTML = `
-          <div class="bg-white/90 p-3 rounded space-y-3">
+          <div class="absolute inset-0 bg-white/30 pointer-events-none" ${opacityStyle}></div>
+          <div class="relative z-10 bg-white/95 p-3 rounded space-y-3 shadow-sm">
             <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">📊 ${sond.titolo}</h3>
             <div class="space-y-2.5">${htmlOpzioni}</div>
           </div>
@@ -1169,7 +1174,6 @@
         const tutorialIcon = g.tutorial ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 text-white w-7 h-7 flex items-center justify-center font-bold text-xs shadow-md z-10">▶</a>' : '';
 
         const card = document.createElement('div');
-        // Aumentata l'altezza da h-24 a h-32 su smartphone per ingrandire foto e testo
         card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-32 md:h-auto p-2 md:p-0 gap-3.5 md:gap-0 relative";
         card.onclick = function() { 
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
