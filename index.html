@@ -193,7 +193,7 @@
     <!-- SEZIONE 0: HOME -->
     <div id="viewHome" class="space-y-6">
       
-      <!-- BANNER DI BENVENUTO (Altezza dimezzata/compatta con p-4 md:p-5) -->
+      <!-- BANNER DI BENVENUTO (Altezza compatta) -->
       <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 p-4 md:p-5 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="space-y-1.5 text-center md:text-left z-10 flex flex-col md:flex-row items-center gap-3">
           <div class="shrink-0">
@@ -551,7 +551,7 @@
           let perc = totaleVoti > 0 ? Math.round((opz.voti / totaleVoti) * 100) : 0;
           htmlOpzioni += `
             <div class="space-y-1 cursor-pointer group" onclick="votaSondaggio('${sond.titolo}','${opz.idOpz}')">
-              <div class="flex justify-between text-xs font-bold text-slate-700 bg-white/70 px-1 py-0.5">
+              <div class="flex justify-between text-xs font-bold text-slate-700 bg-white/75 px-1 py-0.5">
                 <span>${opz.testoOpz}</span>
                 <span class="text-orange-600">${opz.voti} voti (${perc}%)</span>
               </div>
@@ -1165,11 +1165,12 @@
         const heartSvg = isPref ? '<svg class="w-4 h-4 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' : '<svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>';
         let numVotiGlobali = preferitiGlobaliMap[g.id] || 0;
 
-        const statusBadge = g.disponibile ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 py-1 font-bold">Disponibile</span>' : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 py-1 font-bold">Noleggiato</span>';
+        const statusBadge = g.disponibile ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 py-0.5 font-bold shadow-sm">Disp.</span>' : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 py-0.5 font-bold shadow-sm">Nolegg.</span>';
         const tutorialIcon = g.tutorial ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 text-white w-7 h-7 flex items-center justify-center font-bold text-xs shadow-md z-10">▶</a>' : '';
 
         const card = document.createElement('div');
-        card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-3 md:gap-0 relative";
+        // Aumentata l'altezza da h-24 a h-32 su smartphone per ingrandire foto e testo
+        card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-32 md:h-auto p-2 md:p-0 gap-3.5 md:gap-0 relative";
         card.onclick = function() { 
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
           window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
@@ -1177,22 +1178,22 @@
         };
         
         card.innerHTML = `
-          <div class="w-24 md:w-full h-full md:h-48 bg-slate-200 overflow-hidden relative shrink-0">
+          <div class="w-32 md:w-full h-full md:h-52 bg-slate-200 overflow-hidden relative shrink-0">
             <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
             ${tutorialIcon}
             <button onclick="togglePreferito('${g.id}', event)" class="absolute bottom-2 right-2 bg-white/95 w-8 h-8 flex items-center justify-center shadow-md z-20"><span>${heartSvg}</span></button>
             <div class="absolute top-2 right-2 z-10">${statusBadge}</div>
           </div>
-          <div class="flex-grow min-w-0 flex flex-col justify-between p-0 md:p-4 py-1 md:py-4 pr-2 md:pr-4">
+          <div class="flex-grow min-w-0 flex flex-col justify-between p-0 md:p-4 py-1.5 md:py-4 pr-2 md:pr-4">
             <div>
               <div class="flex items-center justify-between gap-1 mb-1">
-                <span class="text-[10px] md:text-xs font-bold text-orange-600 uppercase tracking-wide truncate">${g.tipo}</span>
-                <span class="text-[10px] font-extrabold text-rose-600 bg-rose-50 px-1.5 py-0.5">♥ ${numVotiGlobali}</span>
+                <span class="text-[11px] md:text-xs font-bold text-orange-600 uppercase tracking-wide truncate">${g.tipo}</span>
+                <span class="text-[11px] font-extrabold text-rose-600 bg-rose-50 px-1.5 py-0.5">♥ ${numVotiGlobali}</span>
               </div>
-              <h3 class="text-xs md:text-base font-extrabold text-slate-800 leading-snug group-hover:text-orange-600 truncate">${g.titolo}</h3>
+              <h3 class="text-sm md:text-base font-extrabold text-slate-800 leading-snug group-hover:text-orange-600 truncate">${g.titolo}</h3>
             </div>
-            <div class="flex items-center justify-between text-[11px] md:text-xs text-slate-500 pt-2 border-t border-slate-100 md:mt-3">
-              <span class="flex items-center gap-1 font-medium">👥 ${g.persone} | ⏱ ${g.tempo}</span>
+            <div class="flex items-center justify-between text-xs md:text-xs text-slate-500 pt-2 border-t border-slate-100 md:mt-3">
+              <span class="flex items-center gap-1 font-semibold text-slate-700">👥 ${g.persone} | ⏱ ${g.tempo}</span>
               <span class="text-xs font-bold text-orange-600">Dettagli ➔</span>
             </div>
           </div>
