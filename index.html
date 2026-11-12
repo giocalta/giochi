@@ -246,6 +246,17 @@
         </div>
       </div>
 
+      <!-- SEZIONE SONDAGGI IN TEMPO REALE -->
+      <div id="sondaggiContainerHome" class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4">
+        <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2 px-2 md:px-0">
+          <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          Sondaggi della Community
+        </h2>
+        <div id="boxSondaggiLista" class="space-y-4 px-2 md:px-0">
+          <p class="text-slate-400 text-xs">Caricamento sondaggi in corso...</p>
+        </div>
+      </div>
+
       <!-- CAROSELLO 2: ULTIMI GIOCHI INSERITI -->
       <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between px-2 md:px-0">
@@ -269,12 +280,12 @@
         </div>
       </div>
 
-      <!-- CAROSELLO 3: GIOCHI PIÙ PREFERITI -->
+      <!-- CAROSELLO 3: GIOCHI PIÙ PREFERITI (GLOBALE) -->
       <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
             <svg class="w-5 h-5 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            I Più Amati & Preferiti
+            I Più Amati Dalla Community
           </h2>
           <button onclick="cambiaSezione('preferiti')" class="text-xs font-bold text-orange-600 hover:underline">
             Vedi tutti ♥ ➔
@@ -457,9 +468,11 @@
   <script>
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUuADRwjRN5Yz5MBFMT_afbnfm6fzNvp07xx8V4n6akdztwGYnkQUv2rxX2rvhf20vHQ/exec';
 
     let giochiData = [];
     let eventiData = [];
+    let preferitiGlobaliMap = {}; // Conserva i voti globali dal foglio
     let savedScrollPosition = 0;
     let ultimaSezioneVisitata = 'home';
     let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
@@ -474,16 +487,44 @@
       }
     }
 
+    // Caricamento dei voti globali dei preferiti da Google Apps Script
+    function caricaPreferitiGlobali() {
+      fetch(APPS_SCRIPT_URL + '?action=getPreferiti')
+        .then(res => res.json())
+        .then(data => {
+          preferitiGlobaliMap = {};
+          if (data && data.length > 1) {
+            for (let i = 1; i < data.length; i++) {
+              let id = data[i][0];
+              let voti = Number(data[i][1]) || 0;
+              preferitiGlobaliMap[id] = voti;
+            }
+          }
+          renderHomeContenuti();
+        })
+        .catch(err => console.error("Errore caricamento preferiti globali:", err));
+    }
+
     function togglePreferito(idGioco, event) {
       if (event) event.stopPropagation();
       const index = preferitiIds.indexOf(idGioco);
+      let aggiungi = false;
       if (index > -1) {
         preferitiIds.splice(index, 1);
       } else {
         preferitiIds.push(idGioco);
+        aggiungi = true;
       }
       localStorage.setItem('giocalta_preferiti', JSON.stringify(preferitiIds));
       aggiornaContatorePreferiti();
+
+      // Invia il voto globale al Google Sheet tramite Apps Script
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'votaPreferito', idGioco: idGioco, tipo: aggiungi ? 'aggiungi' : 'rimuovi' })
+      }).then(() => {
+        caricaPreferitiGlobali();
+      }).catch(err => console.error("Errore salvataggio preferito:", err));
       
       if (!document.getElementById('viewCatalogo').classList.contains('hidden')) {
         applicaFiltri();
@@ -494,6 +535,88 @@
       } else if (!document.getElementById('viewGioco').classList.contains('hidden')) {
         mostraDettaglioGioco(idGioco, false);
       }
+    }
+
+    // Caricamento Sondaggi da Apps Script
+    function caricaSondaggi() {
+      fetch(APPS_SCRIPT_URL + '?action=getSondaggi')
+        .then(res => res.json())
+        .then(data => {
+          renderSondaggi(data);
+        })
+        .catch(err => {
+          document.getElementById('boxSondaggiLista').innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo al momento.</p>';
+        });
+    }
+
+    function renderSondaggi(data) {
+      const box = document.getElementById('boxSondaggiLista');
+      if (!box) return;
+      box.innerHTML = '';
+
+      if (!data || data.length <= 1) {
+        box.innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo al momento.</p>';
+        return;
+      }
+
+      // Raggruppiamo per idSondaggio (colonna A)
+      let sondaggiMap = {};
+      for (let i = 1; i < data.length; i++) {
+        let idSond = data[i][0];
+        let idOpz = data[i][1];
+        let testoOpz = data[i][2];
+        let voti = Number(data[i][3]) || 0;
+
+        if (!sondaggiMap[idSond]) {
+          sondaggiMap[idSond] = { titolo: idSond, opzioni: [] };
+        }
+        sondaggiMap[idSond].opzioni.push({ idOpz, testoOpz, voti });
+      }
+
+      Object.keys(sondaggiMap).forEach(idSond => {
+        let sond = sondaggiMap[idSond];
+        let totaleVoti = sond.opzioni.reduce((sum, o) => sum + o.voti, 0);
+
+        let htmlOpzioni = '';
+        sond.opzioni.forEach(opz => {
+          let perc = totaleVoti > 0 ? Math.round((opz.voti / totaleVoti) * 100) : 0;
+          htmlOpzioni += `
+            <div class="space-y-1 cursor-pointer group" onclick="votaSondaggio('${sond.titolo}', '${opz.idOpz}')">
+              <div class="flex justify-between text-xs font-bold text-slate-700">
+                <span>${opz.testoOpz}</span>
+                <span class="text-orange-600">${opz.voti} voti (${perc}%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-3 overflow-hidden rounded-full border border-slate-200">
+                <div class="bg-orange-600 h-full transition-all duration-500 rounded-full" style="width: ${perc}%"></div>
+              </div>
+            </div>
+          `;
+        });
+
+        let card = document.createElement('div');
+        card.className = "bg-amber-50/50 p-4 border border-amber-200/80 shadow-sm space-y-3";
+        card.innerHTML = `
+          <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+            📊 ${sond.titolo}
+          </h3>
+          <div class="space-y-2.5">
+            ${htmlOpzioni}
+          </div>
+        `;
+        box.appendChild(card);
+      });
+    }
+
+    function votaSondaggio(idSondaggio, idOpzione) {
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'votaSondaggio', idSondaggio: idSondaggio, idOpzione: idOpzione })
+      })
+      .then(res => res.json())
+      .then(() => {
+        caricaSondaggi(); // Ricarica i risultati aggiornati
+      })
+      .catch(err => console.error("Errore voto sondaggio:", err));
     }
 
     function apriCatalogoPuro() {
@@ -535,6 +658,7 @@
         btn.classList.remove('text-amber-100', 'font-semibold');
         if (stickyContainer) stickyContainer.classList.add('hidden');
         renderHomeContenuti();
+        caricaSondaggi();
         window.scrollTo(0, 0);
       } else if (nomeSezione === 'catalogo') {
         document.getElementById('viewCatalogo').classList.remove('hidden');
@@ -816,7 +940,8 @@
         aggiornaContatorePreferiti();
         popolaFiltroCategorie();
         applicaFiltri();
-        renderHomeContenuti();
+        caricaPreferitiGlobali();
+        caricaSondaggi();
 
       } catch (err) {
         console.error(err);
@@ -825,7 +950,7 @@
       }
     }
 
-    // 2. CARICAMENTO AGENDA & GALLERIA (CON FILTRO "MOSTRA IN GALLERIA": SÌ / NO)
+    // 2. CARICAMENTO AGENDA & GALLERIA
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -839,23 +964,23 @@
             return c[idx].f !== null && c[idx].f !== undefined ? String(c[idx].f).trim() : (c[idx].v !== null && c[idx].v !== undefined ? String(c[idx].v).trim() : '');
           }
 
-          let giorno = getVal(0);       // Col A
-          let mese = getVal(1);         // Col B
-          let anno = getVal(2) || '2026'; // Col C
-          let titolo = getVal(3);       // Col D
-          let descrizione = getVal(4);  // Col E
-          let tipo = getVal(5) || 'Evento'; // Col F
+          let giorno = getVal(0);
+          let mese = getVal(1);
+          let anno = getVal(2) || '2026';
+          let titolo = getVal(3);
+          let descrizione = getVal(4);
+          let tipo = getVal(5) || 'Evento';
           
-          let rawFotoHome = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Col G (Foto Home)
+          let rawFotoHome = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : '';
           let fotoHome = pulisciUrlFoto(rawFotoHome);
           
-          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Col H (Altre foto o cartella)
+          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : '';
           let altreFotoList = [];
           if (rawAltreFoto) {
             altreFotoList = rawAltreFoto.split(',').map(link => pulisciUrlFoto(link)).filter(link => link !== '');
           }
 
-          let mostraInGalleriaStr = getVal(8).toLowerCase(); // Col I: Si / No per la galleria
+          let mostraInGalleriaStr = getVal(8).toLowerCase();
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
@@ -866,7 +991,6 @@
 
           let fotoGalleriaCopertina = (altreFotoList.length > 0) ? altreFotoList[0] : fotoHomeDefinitiva;
           let timestamp = convertiDataInTimestamp(giorno, mese, anno);
-
           let vaInGalleria = mostraInGalleriaStr !== 'no';
 
           eventiData.push({
@@ -919,7 +1043,6 @@
         let bannerFoto = '';
         let fotoMostrata = ev.fotoHome || ev.fotoGalleria;
         if (fotoMostrata) {
-          // Aumentata l'altezza a h-44 / md:h-52 in modo che si estenda bene verso il basso
           bannerFoto = '<div class="h-44 md:h-52 bg-slate-100 overflow-hidden relative"><img src="' + fotoMostrata + '" alt="' + ev.titolo + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>';
         }
 
@@ -972,9 +1095,8 @@
             <img src="${fotoGrid}" alt="${ev.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
             
-            <!-- FILIGRANA / LOGO AL CENTRO DELLA FOTO -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30 group-hover:opacity-40 transition-opacity">
-              <img src="logo-bianco.png" alt="GIOCALTA Watermark" class="w-24 md:w-32 h-auto object-contain drop-shadow-lg filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" onerror="this.onerror=null; this.style.display='none';">
+              <img src="logo-bianco.png" alt="GIOCALTA Watermark" class="w-24 md:w-32 h-auto object-contain drop-shadow-lg" onerror="this.onerror=null; this.style.display='none';">
             </div>
 
             <div class="absolute top-3 left-3 bg-orange-600 text-white font-black text-center px-2.5 py-1.5 shadow-md">
@@ -1095,7 +1217,6 @@
         } else {
           recenti.forEach(function(g) {
             const card = document.createElement('div');
-            // Larghezza e struttura identiche ai riquadri dell'agenda (min-w / max-w coordinati)
             card.className = "bg-white border border-amber-200/80 shadow-sm min-w-[260px] md:min-w-[300px] max-w-[300px] shrink-0 flex flex-col overflow-hidden cursor-pointer group hover:shadow-md transition-all";
             card.onclick = function() {
               savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
@@ -1126,39 +1247,53 @@
       const gridFav = document.getElementById('homeFavoritesGrid');
       if (gridFav) {
         gridFav.innerHTML = '';
-        let preferitiLista = giochiData.filter(g => preferitiIds.includes(g.id));
+        // Ordiniamo i giochi in base ai voti globali ricevuti sul foglio Google
+        let giochiOrdinatiPerVoti = [...giochiData].sort((a, b) => {
+          let votiA = preferitiGlobaliMap[a.id] || 0;
+          let votiB = preferitiGlobaliMap[b.id] || 0;
+          return votiB - votiA;
+        });
+
+        // Mostriamo quelli con più voti globali
+        let preferitiLista = giochiOrdinatiPerVoti.filter(g => (preferitiGlobaliMap[g.id] || 0) > 0).slice(0, 6);
         if (preferitiLista.length === 0) {
-          gridFav.innerHTML = '<p class="text-slate-400 text-xs py-4 px-2">Nessun gioco nei preferiti. Clicca sul cuore sui giochi per aggiungerli qui!</p>';
-        } else {
-          preferitiLista.forEach(function(g) {
-            const card = document.createElement('div');
-            // Anche per i preferiti manteniamo la stessa identica struttura e proporzione
-            card.className = "bg-white border border-amber-200/80 shadow-sm min-w-[260px] md:min-w-[300px] max-w-[300px] shrink-0 flex flex-col overflow-hidden cursor-pointer group hover:shadow-md transition-all relative";
-            card.onclick = function() {
-              savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-              window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
-              mostraDettaglioGioco(g.id, true);
-            };
-            card.innerHTML = `
-              <div class="h-44 md:h-52 bg-slate-100 overflow-hidden relative shadow-inner">
-                <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
-                <button onclick="togglePreferito('${g.id}', event)" class="absolute top-2 right-2 bg-white/95 w-7 h-7 flex items-center justify-center text-rose-500 font-bold shadow"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
-                ${g.voto ? '<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 font-bold flex items-center gap-1"><svg class="w-3 h-3 text-amber-400 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.399 8.168-7.333-3.854-7.333 3.854 1.399-8.168-5.934-5.787 8.2-1.192z"/></svg> ' + g.voto + '</span>' : ''}
-              </div>
-              <div class="p-3.5 flex items-start justify-between gap-3">
-                <div class="min-w-0">
-                  <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wide block truncate">${g.tipo}</span>
-                  <h4 class="font-extrabold text-slate-800 text-sm mt-1 truncate group-hover:text-orange-600 transition-colors">${g.titolo}</h4>
-                  <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
-                    <span>👥 ${g.persone}</span>
-                    <span>⏱ ${g.tempo}</span>
-                  </p>
-                </div>
-              </div>
-            `;
-            gridFav.appendChild(card);
-          });
+          preferitiLista = giochiData.slice(0, 4); // Fallback se nessuno ha ancora votato
         }
+
+        preferitiLista.forEach(function(g) {
+          const isPref = preferitiIds.includes(g.id);
+          const heartSvg = isPref 
+            ? '<svg class="w-4 h-4 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' 
+            : '<svg class="w-4 h-4 text-rose-400 hover:text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>';
+
+          let numVotiGlobali = preferitiGlobaliMap[g.id] || 0;
+
+          const card = document.createElement('div');
+          card.className = "bg-white border border-amber-200/80 shadow-sm min-w-[260px] md:min-w-[300px] max-w-[300px] shrink-0 flex flex-col overflow-hidden cursor-pointer group hover:shadow-md transition-all relative";
+          card.onclick = function() {
+            savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
+            mostraDettaglioGioco(g.id, true);
+          };
+          card.innerHTML = `
+            <div class="h-44 md:h-52 bg-slate-100 overflow-hidden relative shadow-inner">
+              <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
+              <button onclick="togglePreferito('${g.id}', event)" class="absolute top-2 right-2 bg-white/95 w-8 h-8 flex items-center justify-center shadow-md z-20 transition-transform active:scale-125"><span>${heartSvg}</span></button>
+              <span class="absolute bottom-2 left-2 bg-rose-600 text-white text-[11px] px-2 py-0.5 font-black shadow flex items-center gap-1">♥ ${numVotiGlobali} voti</span>
+            </div>
+            <div class="p-3.5 flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wide block truncate">${g.tipo}</span>
+                <h4 class="font-extrabold text-slate-800 text-sm mt-1 truncate group-hover:text-orange-600 transition-colors">${g.titolo}</h4>
+                <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
+                  <span>👥 ${g.persone}</span>
+                  <span>⏱ ${g.tempo}</span>
+                </p>
+              </div>
+            </div>
+          `;
+          gridFav.appendChild(card);
+        });
       }
     }
 
@@ -1178,6 +1313,7 @@
           : '<svg class="w-4 h-4 text-rose-400 hover:text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>';
         
         const heartTitle = isPref ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti';
+        let numVotiGlobali = preferitiGlobaliMap[g.id] || 0;
 
         const statusBadge = g.disponibile 
           ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 md:px-2.5 py-1 font-bold shadow-sm"><span class="md:hidden">Disp.</span><span class="hidden md:inline">Disponibile</span></span>'
@@ -1211,6 +1347,7 @@
             '<div>' +
               '<div class="flex items-center justify-between gap-1 mb-1">' +
                 '<span class="text-[10px] md:text-xs font-bold text-orange-600 uppercase tracking-wide truncate">' + g.tipo + '</span>' +
+                '<span class="text-[10px] font-extrabold text-rose-600 bg-rose-50 px-1.5 py-0.5 border border-rose-100">♥ ' + numVotiGlobali + '</span>' +
               '</div>' +
               '<h3 class="text-xs md:text-base font-extrabold text-slate-800 leading-snug group-hover:text-orange-600 transition-colors truncate md:whitespace-normal">' + g.titolo + badgeVotoMobile + '</h3>' +
             '</div>' +
