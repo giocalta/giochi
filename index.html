@@ -74,7 +74,7 @@
     </header>
 
     <!-- BARRA RICERCA & PULSANTE FILTRI (VISIBILE SOLO NEL CATALOGO) -->
-    <div id="stickySearchContainer" class="hidden bg-amber-50/95 backdrop-blur-md py-2 border-b border-amber-200/80">
+    <div id="stickySearchContainer" class="hidden bg-amber-50/95 backdrop-blur-md py-2 border-b border-amber-200/80 relative">
       <div class="max-w-6xl mx-auto px-2.5 md:px-4">
         <div class="bg-white p-1.5 md:p-2 shadow-sm border border-amber-200/80">
           <div class="flex items-center gap-1.5 md:gap-2">
@@ -93,123 +93,122 @@
             </button>
           </div>
         </div>
+
+        <!-- TENDINA DEI FILTRI A SCOMPARSA (CLASSICA SOTTO IL PULSANTE) -->
+        <div id="filterModal" class="hidden absolute right-4 top-full mt-1.5 w-80 max-w-[92vw] bg-white shadow-xl border border-amber-200 z-50 overflow-hidden flex flex-col">
+          
+          <!-- Intestazione Tendina -->
+          <div class="bg-orange-600 text-white px-3.5 py-2.5 flex items-center justify-between shadow-sm">
+            <h3 class="font-bold text-xs uppercase tracking-wider flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.172a1 1 0 01-.553.894l-4 2A1 1 0 017 18.28v-5.172a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z"></path></svg>
+              Filtri Ludoteca
+            </h3>
+            <button onclick="toggleFiltriModale()" class="text-white hover:bg-orange-700 w-6 h-6 flex items-center justify-center font-bold text-sm">✕</button>
+          </div>
+
+          <!-- Corpo con le righe dei filtri e icone -->
+          <div class="p-3 space-y-3 max-h-[65vh] overflow-y-auto divide-y divide-slate-100 text-xs">
+            
+            <!-- 1. Giocatori -->
+            <div class="pt-2 first:pt-0 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-slate-700 font-bold shrink-0">
+                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <span>Giocatori</span>
+              </div>
+              <select id="playersFilter" class="py-1.5 px-2 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-36">
+                <option value="">Tutti</option>
+                <option value="1">1 Giocatore</option>
+                <option value="2">2 Giocatori</option>
+                <option value="3">3 Giocatori</option>
+                <option value="4">4 Giocatori</option>
+                <option value="5">5 Giocatori</option>
+                <option value="6">6+ Giocatori</option>
+              </select>
+            </div>
+
+            <!-- 2. Tempo -->
+            <div class="pt-2 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-slate-700 font-bold shrink-0">
+                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>Tempo</span>
+              </div>
+              <select id="timeFilter" class="py-1.5 px-2 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-36">
+                <option value="">Tutti</option>
+                <option value="30">Max 30 min</option>
+                <option value="60">Max 1 ora</option>
+                <option value="120+">Più di 2 ore</option>
+              </select>
+            </div>
+
+            <!-- 3. Complessità -->
+            <div class="pt-2 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-slate-700 font-bold shrink-0">
+                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Complessità</span>
+              </div>
+              <select id="difficultyFilter" class="py-1.5 px-2 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-36">
+                <option value="">Tutti</option>
+                <option value="semplice">Semplice</option>
+                <option value="media">Media</option>
+                <option value="elevata">Elevata</option>
+              </select>
+            </div>
+
+            <!-- 4. Tipo di gioco -->
+            <div class="pt-2 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-slate-700 font-bold shrink-0">
+                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <span>Tipo di gioco</span>
+              </div>
+              <select id="categoryFilter" class="py-1.5 px-2 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-36">
+                <option value="">Tutti</option>
+              </select>
+            </div>
+
+            <!-- 5. Stato (Disponibilità) -->
+            <div class="pt-2 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-slate-700 font-bold shrink-0">
+                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                <span>Stato</span>
+              </div>
+              <select id="statusFilter" class="py-1.5 px-2 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-36">
+                <option value="">Tutti</option>
+                <option value="disponibile">Solo Disponibili</option>
+                <option value="noleggiato">Solo Noleggiati</option>
+              </select>
+            </div>
+
+            <!-- 6. Ordina per -->
+            <div class="pt-2 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-slate-700 font-bold shrink-0">
+                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+                <span>Ordina per</span>
+              </div>
+              <select id="sortOrder" class="py-1.5 px-2 bg-slate-50 border border-slate-200 text-orange-700 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500 w-36">
+                <option value="recenti">✨ Ultimi arrivi</option>
+                <option value="az">🔤 Ordine A-Z</option>
+                <option value="za">🔤 Ordine Z-A</option>
+                <option value="voto">⭐ Voto BGG</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Pulsanti in basso -->
+          <div class="p-2.5 bg-slate-50 border-t border-slate-200 flex gap-2">
+            <button onclick="azzeraFiltriModal()" class="flex-1 bg-white hover:bg-slate-100 text-rose-600 border border-rose-200 font-bold py-1.5 px-3 text-xs transition-all shadow-sm">
+              Cancella
+            </button>
+            <button onclick="applicaFiltriModal()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 px-3 text-xs transition-all shadow-sm">
+              Applica
+            </button>
+          </div>
+
+        </div>
+
       </div>
     </div>
 
-  </div>
-
-  <!-- PANNELLO FILTRI A SCHERMATA / MODALE -->
-  <div id="filterModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex flex-col justify-end md:justify-center md:items-center p-0 md:p-4">
-    <div class="bg-white w-full md:max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      
-      <!-- Intestazione Modale -->
-      <div class="bg-orange-600 text-white p-4 flex items-center justify-between shadow">
-        <h3 class="font-black text-base flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.172a1 1 0 01-.553.894l-4 2A1 1 0 017 18.28v-5.172a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z"></path></svg>
-          Filtri Ludoteca
-        </h3>
-        <button onclick="toggleFiltriModale()" class="text-white hover:bg-orange-700 w-8 h-8 flex items-center justify-center font-bold text-lg">✕</button>
-      </div>
-
-      <!-- Corpo con le righe dei filtri -->
-      <div class="p-4 md:p-6 space-y-4 overflow-y-auto divide-y divide-slate-100">
-        
-        <!-- 1. Giocatori -->
-        <div class="pt-3 first:pt-0 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-            <span>Giocatori</span>
-          </div>
-          <select id="playersFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
-            <option value="">Tutti</option>
-            <option value="1">1 Giocatore</option>
-            <option value="2">2 Giocatori</option>
-            <option value="3">3 Giocatori</option>
-            <option value="4">4 Giocatori</option>
-            <option value="5">5 Giocatori</option>
-            <option value="6">6+ Giocatori</option>
-          </select>
-        </div>
-
-        <!-- 2. Tempo -->
-        <div class="pt-3 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span>Tempo</span>
-          </div>
-          <select id="timeFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
-            <option value="">Tutti</option>
-            <option value="30">Max 30 min</option>
-            <option value="60">Max 1 ora</option>
-            <option value="120+">Più di 2 ore</option>
-          </select>
-        </div>
-
-        <!-- 3. Complessità -->
-        <div class="pt-3 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            <span>Complessità</span>
-          </div>
-          <select id="difficultyFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
-            <option value="">Tutti</option>
-            <option value="semplice">Semplice</option>
-            <option value="media">Media</option>
-            <option value="elevata">Elevata</option>
-          </select>
-        </div>
-
-        <!-- 4. Tipo di gioco -->
-        <div class="pt-3 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-            <span>Tipo di gioco</span>
-          </div>
-          <select id="categoryFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
-            <option value="">Tutti</option>
-          </select>
-        </div>
-
-        <!-- 5. Stato (Disponibilità) -->
-        <div class="pt-3 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-            <span>Stato</span>
-          </div>
-          <select id="statusFilter" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
-            <option value="">Tutti</option>
-            <option value="disponibile">Solo Disponibili</option>
-            <option value="noleggiato">Solo Noleggiati</option>
-          </select>
-        </div>
-
-        <!-- 6. Ordina per -->
-        <div class="pt-3 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 text-slate-700 font-bold text-xs md:text-sm shrink-0">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
-            <span>Ordina per</span>
-          </div>
-          <select id="sortOrder" class="py-2 px-3 bg-slate-50 border border-slate-200 text-xs md:text-sm text-orange-700 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500 w-44">
-            <option value="recenti">✨ Ultimi arrivi</option>
-            <option value="az">🔤 Ordine A-Z</option>
-            <option value="za">🔤 Ordine Z-A</option>
-            <option value="voto">⭐ Voto BGG</option>
-          </select>
-        </div>
-
-      </div>
-
-      <!-- Pulsanti in basso -->
-      <div class="p-4 bg-slate-50 border-t border-slate-200 flex gap-3">
-        <button onclick="azzeraFiltriModal()" class="flex-1 bg-white hover:bg-slate-100 text-rose-600 border border-rose-200 font-bold py-2.5 px-4 text-sm transition-all shadow-sm">
-          Cancella
-        </button>
-        <button onclick="applicaFiltriModal()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 px-4 text-sm transition-all shadow-md">
-          Applica
-        </button>
-      </div>
-
-    </div>
   </div>
 
   <main class="max-w-6xl mx-auto px-0 md:px-4 pt-3 pb-8 flex-grow w-full space-y-6">
@@ -668,15 +667,6 @@
       let matchUrl = clean.match(/(https?:\/\/[^\s"']+)/i);
       if (matchUrl) clean = matchUrl[1];
 
-      // Se è un link di una cartella Google Drive, estraiamo l'ID cartella
-      if (clean.indexOf('drive.google.com') !== -1 && clean.indexOf('/folders/') !== -1) {
-        let matchFolder = clean.match(/\/folders\/([^\/\?]+)/);
-        if (matchFolder && matchFolder[1]) {
-          // Restituiamo un marcatore speciale o gestiamo la cartella
-          return 'FOLDER:' + matchFolder[1];
-        }
-      }
-
       if (clean.indexOf('drive.google.com') !== -1) {
         let matchId = clean.match(/\/d\/([^\/]+)/) || clean.match(/id=([^&]+)/);
         if (matchId && matchId[1]) {
@@ -685,22 +675,6 @@
       }
 
       return clean;
-    }
-
-    // Funzione intelligente per gestire le immagini (supporta sia singola foto che intera cartella Drive)
-    function estraiImmaginiDaInput(rawInput) {
-      if (!rawInput) return [];
-      let pulito = pulisciUrlFoto(rawInput);
-      
-      // Se è un link cartella Drive, simularne il recupero o restituire un segnaposto/anteprima
-      if (pulito.startsWith('FOLDER:')) {
-        let folderId = pulito.replace('FOLDER:', '');
-        // Nota: Le API pubbliche di Drive richiedono un backend per elencare i file di una cartella senza OAuth.
-        // Di conseguenza, se incolli il link della cartella, potremo mostrare il link o le immagini caricate.
-        // In alternativa, se inserisci i link diretti o usi il metodo standard, funziona all'istante.
-      }
-
-      return rawInput.split(',').map(link => pulisciUrlFoto(link.trim())).filter(link => link !== '');
     }
 
     function ottieniLinkTutorial(cellObj, titoloGioco) {
@@ -860,7 +834,7 @@
       }
     }
 
-    // 2. CARICAMENTO AGENDA & GALLERIA (CON COPERTINA AUTOMATICA DA SECONDA COLONNA SE LA PRIMA È VUOTA)
+    // 2. CARICAMENTO AGENDA & GALLERIA (CON SUPPORTO CARTELLA DRIVE E COPERTINA AUTOMATICA)
     function processAgendaData(json) {
       try {
         if (!json || !json.table || !json.table.rows) return;
@@ -881,10 +855,10 @@
           let descrizione = getVal(4);  // Col E
           let tipo = getVal(5) || 'Evento'; // Col F
           
-          let rawFotoHome = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Col G (Foto Home personalizzata)
+          let rawFotoHome = (c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : ''; // Col G (Foto Home)
           let fotoHome = pulisciUrlFoto(rawFotoHome);
           
-          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Col H (Link cartella o foto separate da virgola)
+          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : ''; // Col H (Altre foto o cartella Drive)
           let altreFotoList = [];
           if (rawAltreFoto) {
             altreFotoList = rawAltreFoto.split(',').map(link => pulisciUrlFoto(link)).filter(link => link !== '');
@@ -892,13 +866,11 @@
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
-          // LOGICA AUTOMATICA: Se la foto Home (Col G) è vuota, prende in automatico la prima foto della cartella (Col H)
           let fotoHomeDefinitiva = fotoHome;
           if (!fotoHomeDefinitiva && altreFotoList.length > 0) {
             fotoHomeDefinitiva = altreFotoList[0];
           }
 
-          // Per la galleria usiamo la prima foto disponibile
           let fotoGalleriaCopertina = (altreFotoList.length > 0) ? altreFotoList[0] : fotoHomeDefinitiva;
           let timestamp = convertiDataInTimestamp(giorno, mese, anno);
 
