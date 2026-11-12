@@ -9,21 +9,10 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23ea580c%22/><text x=%2250%%22 y=%2255%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2260%22>🎲</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23ea580c%22/><text x=%2250%%22 y=%2255%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2260%22>🎲</text></svg>">
   <style>
-    body {
-      letter-spacing: -0.01em;
-    }
-    * {
-      -webkit-font-smoothing: antialiased;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+    body { letter-spacing: -0.01em; }
+    * { -webkit-font-smoothing: antialiased; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col">
@@ -84,7 +73,6 @@
                      class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:bg-white text-xs md:text-sm transition-all font-medium">
             </div>
             <button onclick="toggleFiltriModale()" id="btnToggleFiltri" class="bg-[#1E3A8A] hover:bg-blue-900 text-white font-bold text-xs px-4 py-1.5 md:py-2 transition-all flex items-center gap-1.5 shrink-0 shadow-sm">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.172a1 1 0 01-.553.894l-4 2A1 1 0 017 18.28v-5.172a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z"></path></svg>
               <span>Filtri</span>
               <span id="activeFiltersBadge" class="hidden bg-white text-[#1E3A8A] text-[10px] px-1.5 py-0.2 rounded-full font-black ml-1">!</span>
             </button>
@@ -97,147 +85,114 @@
         <!-- TENDINA DEI FILTRI -->
         <div id="filterModal" class="hidden absolute left-0 right-0 md:left-auto md:right-0 top-full mt-1.5 w-full md:w-auto max-w-4xl bg-white shadow-2xl border border-amber-200 z-50 p-3 md:p-4">
           <div class="grid grid-cols-2 lg:grid-cols-6 gap-x-3 gap-y-2.5 text-xs">
-            <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
-              <div class="flex items-center gap-1.5 text-[#1E3A8A] font-bold"><span>Giocatori</span></div>
-              <select id="playersFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+            <div class="flex flex-col gap-1 pb-1">
+              <div class="text-[#1E3A8A] font-bold">Giocatori</div>
+              <select id="playersFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold">
                 <option value="">Tutti</option>
-                <option value="1">1 Giocatore</option>
-                <option value="2">2 Giocatori</option>
-                <option value="3">3 Giocatori</option>
-                <option value="4">4 Giocatori</option>
-                <option value="5">5 Giocatori</option>
-                <option value="6">6+ Giocatori</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option>
               </select>
             </div>
-            <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
-              <div class="flex items-center gap-1.5 text-[#1E3A8A] font-bold"><span>Tempo</span></div>
-              <select id="timeFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="">Tutti</option>
-                <option value="30">Max 30 min</option>
-                <option value="60">Max 1 ora</option>
-                <option value="120+">Più di 2 ore</option>
+            <div class="flex flex-col gap-1 pb-1">
+              <div class="text-[#1E3A8A] font-bold">Tempo</div>
+              <select id="timeFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold">
+                <option value="">Tutti</option><option value="30">Max 30m</option><option value="60">Max 1h</option><option value="120+">2h+</option>
               </select>
             </div>
-            <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
-              <div class="flex items-center gap-1.5 text-[#1E3A8A] font-bold"><span>Complessità</span></div>
-              <select id="difficultyFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="">Tutti</option>
-                <option value="semplice">Semplice</option>
-                <option value="media">Media</option>
-                <option value="elevata">Elevata</option>
+            <div class="flex flex-col gap-1 pb-1">
+              <div class="text-[#1E3A8A] font-bold">Complessità</div>
+              <select id="difficultyFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold">
+                <option value="">Tutti</option><option value="semplice">Semplice</option><option value="media">Media</option><option value="elevata">Elevata</option>
               </select>
             </div>
-            <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
-              <div class="flex items-center gap-1.5 text-[#1E3A8A] font-bold"><span>Tipo di gioco</span></div>
-              <select id="categoryFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+            <div class="flex flex-col gap-1 pb-1">
+              <div class="text-[#1E3A8A] font-bold">Tipo</div>
+              <select id="categoryFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold">
                 <option value="">Tutti</option>
               </select>
             </div>
             <div class="flex flex-col gap-1">
-              <div class="flex items-center gap-1.5 text-[#1E3A8A] font-bold"><span>Stato</span></div>
-              <select id="statusFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="">Tutti</option>
-                <option value="disponibile">Disponibili</option>
-                <option value="noleggiato">Noleggiati</option>
+              <div class="text-[#1E3A8A] font-bold">Stato</div>
+              <select id="statusFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold">
+                <option value="">Tutti</option><option value="disponibile">Disponibili</option><option value="noleggiato">Noleggiati</option>
               </select>
             </div>
             <div class="flex flex-col gap-1">
-              <div class="flex items-center gap-1.5 text-[#1E3A8A] font-bold"><span>Ordina per</span></div>
-              <select id="sortOrder" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-[#1E3A8A] font-bold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="recenti">✨ Recenti</option>
-                <option value="az">🔤 A - Z</option>
-                <option value="za">🔤 Z - A</option>
-                <option value="voto">⭐ Voto</option>
+              <div class="text-[#1E3A8A] font-bold">Ordina</div>
+              <select id="sortOrder" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-[#1E3A8A] font-bold">
+                <option value="recenti">Recenti</option><option value="az">A - Z</option><option value="za">Z - A</option><option value="voto">Voto</option>
               </select>
             </div>
           </div>
           <div class="mt-3 pt-2.5 border-t border-slate-200 flex gap-3 justify-center">
-            <button onclick="azzeraFiltriModal()" class="w-1/2 bg-white hover:bg-slate-100 text-rose-600 border border-rose-300 font-bold py-1.5 px-4 text-xs transition-all shadow-sm">Cancella</button>
-            <button onclick="applicaFiltriModal()" class="w-1/2 bg-[#1E3A8A] hover:bg-blue-900 text-white font-bold py-1.5 px-4 text-xs transition-all shadow-sm">Applica</button>
+            <button onclick="azzeraFiltriModal()" class="w-1/2 bg-white hover:bg-slate-100 text-rose-600 border border-rose-300 font-bold py-1.5 px-4 text-xs">Cancella</button>
+            <button onclick="applicaFiltriModal()" class="w-1/2 bg-[#1E3A8A] hover:bg-blue-900 text-white font-bold py-1.5 px-4 text-xs">Applica</button>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 
   <main class="max-w-6xl mx-auto px-0 md:px-4 pt-3 pb-8 flex-grow w-full space-y-6">
     
-    <!-- SEZIONE 0: HOME / AGENDA & IN VETRINA -->
+    <!-- HOME -->
     <div id="viewHome" class="space-y-6">
-      
-      <!-- BANNER DI BENVENUTO -->
-      <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="space-y-3 text-center md:text-left z-10 flex flex-col md:flex-row items-center gap-4">
-          <div class="shrink-0">
-            <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-12 md:h-16 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
-          </div>
-          <div>
-            <p class="text-amber-100 text-xs md:text-sm max-w-xl font-medium">Noleggio giochi da tavolo a Caltagirone. Scegli il tuo titolo preferito e prenota su WhatsApp!</p>
-          </div>
+      <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 p-6 md:p-8 text-white shadow-md flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex items-center gap-4">
+          <img src="logo-bianco.png" alt="Logo" class="h-12 md:h-16 w-auto object-contain" onerror="this.style.display='none';">
+          <p class="text-amber-100 text-xs md:text-sm font-medium">Noleggio giochi da tavolo a Caltagirone. Scegli e prenota su WhatsApp!</p>
         </div>
-        <div class="flex gap-3 z-10 shrink-0">
-          <button onclick="apriCatalogoPuro()" class="bg-[#1E3A8A] text-white hover:bg-blue-900 font-extrabold text-xs md:text-sm px-4 py-2.5 shadow transition-transform hover:scale-105 flex items-center gap-2">
-            Sfoglia Catalogo
-          </button>
-        </div>
+        <button onclick="apriCatalogoPuro()" class="bg-[#1E3A8A] text-white hover:bg-blue-900 font-extrabold text-xs md:text-sm px-4 py-2.5 shadow">Sfoglia Catalogo</button>
       </div>
 
       <!-- AGENDA -->
-      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
-        <div class="flex items-center justify-between px-2 md:px-0">
-          <h2 class="text-lg md:text-xl font-black text-[#1E3A8A] flex items-center gap-2">Agenda & Prossimi Eventi</h2>
+      <div class="bg-white py-5 px-3 md:p-6 border border-amber-200/60 shadow-sm space-y-4">
+        <div class="flex items-center justify-between px-2">
+          <h2 class="text-lg md:text-xl font-black text-[#1E3A8A]">Agenda & Prossimi Eventi</h2>
           <span class="text-xs font-semibold text-[#1E3A8A] bg-blue-50 px-3 py-1">In Sede</span>
         </div>
         <div class="relative group">
-          <button onclick="scorriCarosello('agendaGrid', -320)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg">‹</button>
+          <button onclick="scorriCarosello('agendaGrid', -320)" class="absolute -left-1 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 flex items-center justify-center font-bold">‹</button>
           <div id="agendaGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
             <p class="text-slate-400 text-xs py-4 px-2">Caricamento eventi...</p>
           </div>
-          <button onclick="scorriCarosello('agendaGrid', 320)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg">›</button>
+          <button onclick="scorriCarosello('agendaGrid', 320)" class="absolute -right-1 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 flex items-center justify-center font-bold">›</button>
         </div>
       </div>
 
-      <!-- SEZIONE SONDAGGI (CON SFONDO DINAMICO DALLA TABELLA) -->
-      <div id="sondaggiContainerHome" class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative overflow-hidden">
-        
-        <!-- SFONDO DINAMICO INSERITO VIA JAVASCRIPT -->
+      <!-- SONDAGGI CON SFONDO DINAMICO -->
+      <div id="sondaggiContainerHome" class="bg-white py-5 px-3 md:p-6 border border-amber-200/60 shadow-sm space-y-4 relative overflow-hidden">
         <div id="sondaggioBgImage" class="absolute inset-0 pointer-events-none opacity-15 bg-cover bg-center transition-all duration-500" style="background-image: url('https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=1000&q=80');"></div>
-
-        <h2 class="text-lg md:text-xl font-black text-[#1E3A8A] flex items-center gap-2 px-2 md:px-0 relative z-10">
-          Sondaggi della Community
-        </h2>
-        <div id="boxSondaggiLista" class="space-y-4 px-2 md:px-0 relative z-10">
+        <h2 class="text-lg md:text-xl font-black text-[#1E3A8A] px-2 relative z-10">Sondaggi della Community</h2>
+        <div id="boxSondaggiLista" class="space-y-4 px-2 relative z-10">
           <p class="text-slate-400 text-xs">Caricamento sondaggi...</p>
         </div>
       </div>
 
       <!-- ULTIMI GIOCHI -->
-      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
-        <div class="flex items-center justify-between px-2 md:px-0">
+      <div class="bg-white py-5 px-3 md:p-6 border border-amber-200/60 shadow-sm space-y-4">
+        <div class="flex items-center justify-between px-2">
           <h2 class="text-lg md:text-xl font-black text-[#1E3A8A]">Ultimi Giochi Inseriti</h2>
           <button onclick="apriCatalogoPuro()" class="text-xs font-bold text-[#1E3A8A] hover:underline">Vedi tutti ➔</button>
         </div>
         <div class="relative group">
-          <button onclick="scorriCarosello('homeRecentGrid', -320)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg">‹</button>
+          <button onclick="scorriCarosello('homeRecentGrid', -320)" class="absolute -left-1 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 flex items-center justify-center font-bold">‹</button>
           <div id="homeRecentGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1"></div>
-          <button onclick="scorriCarosello('homeRecentGrid', 320)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg">›</button>
+          <button onclick="scorriCarosello('homeRecentGrid', 320)" class="absolute -right-1 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 flex items-center justify-center font-bold">›</button>
         </div>
       </div>
 
       <!-- PIÙ AMATI -->
-      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
-        <div class="flex items-center justify-between px-2 md:px-0">
+      <div class="bg-white py-5 px-3 md:p-6 border border-amber-200/60 shadow-sm space-y-4">
+        <div class="flex items-center justify-between px-2">
           <h2 class="text-lg md:text-xl font-black text-[#1E3A8A]">I Più Amati Dalla Community</h2>
           <button onclick="cambiaSezione('preferiti')" class="text-xs font-bold text-[#1E3A8A] hover:underline">Vedi tutti ♥ ➔</button>
         </div>
         <div class="relative group">
-          <button onclick="scorriCarosello('homeFavoritesGrid', -320)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg">‹</button>
+          <button onclick="scorriCarosello('homeFavoritesGrid', -320)" class="absolute -left-1 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 flex items-center justify-center font-bold">‹</button>
           <div id="homeFavoritesGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1"></div>
-          <button onclick="scorriCarosello('homeFavoritesGrid', 320)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg">›</button>
+          <button onclick="scorriCarosello('homeFavoritesGrid', 320)" class="absolute -right-1 top-1/2 -translate-y-1/2 z-20 bg-[#1E3A8A] text-white w-9 h-9 flex items-center justify-center font-bold">›</button>
         </div>
       </div>
-
     </div>
 
     <!-- CATALOGO -->
@@ -264,7 +219,7 @@
     <div id="viewPreferiti" class="hidden space-y-4">
       <div class="bg-white p-5 border border-amber-200/60 shadow-sm flex items-center justify-between">
         <h2 class="text-xl md:text-2xl font-extrabold text-[#1E3A8A]">I tuoi Giochi Preferiti</h2>
-        <button onclick="apriCatalogoPuro()" class="text-xs font-bold text-[#1E3A8A] bg-blue-50 hover:bg-blue-100 px-3.5 py-2">+ Aggiungi</button>
+        <button onclick="apriCatalogoPuro()" class="text-xs font-bold text-[#1E3A8A] bg-blue-50 px-3.5 py-2">+ Aggiungi</button>
       </div>
       <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
     </div>
@@ -330,9 +285,7 @@
           preferitiGlobaliMap = {};
           if (data && data.length > 1) {
             for (let i = 1; i < data.length; i++) {
-              let id = data[i][0];
-              let voti = Number(data[i][1]) || 0;
-              preferitiGlobaliMap[id] = voti;
+              preferitiGlobaliMap[data[i][0]] = Number(data[i][1]) || 0;
             }
           }
           renderHomeContenuti();
@@ -344,15 +297,10 @@
       if (event) event.stopPropagation();
       const index = preferitiIds.indexOf(idGioco);
       let aggiungi = false;
-      if (index > -1) {
-        preferitiIds.splice(index, 1);
-      } else {
-        preferitiIds.push(idGioco);
-        aggiungi = true;
-      }
+      if (index > -1) { preferitiIds.splice(index, 1); } 
+      else { preferitiIds.push(idGioco); aggiungi = true; }
       localStorage.setItem('giocalta_preferiti', JSON.stringify(preferitiIds));
       aggiornaContatorePreferiti();
-
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({ action: 'votaPreferito', idGioco: idGioco, tipo: aggiungi ? 'aggiungi' : 'rimuovi' })
@@ -362,9 +310,7 @@
     function caricaSondaggi() {
       fetch(APPS_SCRIPT_URL + '?action=getSondaggi')
         .then(res => res.json())
-        .then(data => {
-          renderSondaggi(data);
-        })
+        .then(data => renderSondaggi(data))
         .catch(err => {
           document.getElementById('boxSondaggiLista').innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo.</p>';
         });
@@ -374,65 +320,41 @@
       const box = document.getElementById('boxSondaggiLista');
       if (!box) return;
       box.innerHTML = '';
-
       if (!data || data.length <= 1) {
         box.innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo.</p>';
         return;
       }
-
       let sondaggiMap = {};
       let primaFotoDallabaset = '';
-
       for (let i = 1; i < data.length; i++) {
-        let idSond = data[i][0];
-        let idOpz = data[i][1];
-        let testoOpz = data[i][2];
-        let voti = Number(data[i][3]) || 0;
+        let idSond = data[i][0], idOpz = data[i][1], testoOpz = data[i][2], voti = Number(data[i][3]) || 0;
         let fotoSond = data[i][4] ? pulisciUrlFoto(String(data[i][4])) : '';
-
-        if (fotoSond && !primaFotoDallabaset) {
-          primaFotoDallabaset = fotoSond;
-        }
-
-        if (!sondaggiMap[idSond]) {
-          sondaggiMap[idSond] = { titolo: idSond, opzioni: [] };
-        }
+        if (fotoSond && !primaFotoDallabaset) primaFotoDallabaset = fotoSond;
+        if (!sondaggiMap[idSond]) sondaggiMap[idSond] = { titolo: idSond, opzioni: [] };
         sondaggiMap[idSond].opzioni.push({ idOpz, testoOpz, voti });
       }
-
       if (primaFotoDallabaset) {
         const bgEl = document.getElementById('sondaggioBgImage');
-        if (bgEl) {
-          bgEl.style.backgroundImage = `url('${primaFotoDallabaset}')`;
-        }
+        if (bgEl) bgEl.style.backgroundImage = `url('${primaFotoDallabaset}')`;
       }
-
       Object.keys(sondaggiMap).forEach(idSond => {
-        let sond = sondaggiMap[idSond];
-        let totaleVoti = sond.opzioni.reduce((sum, o) => sum + o.voti, 0);
-
+        let sond = sondaggiMap[idSond], totaleVoti = sond.opzioni.reduce((sum, o) => sum + o.voti, 0);
         let htmlOpzioni = '';
         sond.opzioni.forEach(opz => {
           let perc = totaleVoti > 0 ? Math.round((opz.voti / totaleVoti) * 100) : 0;
           htmlOpzioni += `
             <div class="space-y-1 cursor-pointer group" onclick="votaSondaggio('${sond.titolo}', '${opz.idOpz}')">
               <div class="flex justify-between text-xs font-bold text-slate-700">
-                <span>${opz.testoOpz}</span>
-                <span class="text-[#1E3A8A]">${opz.voti} voti (${perc}%)</span>
+                <span>${opz.testoOpz}</span><span class="text-[#1E3A8A]">${opz.voti} voti (${perc}%)</span>
               </div>
               <div class="w-full bg-slate-100 h-3 overflow-hidden rounded-full border border-slate-200">
                 <div class="bg-[#1E3A8A] h-full transition-all duration-500 rounded-full" style="width: ${perc}%"></div>
               </div>
-            </div>
-          `;
+            </div>`;
         });
-
         let card = document.createElement('div');
         card.className = "bg-amber-50/70 p-4 border border-amber-200/80 shadow-sm space-y-3";
-        card.innerHTML = `
-          <h3 class="font-extrabold text-[#1E3A8A] text-sm flex items-center gap-2">📊 ${sond.titolo}</h3>
-          <div class="space-y-2.5">${htmlOpzioni}</div>
-        `;
+        card.innerHTML = `<h3 class="font-extrabold text-[#1E3A8A] text-sm flex items-center gap-2">📊 ${sond.titolo}</h3><div class="space-y-2.5">${htmlOpzioni}</div>`;
         box.appendChild(card);
       });
     }
@@ -441,33 +363,28 @@
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({ action: 'votaSondaggio', idSondaggio: idSondaggio, idOpzione: idOpzione })
-      })
-      .then(res => res.json())
-      .then(() => caricaSondaggi());
+      }).then(() => caricaSondaggi());
     }
 
     function apriCatalogoPuro() { cambiaSezione('catalogo'); }
-    function scorriCarosello(idElemento, quantita) { document.getElementById(idElemento).scrollBy({ left: quantita, behavior: 'smooth' }); }
+    function scorriCarosello(id, q) { document.getElementById(id).scrollBy({ left: q, behavior: 'smooth' }); }
 
-    function cambiaSezione(nomeSezione) {
-      ultimaSezioneVisitata = nomeSezione;
+    function cambiaSezione(nome) {
+      ultimaSezioneVisitata = nome;
       ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewGioco', 'viewEvento'].forEach(v => {
         document.getElementById(v).classList.add('hidden');
       });
-      document.getElementById('view' + nomeSezione.charAt(0).toUpperCase() + nomeSezione.slice(1)).classList.remove('hidden');
-      const stickyContainer = document.getElementById('stickySearchContainer');
-      if (nomeSezione === 'home') {
-        if (stickyContainer) stickyContainer.classList.add('hidden');
-        renderHomeContenuti();
-        caricaSondaggi();
-        window.scrollTo(0, 0);
-      } else if (nomeSezione === 'catalogo') {
-        if (stickyContainer) stickyContainer.classList.remove('hidden');
-        applicaFiltri();
+      document.getElementById('view' + nome.charAt(0).toUpperCase() + nome.slice(1)).classList.remove('hidden');
+      const sticky = document.getElementById('stickySearchContainer');
+      if (nome === 'home') {
+        if (sticky) sticky.classList.add('hidden');
+        renderHomeContenuti(); caricaSondaggi(); window.scrollTo(0, 0);
+      } else if (nome === 'catalogo') {
+        if (sticky) sticky.classList.remove('hidden'); applicaFiltri();
       } else {
-        if (stickyContainer) stickyContainer.classList.add('hidden');
-        if (nomeSezione === 'galleria') renderPaginaGalleria();
-        if (nomeSezione === 'preferiti') renderPreferiti();
+        if (sticky) sticky.classList.add('hidden');
+        if (nome === 'galleria') renderPaginaGalleria();
+        if (nome === 'preferiti') renderPreferiti();
         window.scrollTo(0, 0);
       }
     }
@@ -475,8 +392,8 @@
     function pulisciValore(val) {
       if (!val) return '';
       if (val.indexOf('Date(') !== -1) {
-        let parts = val.split(',');
-        if (parts.length >= 3) return parts[2].replace(/\)/g, '').trim();
+        let p = val.split(',');
+        if (p.length >= 3) return p[2].replace(/\)/g, '').trim();
       }
       return val;
     }
@@ -484,8 +401,8 @@
     function pulisciUrlFoto(url) {
       if (!url) return '';
       let clean = url.trim();
-      let matchUrl = clean.match(/(https?:\/\/[^\s"']+)/i);
-      if (matchUrl) clean = matchUrl[1];
+      let m = clean.match(/(https?:\/\/[^\s"']+)/i);
+      if (m) clean = m[1];
       if (clean.indexOf('drive.google.com') !== -1) {
         let matchId = clean.match(/\/d\/([^\/]+)/) || clean.match(/id=([^&]+)/);
         if (matchId && matchId[1]) return 'https://lh3.googleusercontent.com/d/' + matchId[1] + '=s800';
@@ -527,6 +444,53 @@
       }
     }
 
+    function processAgendaData(json) {
+      try {
+        if (!json || !json.table || !json.table.rows) return;
+        eventiData = [];
+        json.table.rows.forEach(r => {
+          const c = r.c || [];
+          let getVal = idx => (c[idx] ? (c[idx].f || c[idx].v || '') : '');
+          let titolo = getVal(3);
+          if (!titolo || titolo.toLowerCase() === 'titolo') return;
+          eventiData.push({
+            id: generaSlug(titolo),
+            giorno: getVal(0),
+            mese: getVal(1),
+            anno: getVal(2) || '2026',
+            titolo: titolo,
+            descrizione: getVal(4),
+            tipo: getVal(5) || 'Evento',
+            fotoGalleria: pulisciUrlFoto(getVal(7) || getVal(6)),
+            vaInGalleria: String(getVal(8)).toLowerCase() !== 'no'
+          });
+        });
+        renderAgenda();
+      } catch (e) { console.error(e); }
+    }
+
+    function renderAgenda() {
+      const grid = document.getElementById('agendaGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      if (eventiData.length === 0) {
+        grid.innerHTML = '<p class="text-slate-400 text-xs py-4 px-2">Nessun evento in programma.</p>';
+        return;
+      }
+      eventiData.forEach(ev => {
+        const item = document.createElement('div');
+        item.className = "bg-white border border-amber-200/85 shadow-sm w-[300px] shrink-0 flex flex-col overflow-hidden cursor-pointer group";
+        item.innerHTML = `<div class="p-4"><h3 class="font-bold text-[#1E3A8A] text-sm">${ev.titolo}</h3><p class="text-xs text-slate-600 mt-1">${ev.descrizione}</p></div>`;
+        grid.appendChild(item);
+      });
+    }
+
+    function renderPaginaGalleria() {
+      const grid = document.getElementById('galleriaGrid');
+      if (!grid) return;
+      grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12 text-xs">Galleria in aggiornamento...</p>';
+    }
+
     function renderGrigliaGiochi(lista, containerId) {
       const gridEl = document.getElementById(containerId);
       if (!gridEl) return;
@@ -535,62 +499,45 @@
         gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12 text-xs font-medium">Nessun gioco trovato.</p>';
         return;
       }
-      lista.forEach(function(g) {
-        const isPref = preferitiIds.includes(g.id);
-        const heartSvg = isPref ? '♥' : '♡';
+      lista.forEach(g => {
         const card = document.createElement('div');
-        card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-3 md:gap-0 relative";
-        card.onclick = function() {
-          savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-          window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
-          mostraDettaglioGioco(g.id, true);
-        };
+        card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch cursor-pointer group h-24 md:h-auto p-1.5 md:p-0 gap-3 relative";
         card.innerHTML = `
           <div class="w-24 md:w-full h-full md:h-48 bg-slate-200 overflow-hidden relative shrink-0">
-            <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
+            <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
           </div>
-          <div class="flex-grow min-w-0 flex flex-col justify-between h-full md:h-auto p-0 md:p-4 py-1 md:py-4 pr-2 md:pr-4">
+          <div class="flex-grow min-w-0 flex flex-col justify-between p-0 md:p-4">
             <div>
-              <span class="text-[10px] md:text-xs font-bold text-[#1E3A8A] uppercase tracking-wide block truncate">${g.tipo}</span>
-              <h3 class="text-xs md:text-base font-extrabold text-slate-800 leading-snug group-hover:text-[#1E3A8A] transition-colors truncate">${g.titolo}</h3>
+              <span class="text-[10px] md:text-xs font-bold text-[#1E3A8A] uppercase">${g.tipo}</span>
+              <h3 class="text-xs md:text-base font-extrabold text-slate-800 truncate">${g.titolo}</h3>
             </div>
-            <div class="flex items-center justify-between text-[11px] md:text-xs text-slate-500 pt-2 border-t border-slate-100 md:mt-3">
-              <span>👥 ${g.persone}</span>
-              <span class="text-xs font-bold text-[#1E3A8A]">Dettagli ➔</span>
+            <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t">
+              <span>👥 ${g.persone}</span><span class="font-bold text-[#1E3A8A]">Dettagli ➔</span>
             </div>
-          </div>
-        `;
+          </div>`;
         gridEl.appendChild(card);
       });
     }
 
     function renderGiochi(lista) { renderGrigliaGiochi(lista, 'gamesGrid'); }
     function renderPreferiti() { renderGrigliaGiochi(giochiData.filter(g => preferitiIds.includes(g.id)), 'preferitiGrid'); }
-
-    function applicaFiltri() {
-      renderGiochi(giochiData);
-    }
-
+    function applicaFiltri() { renderGiochi(giochiData); }
     function renderHomeContenuti() {
-      const gridRecent = document.getElementById('homeRecentGrid');
-      if (gridRecent && giochiData.length > 0) {
+      if (giochiData.length > 0) {
         renderGrigliaGiochi(giochiData.slice(0, 6), 'homeRecentGrid');
-      }
-      const gridFav = document.getElementById('homeFavoritesGrid');
-      if (gridFav && giochiData.length > 0) {
         renderGrigliaGiochi(giochiData.slice(0, 6), 'homeFavoritesGrid');
       }
     }
 
-    function mostraDettaglioGioco(id, scroll) {
-      // Funzione di gestione dettaglio
-    }
+    function generaSlug(t) { return t.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, ''); }
 
-    function generaSlug(testo) { return testo.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, ''); }
+    const s1 = document.createElement('script');
+    s1.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
+    document.body.appendChild(s1);
 
-    const scriptGiochi = document.createElement('script');
-    scriptGiochi.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
-    document.body.appendChild(scriptGiochi);
+    const s2 = document.createElement('script');
+    s2.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?sheet=Agenda&tqx=responseHandler:processAgendaData';
+    document.body.appendChild(s2);
   </script>
 </body>
 </html>
