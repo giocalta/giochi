@@ -533,9 +533,11 @@
         let idOpz = data[i][1];
         let testoOpz = data[i][2];
         let voti = Number(data[i][3]) || 0;
+        let customSfondo = data[i][4] || ''; // Colonna opzionale sfondo sondaggio (Immagine o Colore)
+        let trasparenza = data[i][5] || '';     // Colonna opzionale trasparenza sondaggio
 
         if (!sondaggiMap[idSond]) {
-          sondaggiMap[idSond] = { titolo: idSond, opzioni: [] };
+          sondaggiMap[idSond] = { titolo: idSond, opzioni: [], customSfondo, trasparenza };
         }
         sondaggiMap[idSond].opzioni.push({ idOpz, testoOpz, voti });
       }
@@ -549,11 +551,11 @@
           let perc = totaleVoti > 0 ? Math.round((opz.voti / totaleVoti) * 100) : 0;
           htmlOpzioni += `
             <div class="space-y-1 cursor-pointer group" onclick="votaSondaggio('${sond.titolo}','${opz.idOpz}')">
-              <div class="flex justify-between text-xs font-bold text-slate-700">
+              <div class="flex justify-between text-xs font-bold text-slate-700 bg-white/70 px-1 py-0.5">
                 <span>${opz.testoOpz}</span>
                 <span class="text-orange-600">${opz.voti} voti (${perc}%)</span>
               </div>
-              <div class="w-full bg-slate-100 h-3 overflow-hidden rounded-full border border-slate-200">
+              <div class="w-full bg-slate-100/90 h-3 overflow-hidden rounded-full border border-slate-200">
                 <div class="bg-orange-600 h-full transition-all duration-500 rounded-full" style="width: ${perc}%"></div>
               </div>
             </div>
@@ -561,10 +563,27 @@
         });
 
         let card = document.createElement('div');
-        card.className = "bg-amber-50/50 p-4 border border-amber-200/80 shadow-sm space-y-3";
+        card.className = "p-4 border border-amber-200/80 shadow-sm space-y-3 relative overflow-hidden";
+        
+        // Gestione Sfondo e Trasparenza per il Sondaggio
+        let styleBg = 'background-color: rgba(254, 243, 199, 0.5);'; // Default ambrato chiaro
+        if (sond.customSfondo) {
+          let opacita = sond.trasparenza !== '' ? sond.trasparenza : '1';
+          card.style.opacity = opacita;
+          let sfondoPulito = pulisciUrlFoto(sond.customSfondo);
+          if (sfondoPulito.startsWith('http') || sfondoPulito.includes('drive.google.com') || sfondoPulito.includes('lh3.googleusercontent.com')) {
+            styleBg = `background-image: url('${sfondoPulito}'); background-size: cover; background-position: center;`;
+          } else {
+            styleBg = `background-color: ${sond.customSfondo};`;
+          }
+        }
+        card.setAttribute('style', styleBg);
+
         card.innerHTML = `
-          <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">📊 ${sond.titolo}</h3>
-          <div class="space-y-2.5">${htmlOpzioni}</div>
+          <div class="bg-white/90 p-3 rounded space-y-3">
+            <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">📊 ${sond.titolo}</h3>
+            <div class="space-y-2.5">${htmlOpzioni}</div>
+          </div>
         `;
         box.appendChild(card);
       });
@@ -868,9 +887,7 @@
 
           let mostraInGalleriaStr = getVal(8).toLowerCase();
           
-          // Colonna 9: Sfondo personalizzato (può essere un URL immagine o un codice colore es. #ff0000)
           let customSfondo = getVal(9); 
-          // Colonna 10: Trasparenza (es. 0.9 oppure 90%)
           let trasparenzaSfondo = getVal(10); 
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
@@ -997,7 +1014,6 @@
 
       const container = document.getElementById('dettaglioEventoContainer');
 
-      // Gestione Sfondo Dinamico (Immagine o Colore) + Trasparenza
       container.style.background = '';
       container.style.backgroundImage = '';
       container.style.opacity = '';
@@ -1007,13 +1023,11 @@
         container.style.opacity = opacita;
 
         let sfondoPulito = pulisciUrlFoto(evento.customSfondo);
-        // Se contiene http o inizia con https / www / googleusercontent / drive, trattalo come immagine di sfondo
         if (sfondoPulito.startsWith('http') || sfondoPulito.includes('drive.google.com') || sfondoPulito.includes('lh3.googleusercontent.com')) {
           container.style.backgroundImage = `url('${sfondoPulito}')`;
           container.style.backgroundSize = 'cover';
           container.style.backgroundPosition = 'center';
         } else {
-          // Altrimenti trattalo come codice colore esadecimale o nome colore
           container.style.backgroundColor = evento.customSfondo;
         }
       }
