@@ -76,7 +76,7 @@
     <!-- BARRA RICERCA & PULSANTE FILTRI -->
     <div id="stickySearchContainer" class="hidden bg-amber-50/95 backdrop-blur-md py-2 border-b border-amber-200/80 relative">
       <div class="max-w-6xl mx-auto px-2.5 md:px-4 relative">
-        <div class="bg-white p-1.5 md:p-2 shadow-sm border border-amber-200/80">
+        <div class="bg-white p-1.5 md:p-2 shadow-sm border border-amber-200/80 relative">
           <div class="flex items-center gap-1.5 md:gap-2">
             <div class="relative flex-grow min-w-0">
               <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -92,96 +92,96 @@
               <span>↺</span>
             </button>
           </div>
-        </div>
 
-        <!-- TENDINA DEI FILTRI -->
-        <div id="filterModal" class="hidden absolute left-0 right-0 md:left-auto md:right-0 top-full mt-1.5 w-full md:w-auto max-w-4xl bg-white shadow-2xl border border-amber-200 z-50 p-3 md:p-4">
-          <div class="grid grid-cols-2 lg:grid-cols-6 gap-x-3 gap-y-2.5 text-xs">
-            <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
-              <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                <span>Giocatori</span>
+          <!-- TENDINA DEI FILTRI ALLINEATA ESATTAMENTE SOTTO IL BOX RICERCA -->
+          <div id="filterModal" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white shadow-2xl border border-amber-200 z-50 p-3 md:p-4">
+            <div class="grid grid-cols-2 lg:grid-cols-6 gap-x-3 gap-y-2.5 text-xs">
+              <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
+                <div class="flex items-center gap-1.5 text-slate-700 font-bold">
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                  <span>Giocatori</span>
+                </div>
+                <select id="playersFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                  <option value="">Tutti</option>
+                  <option value="1">1 Giocatore</option>
+                  <option value="2">2 Giocatori</option>
+                  <option value="3">3 Giocatori</option>
+                  <option value="4">4 Giocatori</option>
+                  <option value="5">5 Giocatori</option>
+                  <option value="6">6+ Giocatori</option>
+                </select>
               </div>
-              <select id="playersFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="">Tutti</option>
-                <option value="1">1 Giocatore</option>
-                <option value="2">2 Giocatori</option>
-                <option value="3">3 Giocatori</option>
-                <option value="4">4 Giocatori</option>
-                <option value="5">5 Giocatori</option>
-                <option value="6">6+ Giocatori</option>
-              </select>
+
+              <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
+                <div class="flex items-center gap-1.5 text-slate-700 font-bold">
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span>Tempo</span>
+                </div>
+                <select id="timeFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                  <option value="">Tutti</option>
+                  <option value="30">Max 30 min</option>
+                  <option value="60">Max 1 ora</option>
+                  <option value="120+">Più di 2 ore</option>
+                </select>
+              </div>
+
+              <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
+                <div class="flex items-center gap-1.5 text-slate-700 font-bold">
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                  <span>Complessità</span>
+                </div>
+                <select id="difficultyFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                  <option value="">Tutti</option>
+                  <option value="semplice">Semplice</option>
+                  <option value="media">Media</option>
+                  <option value="elevata">Elevata</option>
+                </select>
+              </div>
+
+              <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
+                <div class="flex items-center gap-1.5 text-slate-700 font-bold">
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                  <span>Tipo di gioco</span>
+                </div>
+                <select id="categoryFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                  <option value="">Tutti</option>
+                </select>
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-1.5 text-slate-700 font-bold">
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                  <span>Stato</span>
+                </div>
+                <select id="statusFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                  <option value="">Tutti</option>
+                  <option value="disponibile">Disponibili</option>
+                  <option value="noleggiato">Noleggiati</option>
+                </select>
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-1.5 text-slate-700 font-bold">
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+                  <span>Ordina per</span>
+                </div>
+                <select id="sortOrder" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-[#1E3A8A] font-bold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                  <option value="recenti">✨ Recenti</option>
+                  <option value="az">🔤 A - Z</option>
+                  <option value="za">🔤 Z - A</option>
+                  <option value="voto">⭐ Voto</option>
+                </select>
+              </div>
             </div>
 
-            <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
-              <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <span>Tempo</span>
-              </div>
-              <select id="timeFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="">Tutti</option>
-                <option value="30">Max 30 min</option>
-                <option value="60">Max 1 ora</option>
-                <option value="120+">Più di 2 ore</option>
-              </select>
+            <div class="mt-3 pt-2.5 border-t border-slate-200 flex gap-3 justify-center">
+              <button onclick="azzeraFiltriModal()" class="w-1/2 bg-white hover:bg-slate-100 text-rose-600 border border-rose-300 font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
+                Cancella
+              </button>
+              <button onclick="applicaFiltriModal()" class="w-1/2 bg-[#1E3A8A] hover:bg-blue-900 text-white font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
+                Applica
+              </button>
             </div>
-
-            <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
-              <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
-                <span>Complessità</span>
-              </div>
-              <select id="difficultyFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="">Tutti</option>
-                <option value="semplice">Semplice</option>
-                <option value="media">Media</option>
-                <option value="elevata">Elevata</option>
-              </select>
-            </div>
-
-            <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
-              <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                <span>Tipo di gioco</span>
-              </div>
-              <select id="categoryFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="">Tutti</option>
-              </select>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                <span>Stato</span>
-              </div>
-              <select id="statusFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="">Tutti</option>
-                <option value="disponibile">Disponibili</option>
-                <option value="noleggiato">Noleggiati</option>
-              </select>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
-                <span>Ordina per</span>
-              </div>
-              <select id="sortOrder" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-[#1E3A8A] font-bold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
-                <option value="recenti">✨ Recenti</option>
-                <option value="az">🔤 A - Z</option>
-                <option value="za">🔤 Z - A</option>
-                <option value="voto">⭐ Voto</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="mt-3 pt-2.5 border-t border-slate-200 flex gap-3 justify-center">
-            <button onclick="azzeraFiltriModal()" class="w-1/2 bg-white hover:bg-slate-100 text-rose-600 border border-rose-300 font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
-              Cancella
-            </button>
-            <button onclick="applicaFiltriModal()" class="w-1/2 bg-[#1E3A8A] hover:bg-blue-900 text-white font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
-              Applica
-            </button>
           </div>
         </div>
       </div>
@@ -1101,16 +1101,22 @@
             window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
             mostraDettaglioGioco(g.id, true);
           };
+          
+          let votoHtml = g.voto ? `<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 font-bold flex items-center gap-1"><svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${g.voto}</span>` : '';
+
           card.innerHTML = `
             <div class="h-44 md:h-52 bg-slate-100 overflow-hidden relative shadow-inner">
               <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
-              ${g.voto ? '<span class="absolute bottom-2 left-2 bg-slate-900/80 text-white text-xs px-2 py-0.5 font-bold flex items-center gap-1">★ ' + g.voto + '</span>' : ''}
+              ${votoHtml}
             </div>
             <div class="p-3.5 flex items-start justify-between gap-3">
               <div class="min-w-0">
                 <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wide block truncate">${g.tipo}</span>
                 <h4 class="font-extrabold text-slate-800 text-sm mt-1 truncate group-hover:text-orange-600 transition-colors">${g.titolo}</h4>
-                <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-2"><span>👥 ${g.persone}</span><span>⏱ ${g.tempo}</span></p>
+                <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-3">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>${g.persone}</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${g.tempo}</span>
+                </p>
               </div>
             </div>
           `;
@@ -1127,8 +1133,7 @@
 
         preferitiLista.forEach(function(g) {
           const isPref = preferitiIds.includes(g.id);
-          // RIPULITO DA SFONDI BIANCHI: aggiunto rounded-full bg-white/90 backdrop-blur-sm p-1.5 shadow
-          const heartSvg = isPref ? '<svg class="w-4 h-4 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' : '<svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>';
+          const heartSvg = isPref ? '<svg class="w-4 h-4 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' : '<svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>';
           let numVotiGlobali = preferitiGlobaliMap[g.id] || 0;
 
           const card = document.createElement('div');
@@ -1142,13 +1147,16 @@
             <div class="h-44 md:h-52 bg-slate-100 overflow-hidden relative shadow-inner">
               <img src="${g.foto}" alt="${g.titolo}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'">
               <button onclick="togglePreferito('${g.id}', event)" class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-md z-20 flex items-center justify-center"><span>${heartSvg}</span></button>
-              <span class="absolute bottom-2 left-2 bg-rose-600 text-white text-[11px] px-2 py-0.5 font-black shadow">♥ ${numVotiGlobali} voti</span>
+              <span class="absolute bottom-2 left-2 bg-rose-600 text-white text-[11px] px-2 py-0.5 font-black shadow flex items-center gap-1"><svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>${numVotiGlobali} voti</span>
             </div>
             <div class="p-3.5 flex items-start justify-between gap-3">
               <div class="min-w-0">
                 <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wide block truncate">${g.tipo}</span>
                 <h4 class="font-extrabold text-slate-800 text-sm mt-1 truncate group-hover:text-orange-600 transition-colors">${g.titolo}</h4>
-                <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-2"><span>👥 ${g.persone}</span><span>⏱ ${g.tempo}</span></p>
+                <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-3">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>${g.persone}</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${g.tempo}</span>
+                </p>
               </div>
             </div>
           `;
@@ -1167,7 +1175,6 @@
 
       lista.forEach(function(g) {
         const isPref = preferitiIds.includes(g.id);
-        // RIPULITO DA SFONDI BIANCHI: aggiunto rounded-full bg-white/90 backdrop-blur-sm p-1.5 shadow per renderlo rotondo e pulito
         const heartSvg = isPref ? '<svg class="w-4 h-4 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' : '<svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>';
         let numVotiGlobali = preferitiGlobaliMap[g.id] || 0;
 
@@ -1175,7 +1182,7 @@
         const tutorialIcon = g.tutorial ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 text-white w-7 h-7 flex items-center justify-center font-bold text-xs shadow-md z-10">▶</a>' : '';
 
         const card = document.createElement('div');
-        card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-32 md:h-auto p-2 md:p-0 gap-3.5 md:gap-0 relative";
+        card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-36 md:h-auto p-2 md:p-0 gap-3.5 md:gap-0 relative";
         card.onclick = function() { 
           savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
           window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
@@ -1193,12 +1200,16 @@
             <div>
               <div class="flex items-center justify-between gap-1 mb-1">
                 <span class="text-[11px] md:text-xs font-bold text-orange-600 uppercase tracking-wide truncate">${g.tipo}</span>
-                <span class="text-[11px] font-extrabold text-rose-600 bg-rose-50 px-1.5 py-0.5">♥ ${numVotiGlobali}</span>
+                <span class="text-[11px] font-extrabold text-rose-600 bg-rose-50 px-1.5 py-0.5 flex items-center gap-1"><svg class="w-3 h-3 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>${numVotiGlobali}</span>
               </div>
               <h3 class="text-sm md:text-base font-extrabold text-slate-800 leading-snug group-hover:text-orange-600 truncate">${g.titolo}</h3>
             </div>
-            <div class="flex items-center justify-between text-xs md:text-xs text-slate-500 pt-2 border-t border-slate-100 md:mt-3">
-              <span class="flex items-center gap-1 font-semibold text-slate-700">👥 ${g.persone} | ⏱ ${g.tempo}</span>
+            <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100 md:mt-3">
+              <span class="flex items-center gap-2 font-semibold text-slate-700">
+                <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>${g.persone}</span>
+                <span class="text-slate-300">|</span>
+                <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${g.tempo}</span>
+              </span>
               <span class="text-xs font-bold text-orange-600">Dettagli ➔</span>
             </div>
           </div>
@@ -1224,7 +1235,11 @@
 
       const container = document.getElementById('dettaglioGiocoContainer');
       const isPref = preferitiIds.includes(gioco.id);
-      const heartText = isPref ? '♥ Rimuovi dai Preferiti' : '♡ Aggiungi ai Preferiti';
+      
+      const heartBtnSvg = isPref 
+        ? '<svg class="w-4 h-4 text-rose-500 inline-block mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>Rimuovi dai Preferiti' 
+        : '<svg class="w-4 h-4 text-rose-400 inline-block mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>Aggiungi ai Preferiti';
+
       const statusBadge = gioco.disponibile ? '<span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 font-bold">✓ Disponibile per il noleggio</span>' : '<span class="bg-rose-100 text-rose-800 text-xs px-3 py-1.5 font-bold">⏳ Attualmente noleggiato</span>';
 
       const msgWA = encodeURIComponent('Ciao Giuseppe! Vorrei noleggiare il gioco "' + gioco.titolo + '". È disponibile?');
@@ -1242,16 +1257,26 @@
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <span class="text-xs font-bold uppercase text-orange-600 bg-orange-50 px-3 py-1.5 border border-orange-100">${gioco.tipo}</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="togglePreferito('${gioco.id}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3.5 py-2">${heartText}</button>
+                  <button onclick="togglePreferito('${gioco.id}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3.5 py-2 flex items-center">${heartBtnSvg}</button>
                   ${statusBadge}
                 </div>
               </div>
               <h2 class="text-2xl md:text-4xl font-black text-slate-900 mb-5 leading-tight">${gioco.titolo}</h2>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-6">
-                <div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Giocatori</span><span class="font-extrabold text-slate-800 text-xs">👥 ${gioco.persone}</span></div>
-                <div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Durata</span><span class="font-extrabold text-slate-800 text-xs">⏱ ${gioco.tempo}</span></div>
-                ${gioco.eta ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Età</span><span class="font-extrabold text-slate-800 text-xs">👶 ' + gioco.eta + '+</span></div>' : ''}
-                ${gioco.voto ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Voto BGG</span><span class="font-extrabold text-slate-800 text-xs">★ ' + gioco.voto + '</span></div>' : ''}
+                <div class="bg-amber-50/70 p-3 border border-amber-100">
+                  <span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Giocatori</span>
+                  <span class="font-extrabold text-slate-800 text-xs flex items-center justify-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>${gioco.persone}
+                  </span>
+                </div>
+                <div class="bg-amber-50/70 p-3 border border-amber-100">
+                  <span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Durata</span>
+                  <span class="font-extrabold text-slate-800 text-xs flex items-center justify-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${gioco.tempo}
+                  </span>
+                </div>
+                ${gioco.eta ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Età</span><span class="font-extrabold text-slate-800 text-xs flex items-center justify-center gap-1"><svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>' + gioco.eta + '+</span></div>' : ''}
+                ${gioco.voto ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Voto BGG</span><span class="font-extrabold text-slate-800 text-xs flex items-center justify-center gap-1"><svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' + gioco.voto + '</span></div>' : ''}
               </div>
               <div class="border-t border-slate-100 pt-4 space-y-2">
                 <h3 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Descrizione</h3>
@@ -1326,7 +1351,7 @@
       if (sortQuery === 'recenti') filtrati.sort((a, b) => b.idFisso - a.idFisso);
       else if (sortQuery === 'az') filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo));
       else if (sortQuery === 'za') filtrati.sort((a, b) => b.titolo.localeCompare(a.titolo));
-      else if (sortQuery ===5 || sortQuery === 'voto') filtrati.sort((a, b) => (parseFloat(b.voto) || 0) - (parseFloat(a.voto) || 0));
+      else if (sortQuery === 'voto') filtrati.sort((a, b) => (parseFloat(b.voto) || 0) - (parseFloat(a.voto) || 0));
 
       renderGiochi(filtrati);
     }
