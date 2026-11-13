@@ -827,8 +827,11 @@
           let peso = getFormattedVal(11);
           let dispStr = getFormattedVal(12).trim().toUpperCase();
           let descrizione = getFormattedVal(13);
+          let visibileStr = getFormattedVal(14).toLowerCase(); // Colonna O (Indice 14): Se è "no", il gioco viene nascosto
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
+          if (visibileStr === 'no') return; // Salta completamente i giochi impostati su No
+
           const isDisp = dispStr === '' || !['NO', 'NOLEGGIATO', 'OCCUPATO', 'FALSE', '0', 'NON DISPONIBILE'].includes(dispStr);
 
           giochiData.push({
