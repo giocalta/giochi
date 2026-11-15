@@ -93,17 +93,17 @@
             </button>
           </div>
 
-          <!-- TENDINA DEI FILTRI -->
+          <!-- TENDINA DEI FILTRI (7 COLONNE: 2 PER LE CATEGORIE E ALTRE PER I FILTRI) -->
           <div id="filterModal" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white shadow-2xl border border-amber-200 z-50 p-3 md:p-4">
-            <div class="grid grid-cols-2 lg:grid-cols-6 gap-x-3 gap-y-2.5 text-xs">
+            <div class="grid grid-cols-2 lg:grid-cols-7 gap-x-3 gap-y-2.5 text-xs">
               
-              <!-- FILTRO CATEGORIA PRINCIPALE -->
+              <!-- 1. CATEGORIA PRINCIPALE -->
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
                   <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                  <span>Categoria</span>
+                  <span>Cat. Principale</span>
                 </div>
-                <select id="mainCategoryFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                <select id="mainCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
                   <option value="">Tutte</option>
                   <option value="party">🎉 Party Game</option>
                   <option value="famiglia">👨‍👩‍👧‍👦 Introduttivi Family</option>
@@ -111,6 +111,17 @@
                   <option value="avventura">⚔️ Avventura e Tematici</option>
                   <option value="cooperativo">🤝 Cooperativi</option>
                   <option value="carte">🃏 Carte / Astratti</option>
+                </select>
+              </div>
+
+              <!-- 2. CATEGORIA SPECIFICA / GENERE (DA FOGLIO) -->
+              <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
+                <div class="flex items-center gap-1.5 text-slate-700 font-bold">
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                  <span>Genere Specifico</span>
+                </div>
+                <select id="specificCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                  <option value="">Tutti i generi</option>
                 </select>
               </div>
 
@@ -731,23 +742,46 @@
       if (el) { el.scrollBy({ left: quantita, behavior: 'smooth' }); }
     }
 
-    function selezionaCategoriaRapida(cat) {
-      document.getElementById('mainCategoryFilter').value = cat;
+    function aggiornaStilePillole(cat) {
+      const catChiave = cat === '' ? 'tutti' : cat;
       ['tutti', 'party', 'famiglia', 'strategia', 'avventura', 'cooperativo', 'carte'].forEach(c => {
         const btn = document.getElementById('cat-pill-' + c);
         if (!btn) return;
-        if (c === (cat === '' ? 'tutti' : cat)) {
+        if (c === catChiave) {
           btn.className = "bg-orange-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all";
         } else {
           btn.className = "bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all";
         }
       });
+    }
+
+    function selezionaCategoriaRapida(cat) {
+      document.getElementById('mainCategoryFilter').value = cat;
+      aggiornaStilePillole(cat);
       applicaFiltri();
+    }
+
+    function popolaDropdownGeneriSpecifici() {
+      const selectSpec = document.getElementById('specificCategoryFilter');
+      if (!selectSpec) return;
+      const valoreAttuale = selectSpec.value;
+      
+      // Estrae i generi unici dal campo 'tipo' dei giochi caricati
+      let generiUnici = [...new Set(giochiData.map(g => g.tipo).filter(t => t && t !== ''))].sort();
+      
+      selectSpec.innerHTML = '<option value="">Tutti i generi</option>';
+      generiUnici.forEach(genere => {
+        let opt = document.createElement('option');
+        opt.value = genere;
+        opt.textContent = genere;
+        selectSpec.appendChild(opt);
+      });
+      selectSpec.value = valoreAttuale;
     }
 
     function cambiaSezione(nomeSezione) {
       ultimaSezioneVisitata = nomeSezione;
-      window.location.hash = nomeSezione; // Salva la sezione nell'URL per il refresh
+      window.location.hash = nomeSezione;
 
       ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewGioco', 'viewEvento'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
@@ -851,6 +885,7 @@
 
     function azzeraFiltriModal() {
       document.getElementById('mainCategoryFilter').value = '';
+      document.getElementById('specificCategoryFilter').value = '';
       document.getElementById('playersFilter').value = '';
       document.getElementById('timeFilter').value = '';
       document.getElementById('difficultyFilter').value = '';
@@ -1009,6 +1044,7 @@
         });
 
         loadingEl.classList.add('hidden');
+        popolaDropdownGeneriSpecifici();
         aggiornaContatorePreferiti();
         applicaFiltri();
         caricaPreferitiGlobali();
@@ -1458,12 +1494,16 @@
       const textQuery = document.getElementById('searchInput').value.toLowerCase();
       const playersQuery = document.getElementById('playersFilter').value;
       const mainCatQuery = document.getElementById('mainCategoryFilter').value;
+      const specificCatQuery = document.getElementById('specificCategoryFilter').value.toLowerCase();
       const statusQuery = document.getElementById('statusFilter').value;
       const sortQuery = document.getElementById('sortOrder').value;
       const diffQuery = document.getElementById('difficultyFilter').value.toLowerCase();
       const timeQuery = document.getElementById('timeFilter').value;
 
-      const hasActiveFilters = playersQuery !== '' || mainCatQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
+      // Sincronizza le pillole in alto quando si seleziona la categoria principale dal menu
+      aggiornaStilePillole(mainCatQuery);
+
+      const hasActiveFilters = playersQuery !== '' || mainCatQuery !== '' || specificCatQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
       const badge = document.getElementById('activeFiltersBadge');
       if (hasActiveFilters) badge.classList.remove('hidden'); else badge.classList.add('hidden');
 
@@ -1489,6 +1529,8 @@
           }
         }
 
+        let matchSpecificCat = specificCatQuery === '' || g.tipo.toLowerCase().includes(specificCatQuery);
+
         let matchStatus = true;
         if (statusQuery === 'disponibile') matchStatus = g.disponibile;
         if (statusQuery === 'noleggiato') matchStatus = !g.disponibile;
@@ -1507,7 +1549,7 @@
           else matchTime = g.tempoMinuti > 0 && g.tempoMinuti <= parseInt(timeQuery, 10);
         }
 
-        return matchTitle && matchPlayers && matchMainCat && matchStatus && matchDiff && matchTime;
+        return matchTitle && matchPlayers && matchMainCat && matchSpecificCat && matchStatus && matchDiff && matchTime;
       });
 
       if (sortQuery === 'recenti') filtrati.sort((a, b) => b.idFisso - a.idFisso);
@@ -1520,7 +1562,6 @@
 
     document.getElementById('searchInput').addEventListener('input', applicaFiltri);
 
-    // Gestione dell'avvio con lettura dell'hash (mantiene la pagina attiva dopo un aggiornamento F5)
     window.addEventListener('DOMContentLoaded', function() {
       const hashIniziale = window.location.hash.replace('#', '');
       if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'info', 'contatti'].includes(hashIniziale)) {
