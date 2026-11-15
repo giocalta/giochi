@@ -293,11 +293,11 @@
       <div class="mb-4 overflow-x-auto no-scrollbar pb-1 px-1 md:px-0">
         <div class="flex items-center gap-2 min-w-max">
           <button onclick="selezionaCategoriaRapida('')" id="cat-pill-tutti" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">Tutti</button>
-          <button onclick="selezionaCategoriaRapida('party')" id="cat-pill-party" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🎉 Party</button>
-          <button onclick="selezionaCategoriaRapida('famiglia')" id="cat-pill-famiglia" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">👨‍👩‍👧‍👦 Famiglia</button>
+          <button onclick="selezionaCategoriaRapida('party')" id="cat-pill-party" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🎉 Party Game</button>
+          <button onclick="selezionaCategoriaRapida('famiglia')" id="cat-pill-famiglia" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">👨‍👩‍👧‍👦 Introduttivi Family</button>
           <button onclick="selezionaCategoriaRapida('strategia')" id="cat-pill-strategia" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🧠 Strategia</button>
-          <button onclick="selezionaCategoriaRapida('avventura')" id="cat-pill-avventura" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">⚔️ Avventura</button>
-          <button onclick="selezionaCategoriaRapida('cooperativo')" id="cat-pill-cooperativo" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🤝 Cooperativo</button>
+          <button onclick="selezionaCategoriaRapida('avventura')" id="cat-pill-avventura" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">⚔️ Avventura e Tematici</button>
+          <button onclick="selezionaCategoriaRapida('cooperativo')" id="cat-pill-cooperativo" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🤝 Cooperativi</button>
           <button onclick="selezionaCategoriaRapida('carte')" id="cat-pill-carte" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🃏 Carte / Astratti</button>
         </div>
       </div>
@@ -346,7 +346,7 @@
       <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
     </div>
 
-    <!-- SEZIONE 2: INFO -->
+    <!-- SEZIONE 2: INFO & GUIDA ALLE CATEGORIE -->
     <div id="viewInfo" class="hidden space-y-6">
       <div class="bg-white p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
         <div>
@@ -369,6 +369,84 @@
             <div class="w-10 h-10 bg-orange-600 text-white flex items-center justify-center font-bold mb-3 shadow-sm text-lg">🏆</div>
             <h3 class="font-bold text-slate-800 mb-1">Gioca e Restituisci</h3>
             <p class="text-xs text-slate-600">Ritira il gioco completo a Caltagirone, divertiti e restituiscilo integro entro la data stabilita.</p>
+          </div>
+        </div>
+
+        <!-- GUIDA APPROFONDITA ALLE CATEGORIE PRINCIPALI -->
+        <div class="border-t border-slate-200 pt-8 space-y-6">
+          <div class="space-y-1">
+            <h3 class="text-xl font-black text-slate-900">📖 Guida alla Scelta: Come e quale categoria scegliere?</h3>
+            <p class="text-xs md:text-sm text-slate-600">Ogni gruppo e ogni serata ha il suo gioco perfetto. Ecco una panoramica per orientarti tra le nostre categorie principali e capire quale fa al caso tuo:</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Categoria 1 -->
+            <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
+              <div class="flex items-center gap-2 text-orange-700 font-black text-base">
+                <span>🎉</span> Party Game
+              </div>
+              <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Ideale se hai ospiti a casa, feste di compleanno o gruppi numerosi (da 4 a 10+ giocatori). Si spiegano in meno di 2 minuti e scatenano risate e interazione continua.</p>
+              <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Rompono il ghiaccio all'istante, coinvolgono anche chi non ha mai toccato un gioco da tavolo e garantiscono un'atmosfera allegra e spensierata.</p>
+            </div>
+
+            <!-- Categoria 2 -->
+            <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
+              <div class="flex items-center gap-2 text-orange-700 font-black text-base">
+                <span>👨‍👩‍👧‍👦</span> Introduttivi Family
+              </div>
+              <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Perfetti per i pomeriggi in famiglia, con bambini o ragazzi (spesso adatti dai 7-8 anni in su) e per introdurre nuovi giocatori al mondo ludico.</p>
+              <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Bilanciano perfettamente divertimento e stimolo logico, unendo grandi e piccini attorno al tavolo senza frustrazioni o regole troppo complesse.</p>
+            </div>
+
+            <!-- Categoria 3 -->
+            <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
+              <div class="flex items-center gap-2 text-orange-700 font-black text-base">
+                <span>🧠</span> Strategia
+              </div>
+              <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Per chi ama spremere le meningi, pianificare a lungo termine e sfidarsi ad armi pari dove la vittoria dipende esclusivamente dalle proprie scelte tattiche.</p>
+              <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Offrono una rigiocabilità immensa e una profonda soddisfazione quando la tua strategia di gioco si realizza alla perfezione.</p>
+            </div>
+
+            <!-- Categoria 4 -->
+            <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
+              <div class="flex items-center gap-2 text-orange-700 font-black text-base">
+                <span>⚔️</span> Avventura e Tematici
+              </div>
+              <p class="text-xs font-bold text-slate-800">Como sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Se cerchi storie epiche, esplorazione di dungeon, combattimenti contro mostri o ambientazioni fantasy/sci-fi ricche di miniature e componenti curati.</p>
+              <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Ti trasportano letteralmente in un altro mondo, facendo vivere a te e al tuo gruppo un'esperienza narrativa indimenticabile.</p>
+            </div>
+
+            <!-- Categoria 5 -->
+            <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
+              <div class="flex items-center gap-2 text-orange-700 font-black text-base">
+                <span>🤝</span> Cooperativi
+              </div>
+              <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Quando il gruppo vuole remare nella stessa direzione: tutti i giocatori vincono o perdono insieme contro le insidie del tabellone.</p>
+              <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Eliminano la competizione diretta, stimolano enormemente il dialogo, il lavoro di squadra e la cooperazione.</p>
+            </div>
+
+            <!-- Categoria 6 -->
+            <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
+              <div class="flex items-center gap-2 text-orange-700 font-black text-base">
+                <span>🃏</span> Carte / Astratti
+              </div>
+              <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Ottimi per sfide rapide (spesso ideali anche in 2 giocatori), con regolamenti agili, grande portabilità e meccaniche pulite ed eleganti.</p>
+              <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Permettono di intavolare una partita in pochissimi secondi e offrono sfide tattiche immediate e stimolanti.</p>
+            </div>
+
           </div>
         </div>
 
@@ -1315,7 +1393,7 @@
               </div>
               <h2 class="text-2xl md:text-4xl font-black text-slate-900 mb-5 leading-tight">${gioco.titolo}</h2>
               
-              <!-- GRIGLIA METRICHE RIPRISTINATA (Giocatori, Top Giocatori, Durata, Età, Voto BGG, Complessità) -->
+              <!-- GRIGLIA METRICHE -->
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center mb-6">
                 <div class="bg-amber-50/70 p-3 border border-amber-100">
                   <span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Giocatori</span>
