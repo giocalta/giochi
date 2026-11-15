@@ -81,12 +81,12 @@
             <div class="relative flex-grow min-w-0">
               <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               <input type="text" id="searchInput" placeholder="Cerca gioco..." 
-                     class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:bg-white text-xs md:text-sm transition-all font-medium">
+                     class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#172554] focus:bg-white text-xs md:text-sm transition-all font-medium">
             </div>
-            <button onclick="toggleFiltriModale()" id="btnToggleFiltri" class="bg-[#1E3A8A] hover:bg-blue-950 text-white font-bold text-xs px-4 py-1.5 md:py-2 transition-all flex items-center gap-1.5 shrink-0 shadow-sm">
+            <button onclick="toggleFiltriModale()" id="btnToggleFiltri" class="bg-[#172554] hover:bg-black text-white font-bold text-xs px-4 py-1.5 md:py-2 transition-all flex items-center gap-1.5 shrink-0 shadow-sm">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.172a1 1 0 01-.553.894l-4 2A1 1 0 017 18.28v-5.172a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z"></path></svg>
               <span>Filtri</span>
-              <span id="activeFiltersBadge" class="hidden bg-white text-[#1E3A8A] text-[10px] px-1.5 py-0.2 rounded-full font-black ml-1">!</span>
+              <span id="activeFiltersBadge" class="hidden bg-white text-[#172554] text-[10px] px-1.5 py-0.2 rounded-full font-black ml-1">!</span>
             </button>
             <button onclick="azzeraFiltri()" title="Azzera Ricerca" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2.5 py-1.5 md:py-2 transition-all flex items-center shrink-0">
               <span>↺</span>
@@ -100,10 +100,10 @@
               <!-- 1. CATEGORIA PRINCIPALE -->
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                   <span>Cat. Principale</span>
                 </div>
-                <select id="mainCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                <select id="mainCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
                   <option value="">Tutte</option>
                   <option value="party">🎉 Party Game</option>
                   <option value="famiglia">👨‍👩‍👧‍👦 Introduttivi Family</option>
@@ -117,20 +117,20 @@
               <!-- 2. GENERE SPECIFICO -->
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                   <span>Genere Specifico</span>
                 </div>
-                <select id="specificCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                <select id="specificCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
                   <option value="">Tutti i generi</option>
                 </select>
               </div>
 
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                   <span>Giocatori</span>
                 </div>
-                <select id="playersFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                <select id="playersFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
                   <option value="">Tutti</option>
                   <option value="1">1 Giocatore</option>
                   <option value="2">2 Giocatori</option>
@@ -143,10 +143,10 @@
 
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                   <span>Tempo</span>
                 </div>
-                <select id="timeFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                <select id="timeFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
                   <option value="">Tutti</option>
                   <option value="30">Max 30 min</option>
                   <option value="60">Max 1 ora</option>
@@ -156,10 +156,10 @@
 
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
                   <span>Complessità</span>
                 </div>
-                <select id="difficultyFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                <select id="difficultyFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
                   <option value="">Tutti</option>
                   <option value="semplice">Semplice</option>
                   <option value="media">Media</option>
@@ -169,10 +169,10 @@
 
               <div class="flex flex-col gap-1">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                   <span>Stato</span>
                 </div>
-                <select id="statusFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                <select id="statusFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
                   <option value="">Tutti</option>
                   <option value="disponibile">Disponibili</option>
                   <option value="noleggiato">Noleggiati</option>
@@ -181,10 +181,10 @@
 
               <div class="flex flex-col gap-1">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
                   <span>Ordina per</span>
                 </div>
-                <select id="sortOrder" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-[#1E3A8A] font-bold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
+                <select id="sortOrder" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-[#172554] font-bold focus:outline-none focus:ring-1 focus:ring-[#172554]">
                   <option value="recenti">✨ Recenti</option>
                   <option value="az">🔤 A - Z</option>
                   <option value="za">🔤 Z - A</option>
@@ -197,7 +197,7 @@
               <button onclick="azzeraFiltriModal()" class="w-1/2 bg-white hover:bg-slate-100 text-rose-600 border border-rose-300 font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
                 Cancella
               </button>
-              <button onclick="applicaFiltriModal()" class="w-1/2 bg-[#1E3A8A] hover:bg-blue-950 text-white font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
+              <button onclick="applicaFiltriModal()" class="w-1/2 bg-[#172554] hover:bg-black text-white font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
                 Applica
               </button>
             </div>
@@ -223,7 +223,7 @@
           </div>
         </div>
         <div class="flex gap-3 z-10 shrink-0">
-          <button onclick="apriCatalogoPuro()" class="bg-[#1E3A8A] text-white hover:bg-blue-950 font-extrabold text-xs md:text-sm px-4 py-2 shadow transition-transform hover:scale-105 flex items-center gap-2">
+          <button onclick="apriCatalogoPuro()" class="bg-[#172554] text-white hover:bg-black font-extrabold text-xs md:text-sm px-4 py-2 shadow transition-transform hover:scale-105 flex items-center gap-2">
             <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             Sfoglia Catalogo
           </button>
@@ -565,8 +565,8 @@
 
   </main>
 
-  <!-- FOOTER AGGIORNATO IN BLU SCURO COORDINATO -->
-  <footer class="bg-[#1E3A8A] text-amber-100 border-t border-blue-900 py-8 text-center text-xs space-y-3 mt-auto shadow-inner">
+  <!-- FOOTER IN BLU NOTTE ANCORA PIÙ SCURO -->
+  <footer class="bg-[#172554] text-amber-100 border-t border-blue-950 py-8 text-center text-xs space-y-3 mt-auto shadow-inner">
     <div class="max-w-6xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
       <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-8 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.textContent='GIOCALTA';">
       <p class="text-amber-100/80 font-medium">Noleggio Giochi da Tavolo a Caltagirone</p>
@@ -967,6 +967,32 @@
       return new Date(a, m, g).getTime();
     }
 
+    // FUNZIONE PER DARE CARATTERE E PERSONALITÀ ALLE DESCRIZIONI DEI GIOCHI
+    function arricchisciDescrizione(titolo, tipo, descOriginale) {
+      if (descOriginale && descOriginale.length > 30 && !descOriginale.includes('Nessuna descrizione')) {
+        return descOriginale;
+      }
+      let t = tipo.toLowerCase();
+      let base = descOriginale && descOriginale.length > 5 ? descOriginale : '';
+      
+      if (t.includes('party') || t.includes('bluff') || t.includes('deduz')) {
+        return base ? `${base} Preparati a risate a non finire, colpi di scena fulminei e sguardi di fuoco al tavolo. Ideale per sbloccare qualsiasi serata in compagnia!` 
+                    : `Un'esperienza esplosiva e divertentissima! Perfetto per rompere il ghiaccio, scatenare il caos al tavolo e mettere alla prova la complicità (o il bluff) di tutto il gruppo.`;
+      } else if (t.includes('strategia') || t.includes('gestion') || t.includes('euro') || t.includes('piazzamento')) {
+        return base ? `${base} Ogni mossa richiede calcolo e visione d'insieme: pianifica la tua strategia per superare gli avversari e conquistare la vittoria.` 
+                    : `Pane per i denti dei veri strateghi! Gestisci le tue risorse con precisione millimetrica e anticipa le mosse degli avversari in una sfida profonda e appagante.`;
+      } else if (t.includes('cooperativo') || t.includes('collaborativ')) {
+        return base ? `${base} Qui si vince o si perde tutti insieme: la comunicazione e il lavoro di squadra sono l'unica via per la salvezza.` 
+                    : `Tutti uniti per un unico obiettivo comune! Mettete da parte la rivalità e collaborate gomito a gomito: ogni decisione presa insieme farà la differenza tra il trionfo e la sconfitta.`;
+      } else if (t.includes('avventura') || t.includes('tematic') || t.includes('dungeon') || t.includes('miniatur')) {
+        return base ? `${base} Tuffati in un'ambientazione ricca di atmosfera dove ogni scelta scriverà una nuova ed epica pagina della vostra avventura.` 
+                    : `Un viaggio straordinario in un mondo fantastico! Preparati a vivere un'immersione totale tra sfide epiche, componenti curatissimi e momenti indimenticabili al tavolo.`;
+      } else {
+        return base ? `${base} Un titolo imperdibile per arricchire la tua serata ludica con meccaniche coinvolgenti e tanto divertimento.` 
+                    : `Un gioco da tavolo eccezionale, selezionato con cura per garantire ore di puro divertimento, sfide stimolanti e ottima compagnia a Caltagirone.`;
+      }
+    }
+
     function processGoogleSheetsData(json) {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
@@ -999,13 +1025,14 @@
           let voto = getFormattedVal(10);
           let peso = getFormattedVal(11);
           let dispStr = getFormattedVal(12).trim().toUpperCase();
-          let descrizione = getFormattedVal(13);
+          let descrizioneBrutta = getFormattedVal(13);
           let visibileStr = getFormattedVal(14).toLowerCase();
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
           if (visibileStr === 'no') return;
 
           const isDisp = dispStr === '' || !['NO', 'NOLEGGIATO', 'OCCUPATO', 'FALSE', '0', 'NON DISPONIBILE'].includes(dispStr);
+          let descrizioneConCarattere = arricchisciDescrizione(titolo, tipo, descrizioneBrutta);
 
           giochiData.push({
             id: generaSlug(titolo),
@@ -1022,7 +1049,7 @@
             voto: voto,
             peso: peso ? peso + ' / 5' : '',
             disponibile: isDisp,
-            descrizione: descrizione || 'Nessuna descrizione dettagliata disponibile al momento.',
+            descrizione: descrizioneConCarattere,
             foto: foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'
           });
         });
@@ -1463,7 +1490,7 @@
                 ${gioco.peso ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Complessità</span><span class="font-extrabold text-slate-800 text-xs flex items-center justify-center gap-1"><svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>' + gioco.peso + '</span></div>' : ''}
               </div>
 
-              <!-- DESCRIZIONE MODERNA STILE FOGLIO CON IMMAGINE INTEGRATA -->
+              <!-- DESCRIZIONE MODERNA CON CARATTERE -->
               <div class="bg-gradient-to-br from-amber-50/70 via-white to-amber-50/30 p-5 rounded-xl border border-amber-200/80 shadow-inner space-y-3">
                 <div class="flex items-center justify-between border-b border-amber-200/60 pb-2">
                   <h3 class="text-xs font-black text-orange-800 uppercase tracking-wider flex items-center gap-1.5">
