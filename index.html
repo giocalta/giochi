@@ -289,7 +289,7 @@
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo" class="hidden">
       
-      <!-- RIGA CATEGORIE PRINCIPALI (PILLOLE SCORREVOLI) -->
+      <!-- RIGA CATEGORIE PRINCIPALI (PILLOLE SCORREVOLI CON ICONE UNIFORMI) -->
       <div class="mb-4 overflow-x-auto no-scrollbar pb-1 px-1 md:px-0">
         <div class="flex items-center gap-2 min-w-max">
           <button onclick="selezionaCategoriaRapida('')" id="cat-pill-tutti" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">Tutti</button>
@@ -346,7 +346,7 @@
       <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
     </div>
 
-    <!-- SEZIONE 2: INFO & GUIDA ALLE CATEGORIE -->
+    <!-- SEZIONE 2: INFO & GUIDA ALLE CATEGORIE E AL PESO -->
     <div id="viewInfo" class="hidden space-y-6">
       <div class="bg-white p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
         <div>
@@ -372,79 +372,98 @@
           </div>
         </div>
 
-        <!-- GUIDA APPROFONDITA ALLE CATEGORIE PRINCIPALI -->
+        <!-- GUIDA APPROFONDITA ALLE CATEGORIE PRINCIPALI E AL PESO BGG -->
         <div class="border-t border-slate-200 pt-8 space-y-6">
           <div class="space-y-1">
-            <h3 class="text-xl font-black text-slate-900">📖 Guida alla Scelta: Come e quale categoria scegliere?</h3>
-            <p class="text-xs md:text-sm text-slate-600">Ogni gruppo e ogni serata ha il suo gioco perfetto. Ecco una panoramica per orientarti tra le nostre categorie principali e capire quale fa al caso tuo:</p>
+            <h3 class="text-xl font-black text-slate-900">📖 Guida alla Scelta: Come orientarsi tra categorie e complessità</h3>
+            <p class="text-xs md:text-sm text-slate-600">Ogni gruppo e ogni serata ha il suo gioco perfetto. Ecco la spiegazione delle categorie principali e del <strong>Peso / Complessità (da 1 a 5)</strong>:</p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- SPIEGAZIONE DEL PESO / COMPLESSITÀ BGG -->
+          <div class="bg-orange-50/70 p-5 border border-orange-200 space-y-3">
+            <div class="flex items-center gap-2 text-orange-800 font-black text-base">
+              <span>⚖️</span> Cos'è il Peso / Complessità (1 - 5)?
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed">
+              Il valore di <strong>Complessità (Peso BGG)</strong> indica quanto è impegnativo il regolamento di un gioco in una scala da 1 a 5:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div class="bg-white p-3 border border-orange-200 shadow-sm">
+                <span class="block font-black text-orange-700 text-xs mb-1">1.0 - 2.0 (Semplice)</span>
+                <p class="text-[11px] text-slate-600">Regole immediate, spiegazione in 5 minuti, zero frustrazione. Ideale per famiglie e principianti.</p>
+              </div>
+              <div class="bg-white p-3 border border-orange-200 shadow-sm">
+                <span class="block font-black text-orange-700 text-xs mb-1">2.0 - 3.0 (Medio)</span>
+                <p class="text-[11px] text-slate-600">Il giusto compromesso. Richiede un minimo di strategia e pianificazione, perfetto per serate con amici.</p>
+              </div>
+              <div class="bg-white p-3 border border-orange-200 shadow-sm">
+                <span class="block font-black text-orange-700 text-xs mb-1">3.0 - 5.0 (Elevato)</span>
+                <p class="text-[11px] text-slate-600">Per veri strateghi. Regole articolate, alta profondità tattica e partite che richiedono concentrazione e studio.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- GRIGLIA DELLE CATEGORIE CON ICONE UNIFORMI -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
             
-            <!-- Categoria 1 -->
             <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
               <div class="flex items-center gap-2 text-orange-700 font-black text-base">
                 <span>🎉</span> Party Game
               </div>
               <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Ideale se hai ospiti a casa, feste di compleanno o gruppi numerosi (da 4 a 10+ giocatori). Si spiegano in meno di 2 minuti e scatenano risate e interazione continua.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Ideale se hai ospiti a casa, feste o gruppi numerosi (da 4 a 10+ giocatori). Si spiegano in un attimo.</p>
               <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Rompono il ghiaccio all'istante, coinvolgono anche chi non ha mai toccato un gioco da tavolo e garantiscono un'atmosfera allegra e spensierata.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Rompono il ghiaccio all'istante, coinvolgono chiunque e garantiscono risate e allegria assicurata.</p>
             </div>
 
-            <!-- Categoria 2 -->
             <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
               <div class="flex items-center gap-2 text-orange-700 font-black text-base">
                 <span>👨‍👩‍👧‍👦</span> Introduttivi Family
               </div>
               <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Perfetti per i pomeriggi in famiglia, con bambini o ragazzi (spesso adatti dai 7-8 anni in su) e per introdurre nuovi giocatori al mondo ludico.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Perfetti per i pomeriggi in famiglia, con bambini o ragazzi e per avvicinare nuovi giocatori al mondo ludico.</p>
               <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Bilanciano perfettamente divertimento e stimolo logico, unendo grandi e piccini attorno al tavolo senza frustrazioni o regole troppo complesse.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Uniscono grandi e piccini attorno al tavolo con meccaniche stimolanti ma accessibili a tutti.</p>
             </div>
 
-            <!-- Categoria 3 -->
             <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
               <div class="flex items-center gap-2 text-orange-700 font-black text-base">
                 <span>🧠</span> Strategia
               </div>
               <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Per chi ama spremere le meningi, pianificare a lungo termine e sfidarsi ad armi pari dove la vittoria dipende esclusivamente dalle proprie scelte tattiche.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Per chi ama spremere le meningi e pianificare a lungo termine dove la vittoria dipende solo dalle tue scelte.</p>
               <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Offrono una rigiocabilità immensa e una profonda soddisfazione quando la tua strategia di gioco si realizza alla perfezione.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Offrono una rigiocabilità immensa e una grande soddisfazione quando la tua tattica si realizza.</p>
             </div>
 
-            <!-- Categoria 4 -->
             <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
               <div class="flex items-center gap-2 text-orange-700 font-black text-base">
                 <span>⚔️</span> Avventura e Tematici
               </div>
-              <p class="text-xs font-bold text-slate-800">Como sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Se cerchi storie epiche, esplorazione di dungeon, combattimenti contro mostri o ambientazioni fantasy/sci-fi ricche di miniature e componenti curati.</p>
+              <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Se cerchi storie epiche, esplorazione di dungeon, combattimenti o ambientazioni ricche di miniature.</p>
               <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Ti trasportano letteralmente in un altro mondo, facendo vivere a te e al tuo gruppo un'esperienza narrativa indimenticabile.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Ti trasportano letteralmente in un altro mondo, facendo vivere al gruppo un'esperienza narrativa unica.</p>
             </div>
 
-            <!-- Categoria 5 -->
             <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
               <div class="flex items-center gap-2 text-orange-700 font-black text-base">
                 <span>🤝</span> Cooperativi
               </div>
               <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Quando il gruppo vuole remare nella stessa direzione: tutti i giocatori vincono o perdono insieme contro le insidie del tabellone.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Quando il gruppo vuole remare nella stessa direzione: tutti vincono o perdono insieme contro il gioco.</p>
               <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Eliminano la competizione diretta, stimolano enormemente il dialogo, il lavoro di squadra e la cooperazione.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Eliminano la competizione diretta e stimolano enormemente il dialogo e il lavoro di squadra.</p>
             </div>
 
-            <!-- Categoria 6 -->
             <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
               <div class="flex items-center gap-2 text-orange-700 font-black text-base">
                 <span>🃏</span> Carte / Astratti
               </div>
               <p class="text-xs font-bold text-slate-800">Come sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Ottimi per sfide rapide (spesso ideali anche in 2 giocatori), con regolamenti agili, grande portabilità e meccaniche pulite ed eleganti.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Ottimi per sfide rapide (spesso perfetti in 2 giocatori), con regolamenti agili e grande portabilità.</p>
               <p class="text-xs font-bold text-slate-800 pt-1">Perché sceglierlo:</p>
-              <p class="text-xs text-slate-600 leading-relaxed">Permettono di intavolare una partita in pochissimi secondi e offrono sfide tattiche immediate e stimolanti.</p>
+              <p class="text-xs text-slate-600 leading-relaxed">Permettono di intavolare una partita in pochi secondi e offrono sfide immediate ed eleganti.</p>
             </div>
 
           </div>
