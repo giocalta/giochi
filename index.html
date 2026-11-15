@@ -355,33 +355,46 @@
     <!-- SEZIONE 2: INFO & GUIDA -->
     <div id="viewInfo" class="hidden space-y-6">
       
+      <!-- BANNER SUPERIORE INFO CON IMMAGINE DI SFONDO E LOGO UFFICIALE -->
+      <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4 border border-orange-500/40">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center opacity-15 pointer-events-none"></div>
+        <div class="absolute inset-0 bg-slate-950/20 pointer-events-none"></div>
+        <div class="relative z-10 space-y-2 text-center md:text-left">
+          <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-10 md:h-14 w-auto object-contain drop-shadow mx-auto md:mx-0" onerror="this.onerror=null; this.textContent='GIOCALTA';">
+          <p class="text-amber-100 text-xs md:text-sm font-medium">Noleggio giochi da tavolo a Caltagirone per serate in compagnia, eventi e famiglie.</p>
+        </div>
+        <div class="relative z-10 shrink-0">
+          <span class="bg-white/20 backdrop-blur-md px-3.5 py-2 rounded-lg text-xs font-black text-white border border-white/30 shadow">Guida & Regolamento 📖</span>
+        </div>
+      </div>
+
       <!-- BLOCCO 1: COME FUNZIONA IL NOLEGGIO E REGOLE -->
       <div class="bg-white p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-8">
         <div>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">Come funziona GIOCALTA 🎲</h2>
-          <p class="text-slate-600 text-sm">Noleggio giochi da tavolo a Caltagirone per serate in compagnia, eventi e famiglie.</p>
+          <h3 class="text-xl md:text-2xl font-black text-slate-900 mb-2">Come funziona GIOCALTA 🎲</h3>
+          <p class="text-slate-600 text-sm">Semplice, veloce e pensato per tutti gli appassionati del territorio.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="bg-amber-50/60 p-5 border border-amber-100">
             <div class="w-10 h-10 bg-orange-600 text-white flex items-center justify-center font-bold mb-3 shadow-sm text-lg">🎯</div>
-            <h3 class="font-bold text-slate-800 mb-1">Scegli dal catalogo</h3>
+            <h4 class="font-bold text-slate-800 mb-1">Scegli dal catalogo</h4>
             <p class="text-xs text-slate-600">Sfoglia i giochi disponibili, controlla durata, età consigliata e guarda il video tutorial.</p>
           </div>
           <div class="bg-amber-50/60 p-5 border border-amber-100">
             <div class="w-10 h-10 bg-orange-600 text-white flex items-center justify-center font-bold mb-3 shadow-sm text-lg">💬</div>
-            <h3 class="font-bold text-slate-800 mb-1">Prenota via WhatsApp</h3>
+            <h4 class="font-bold text-slate-800 mb-1">Prenota via WhatsApp</h4>
             <p class="text-xs text-slate-600">Clicca su "Prenota su WhatsApp" per verificare la disponibilità e fissare l'orario del ritiro.</p>
           </div>
           <div class="bg-amber-50/60 p-5 border border-amber-100">
             <div class="w-10 h-10 bg-orange-600 text-white flex items-center justify-center font-bold mb-3 shadow-sm text-lg">🏆</div>
-            <h3 class="font-bold text-slate-800 mb-1">Gioca e Restituisci</h3>
+            <h4 class="font-bold text-slate-800 mb-1">Gioca e Restituisci</h4>
             <p class="text-xs text-slate-600">Ritira il gioco completo a Caltagirone, divertiti e restituiscilo integro entro la data stabilita.</p>
           </div>
         </div>
 
         <div class="border-t border-slate-100 pt-6 space-y-4 text-xs md:text-sm text-slate-600">
-          <h3 class="font-bold text-slate-800 text-base">📌 Regole del Servizio</h3>
+          <h4 class="font-bold text-slate-800 text-base">📌 Regole del Servizio</h4>
           <ul class="list-disc pl-5 space-y-2">
             <li><strong>Cura del gioco:</strong> Chiediamo la massima cura per carte e componenti.</li>
             <li><strong>Ritiro a Caltagirone:</strong> Consegna e ritiro vengono effettuati di persona previa conferma via messaggio.</li>
@@ -392,7 +405,7 @@
       <!-- BLOCCO 2: GUIDA ALLE CATEGORIE E COMPLESSITÀ -->
       <div class="bg-white p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-6">
         <div class="space-y-1">
-          <h3 class="text-2xl font-black text-slate-900">📖 Guida alla Scelta: Categorie e Complessità</h3>
+          <h3 class="text-xl md:text-2xl font-black text-slate-900">📖 Guida alla Scelta: Categorie e Complessità</h3>
           <p class="text-xs md:text-sm text-slate-600">Tutto quello che ti serve per orientarti tra i titoli del catalogo, comprendere il <strong>Peso / Complessità (da 1 a 5)</strong> e scegliere il gioco perfetto:</p>
         </div>
 
@@ -552,8 +565,13 @@
 
   </main>
 
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-    <p>© <strong>GIOCALTA</strong> - Noleggio Giochi da Tavolo Caltagirone.</p>
+  <!-- FOOTER CON LOGO UFFICIALE -->
+  <footer class="bg-slate-900 text-amber-100 border-t border-amber-900/40 py-8 text-center text-xs space-y-3 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
+      <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-8 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.textContent='GIOCALTA';">
+      <p class="text-slate-400 font-medium">Noleggio Giochi da Tavolo a Caltagirone</p>
+      <p class="text-[11px] text-slate-500">© 2026 GIOCALTA - Tutti i diritti riservati.</p>
+    </div>
   </footer>
 
   <script>
@@ -1340,7 +1358,9 @@
         let numVotiGlobali = preferitiGlobaliMap[g.id] || 0;
 
         const statusBadge = g.disponibile ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2 py-0.5 font-bold shadow-sm">Disp.</span>' : '<span class="bg-rose-100 text-rose-800 text-[10px] md:text-xs px-2 py-0.5 font-bold shadow-sm">Nolegg.</span>';
-        const tutorialIcon = g.tutorial ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 text-white w-7 h-7 flex items-center justify-center font-bold text-xs shadow-md z-10">▶</a>' : '';
+        
+        <!-- LOGHETTO VIDEO ROSSO E BIANCO -->
+        const tutorialIcon = g.tutorial ? '<a href="' + g.tutorial + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="absolute top-2 left-2 bg-red-600 text-white w-7 h-7 flex items-center justify-center font-bold text-xs shadow-md z-10" title="Guarda Tutorial">▶</a>' : '';
 
         const card = document.createElement('div');
         card.className = "bg-white shadow-sm border border-amber-200/60 overflow-hidden flex flex-row md:flex-col items-center md:items-stretch hover:shadow-lg transition-all cursor-pointer group h-36 md:h-auto p-2 md:p-0 gap-3.5 md:gap-0 relative";
@@ -1444,10 +1464,24 @@
                 ${gioco.peso ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Complessità</span><span class="font-extrabold text-slate-800 text-xs flex items-center justify-center gap-1"><svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>' + gioco.peso + '</span></div>' : ''}
               </div>
 
-              <div class="border-t border-slate-100 pt-4 space-y-2">
-                <h3 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Descrizione</h3>
-                <p class="text-slate-600 text-xs md:text-sm leading-relaxed whitespace-pre-line">${gioco.descrizione}</p>
+              <!-- DESCRIZIONE MODERNA STILE FOGLIO CON IMMAGINE INTEGRATA -->
+              <div class="bg-gradient-to-br from-amber-50/70 via-white to-amber-50/30 p-5 rounded-xl border border-amber-200/80 shadow-inner space-y-3">
+                <div class="flex items-center justify-between border-b border-amber-200/60 pb-2">
+                  <h3 class="text-xs font-black text-orange-800 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>📜</span> Panoramica e Regolamento
+                  </h3>
+                  <span class="text-[10px] font-bold text-slate-400 bg-white px-2 py-0.5 border border-amber-100">Scheda Ufficiale</span>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 items-start">
+                  <div class="w-full sm:w-1/3 h-28 shrink-0 overflow-hidden rounded-lg shadow-sm border border-amber-200/50">
+                    <img src="${gioco.foto}" alt="${gioco.titolo}" class="w-full h-full object-cover">
+                  </div>
+                  <div class="flex-grow min-w-0">
+                    <p class="text-slate-700 text-xs md:text-sm leading-relaxed whitespace-pre-line font-normal">${gioco.descrizione}</p>
+                  </div>
+                </div>
               </div>
+
             </div>
             <div class="space-y-3 pt-5 border-t border-slate-100">${btnWA}${tutorialBtn}</div>
           </div>
