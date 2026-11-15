@@ -93,7 +93,7 @@
             </button>
           </div>
 
-          <!-- TENDINA DEI FILTRI (7 COLONNE: 2 PER LE CATEGORIE E ALTRE PER I FILTRI) -->
+          <!-- TENDINA DEI FILTRI -->
           <div id="filterModal" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white shadow-2xl border border-amber-200 z-50 p-3 md:p-4">
             <div class="grid grid-cols-2 lg:grid-cols-7 gap-x-3 gap-y-2.5 text-xs">
               
@@ -114,7 +114,7 @@
                 </select>
               </div>
 
-              <!-- 2. CATEGORIA SPECIFICA / GENERE (DA FOGLIO) -->
+              <!-- 2. GENERE SPECIFICO -->
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
                   <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
@@ -308,19 +308,6 @@
     <!-- SEZIONE 1: CATALOGO -->
     <div id="viewCatalogo" class="hidden">
       
-      <!-- RIGA CATEGORIE PRINCIPALI (PILLOLE SCORREVOLI CON ICONE UNIFORMI) -->
-      <div class="mb-4 overflow-x-auto no-scrollbar pb-1 px-1 md:px-0">
-        <div class="flex items-center gap-2 min-w-max">
-          <button onclick="selezionaCategoriaRapida('')" id="cat-pill-tutti" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">Tutti</button>
-          <button onclick="selezionaCategoriaRapida('party')" id="cat-pill-party" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🎉 Party Game</button>
-          <button onclick="selezionaCategoriaRapida('famiglia')" id="cat-pill-famiglia" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">👨‍👩‍👧‍👦 Introduttivi Family</button>
-          <button onclick="selezionaCategoriaRapida('strategia')" id="cat-pill-strategia" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🧠 Strategia</button>
-          <button onclick="selezionaCategoriaRapida('avventura')" id="cat-pill-avventura" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">⚔️ Avventura e Tematici</button>
-          <button onclick="selezionaCategoriaRapida('cooperativo')" id="cat-pill-cooperativo" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🤝 Cooperativi</button>
-          <button onclick="selezionaCategoriaRapida('carte')" id="cat-pill-carte" class="bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all">🃏 Carte / Astratti</button>
-        </div>
-      </div>
-
       <div id="loading" class="text-center py-16">
         <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-amber-200 border-t-orange-600 mb-3"></div>
         <p class="text-slate-500 text-xs md:text-sm font-medium">Caricamento catalogo GIOCALTA in corso...</p>
@@ -402,7 +389,7 @@
         </div>
       </div>
 
-      <!-- BLOCCO 2: GUIDA ALLE CATEGORIE E COMPLESSITÀ (SEPARATO) -->
+      <!-- BLOCCO 2: GUIDA ALLE CATEGORIE E COMPLESSITÀ -->
       <div class="bg-white p-6 md:p-10 border border-amber-200/60 shadow-sm space-y-6">
         <div class="space-y-1">
           <h3 class="text-2xl font-black text-slate-900">📖 Guida alla Scelta: Categorie e Complessità</h3>
@@ -433,7 +420,7 @@
           </div>
         </div>
 
-        <!-- GRIGLIA DELLE CATEGORIE CON ICONE UNIFORMI E IDENTICHE AL MENU -->
+        <!-- GRIGLIA DELLE CATEGORIE -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           
           <div class="bg-amber-50/50 p-5 border border-amber-200 space-y-2">
@@ -742,31 +729,11 @@
       if (el) { el.scrollBy({ left: quantita, behavior: 'smooth' }); }
     }
 
-    function aggiornaStilePillole(cat) {
-      const catChiave = cat === '' ? 'tutti' : cat;
-      ['tutti', 'party', 'famiglia', 'strategia', 'avventura', 'cooperativo', 'carte'].forEach(c => {
-        const btn = document.getElementById('cat-pill-' + c);
-        if (!btn) return;
-        if (c === catChiave) {
-          btn.className = "bg-orange-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all";
-        } else {
-          btn.className = "bg-white hover:bg-orange-50 text-slate-700 border border-amber-200 font-semibold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition-all";
-        }
-      });
-    }
-
-    function selezionaCategoriaRapida(cat) {
-      document.getElementById('mainCategoryFilter').value = cat;
-      aggiornaStilePillole(cat);
-      applicaFiltri();
-    }
-
     function popolaDropdownGeneriSpecifici() {
       const selectSpec = document.getElementById('specificCategoryFilter');
       if (!selectSpec) return;
       const valoreAttuale = selectSpec.value;
       
-      // Estrae i generi unici dal campo 'tipo' dei giochi caricati
       let generiUnici = [...new Set(giochiData.map(g => g.tipo).filter(t => t && t !== ''))].sort();
       
       selectSpec.innerHTML = '<option value="">Tutti i generi</option>';
@@ -891,7 +858,6 @@
       document.getElementById('difficultyFilter').value = '';
       document.getElementById('statusFilter').value = '';
       document.getElementById('sortOrder').value = 'recenti';
-      selezionaCategoriaRapida('');
     }
 
     function azzeraFiltri() {
@@ -1499,9 +1465,6 @@
       const sortQuery = document.getElementById('sortOrder').value;
       const diffQuery = document.getElementById('difficultyFilter').value.toLowerCase();
       const timeQuery = document.getElementById('timeFilter').value;
-
-      // Sincronizza le pillole in alto quando si seleziona la categoria principale dal menu
-      aggiornaStilePillole(mainCatQuery);
 
       const hasActiveFilters = playersQuery !== '' || mainCatQuery !== '' || specificCatQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
       const badge = document.getElementById('activeFiltersBadge');
