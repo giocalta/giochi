@@ -97,7 +97,7 @@
           <div id="filterModal" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white shadow-2xl border border-amber-200 z-50 p-3 md:p-4">
             <div class="grid grid-cols-2 lg:grid-cols-7 gap-x-3 gap-y-2.5 text-xs">
               
-              <!-- 1. CATEGORIA PRINCIPALE -->
+              <!-- 1. CATEGORIA PRINCIPALE (LEGTA DA COLONNA P) -->
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
                   <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -105,12 +105,6 @@
                 </div>
                 <select id="mainCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
                   <option value="">Tutte</option>
-                  <option value="party">🎉 Party Game</option>
-                  <option value="famiglia">👨‍👩‍👧‍👦 Introduttivi Family</option>
-                  <option value="strategia">🧠 Strategia</option>
-                  <option value="avventura">⚔️ Avventura e Tematici</option>
-                  <option value="cooperativo">🤝 Cooperativi</option>
-                  <option value="carte">🃏 Carte / Astratti</option>
                 </select>
               </div>
 
@@ -747,6 +741,33 @@
       if (el) { el.scrollBy({ left: quantita, behavior: 'smooth' }); }
     }
 
+    // POPOLA AUTOMATICAMENTE LA TENDINA DELLE CATEGORIE PRINCIPALI DALLA COLONNA P
+    function popolaDropdownCategoriePrincipali() {
+      const selectMain = document.getElementById('mainCategoryFilter');
+      if (!selectMain) return;
+      const valoreAttuale = selectMain.value;
+      
+      let setCat = new Set();
+      giochiData.forEach(g => {
+        if (g.categoriaPrincipale) {
+          g.categoriaPrincipale.split(',').forEach(c => {
+            let pulito = c.trim();
+            if (pulito) setCat.add(pulito);
+          });
+        }
+      });
+
+      let categorieUniche = [...setCat].sort();
+      selectMain.innerHTML = '<option value="">Tutte</option>';
+      categorieUniche.forEach(cat => {
+        let opt = document.createElement('option');
+        opt.value = cat.toLowerCase();
+        opt.textContent = cat;
+        selectMain.appendChild(opt);
+      });
+      selectMain.value = valoreAttuale;
+    }
+
     function popolaDropdownGeneriSpecifici() {
       const selectSpec = document.getElementById('specificCategoryFilter');
       if (!selectSpec) return;
@@ -1027,6 +1048,7 @@
           let dispStr = getFormattedVal(12).trim().toUpperCase();
           let descrizioneBrutta = getFormattedVal(13);
           let visibileStr = getFormattedVal(14).toLowerCase();
+          let categoriaPrincipale = getFormattedVal(15) || ''; // Colonna P (Indice 15)
 
           if (!titolo || titolo.toLowerCase() === 'titolo') return;
           if (visibileStr === 'no') return;
@@ -1039,6 +1061,7 @@
             idFisso: idFisso, 
             titolo: titolo,
             tipo: tipo,
+            categoriaPrincipale: categoriaPrincipale,
             persone: persone || '-',
             topPersone: topPersone,
             tempo: tempo,
@@ -1055,6 +1078,7 @@
         });
 
         loadingEl.classList.add('hidden');
+        popolaDropdownCategoriePrincipali();
         popolaDropdownGeneriSpecifici();
         aggiornaContatorePreferiti();
         applicaFiltri();
@@ -1534,22 +1558,11 @@
         const matchTitle = g.titolo.toLowerCase().indexOf(textQuery) !== -1;
         const matchPlayers = playersQuery === '' || verificaCompatibilitaGiocatori(g.persone, playersQuery);
         
+        // FILTRAGGIO BASATO SULLA COLONNA P (Gestisce anche più categorie separate da virgola)
         let matchMainCat = true;
         if (mainCatQuery !== '') {
-          let tipoLower = g.tipo.toLowerCase();
-          if (mainCatQuery === 'party') {
-            matchMainCat = tipoLower.includes('party') || tipoLower.includes('filler') || tipoLower.includes('bluff') || tipoLower.includes('deduz');
-          } else if (mainCatQuery === 'famiglia') {
-            matchMainCat = tipoLower.includes('famiglia') || tipoLower.includes('family') || tipoLower.includes('introduttiv') || tipoLower.includes('bambin');
-          } else if (mainCatQuery === 'strategia') {
-            matchMainCat = tipoLower.includes('strategia') || tipoLower.includes('strategy') || tipoLower.includes('gestion') || tipoLower.includes('euro') || tipoLower.includes('piazzamento') || tipoLower.includes('economico');
-          } else if (mainCatQuery === 'avventura') {
-            matchMainCat = tipoLower.includes('avventura') || tipoLower.includes('tematic') || tipoLower.includes('dungeon') || tipoLower.includes('miniatur') || tipoLower.includes('ambientat') || tipoLower.includes('narrativ');
-          } else if (mainCatQuery === 'cooperativo') {
-            matchMainCat = tipoLower.includes('cooperat') || tipoLower.includes('collaborativ');
-          } else if (mainCatQuery === 'carte') {
-            matchMainCat = tipoLower.includes('carte') || tipoLower.includes('card') || tipoLower.includes('astratta') || tipoLower.includes('astratto') || tipoLower.includes('deckbuilding');
-          }
+          let gameCats = g.categoriaPrincipale.toLowerCase().split(',').map(c => c.trim());
+          matchMainCat = gameCats.includes(mainCatQuery.toLowerCase());
         }
 
         let matchSpecificCat = specificCatQuery === '' || g.tipo.toLowerCase().includes(specificCatQuery);
