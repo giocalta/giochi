@@ -88,7 +88,7 @@
               <span>Filtri</span>
               <span id="activeFiltersBadge" class="hidden bg-white text-[#1E3A8A] text-[10px] px-1.5 py-0.2 rounded-full font-black ml-1">!</span>
             </button>
-            <button onclick="azzeraFiltri" title="Azzera Ricerca" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2.5 py-1.5 md:py-2 transition-all flex items-center shrink-0">
+            <button onclick="azzeraFiltri()" title="Azzera Ricerca" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2.5 py-1.5 md:py-2 transition-all flex items-center shrink-0">
               <span>↺</span>
             </button>
           </div>
@@ -747,6 +747,8 @@
 
     function cambiaSezione(nomeSezione) {
       ultimaSezioneVisitata = nomeSezione;
+      window.location.hash = nomeSezione; // Salva la sezione nell'URL per il refresh
+
       ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewGioco', 'viewEvento'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
@@ -1517,6 +1519,16 @@
     }
 
     document.getElementById('searchInput').addEventListener('input', applicaFiltri);
+
+    // Gestione dell'avvio con lettura dell'hash (mantiene la pagina attiva dopo un aggiornamento F5)
+    window.addEventListener('DOMContentLoaded', function() {
+      const hashIniziale = window.location.hash.replace('#', '');
+      if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'info', 'contatti'].includes(hashIniziale)) {
+        cambiaSezione(hashIniziale);
+      } else {
+        cambiaSezione('home');
+      }
+    });
 
     const scriptGiochi = document.createElement('script');
     scriptGiochi.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
