@@ -100,7 +100,7 @@
           <div id="filterModal" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white shadow-2xl border border-amber-200 z-50 p-3 md:p-4">
             <div class="grid grid-cols-2 lg:grid-cols-7 gap-x-3 gap-y-2.5 text-xs">
               
-              <!-- 1. CATEGORIA PRINCIPALE (LEGTA DA COLONNA P) -->
+              <!-- 1. CATEGORIA PRINCIPALE -->
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
                   <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -356,7 +356,7 @@
           <h2 class="text-2xl md:text-3xl font-black text-slate-900 flex items-center gap-2">
             <span>👤</span> Area Riservata Soci GIOCALTA
           </h2>
-          <p class="text-xs md:text-sm text-slate-500 mt-1">Accedi per partecipare ai sondaggi ufficiali, gestire il tesseramento e concordare i ritiri.</p>
+          <p class="text-xs md:text-sm text-slate-500 mt-1">Accedi con email e password per partecipare ai sondaggi ufficiali e concordare i ritiri.</p>
         </div>
         <div id="areaSociContent"></div>
       </div>
@@ -365,7 +365,7 @@
     <!-- SEZIONE 2: INFO & GUIDA -->
     <div id="viewInfo" class="hidden space-y-6">
       
-      <!-- BANNER SUPERIORE INFO CON IMMAGINE DI SFONDO E LOGO UFFICIALE -->
+      <!-- BANNER SUPERIORE INFO -->
       <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4 border border-orange-500/40">
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center opacity-15 pointer-events-none"></div>
         <div class="absolute inset-0 bg-slate-950/20 pointer-events-none"></div>
@@ -546,44 +546,6 @@
               </div>
             </div>
           </div>
-
-          <div class="overflow-hidden border border-slate-200 h-64 md:h-auto min-h-[250px]">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25438.455648834615!2d14.500000000000002!3d37.23333333333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x131102e3b8b1a45d%3A0x400b047c2096ee0!2s95041%20Caltagirone%20CT!5e0!3m2!1sit!2sit!4v1680000000000!5m2!1sit!2sit" 
-              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
-    <div id="viewGioco" class="hidden">
-      <button onclick="tornaAlCatalogo(true)" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
-        ⬅️ Torna indietro
-      </button>
-      <div id="dettaglioGiocoContainer" class="bg-white shadow-sm border border-slate-200 overflow-hidden"></div>
-    </div>
-
-    <!-- SEZIONE 5: DETTAGLIO EVENTO -->
-    <div id="viewEvento" class="hidden space-y-4">
-      <button onclick="tornaIndietroEvento()" class="mb-2 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
-        ⬅️ Torna indietro
-      </button>
-      <div id="dettaglioEventoContainer" class="bg-white shadow-sm border border-slate-200 p-6 md:p-8 space-y-6 relative overflow-hidden"></div>
-    </div>
-
-  </main>
-
-  <!-- FOOTER IN BLU NOTTE ANCORA PIÙ SCURO -->
-  <footer class="bg-[#172554] text-amber-100 border-t border-blue-950 py-8 text-center text-xs space-y-3 mt-auto shadow-inner">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
-      <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-8 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.textContent='GIOCALTA';">
-      <p class="text-amber-100/80 font-medium">Noleggio Giochi da Tavolo a Caltagirone</p>
-      <p class="text-[11px] text-amber-200/60">© 2026 GIOCALTA - Tutti i diritti riservati.</p>
-    </div>
-  </footer>
-
   <script>
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
@@ -655,7 +617,7 @@
       }
     }
 
-    // --- GESTIONE AREA SOCI & LOGIN APS ---
+    // --- GESTIONE AREA SOCI & LOGIN CON PASSWORD & RECUPERO INTEGRATO ---
     function renderAreaSoci() {
       const container = document.getElementById('areaSociContent');
       if (!container) return;
@@ -665,20 +627,36 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="bg-amber-50/60 p-6 border border-amber-200 shadow-sm space-y-4">
               <h3 class="font-black text-slate-900 text-lg">🔑 Accedi alla tua Area</h3>
-              <p class="text-xs text-slate-600">Inserisci l'email con cui ti sei tesserato a GIOCALTA.</p>
+              <p class="text-xs text-slate-600">Inserisci l'email e la password associate al tuo tesseramento.</p>
               <div class="space-y-3">
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1">Email del Socio</label>
                   <input type="email" id="loginEmailInput" placeholder="tu@email.it" class="w-full p-2 bg-white border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
                 </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                  <input type="password" id="loginPasswordInput" placeholder="Password" class="w-full p-2 bg-white border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                  <button onclick="toggleBoxRecupero()" class="text-orange-600 font-bold hover:underline">Password dimenticata?</button>
+                </div>
                 <button onclick="eseguiLoginSocio()" class="w-full bg-[#172554] hover:bg-black text-white font-bold py-2.5 text-xs transition-all shadow">Accedi</button>
               </div>
               <div id="loginMsg" class="text-xs font-bold text-center mt-2"></div>
+
+              <!-- BOX RECUPERO PASSWORD -->
+              <div id="boxRecuperoPass" class="hidden pt-4 border-t border-amber-200 space-y-2 mt-4 bg-white p-4 shadow-sm">
+                <h4 class="font-bold text-slate-800 text-xs">🔄 Recupero Password</h4>
+                <p class="text-[11px] text-slate-500">Inserisci la tua email o il numero di telefono registrato:</p>
+                <input type="text" id="recuperoInput" placeholder="Email o Telefono" class="w-full p-2 bg-slate-50 border border-slate-300 text-xs">
+                <button onclick="inviaRichiestaRecupero()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 text-xs">Invia Nuova Password</button>
+                <div id="recuperoMsg" class="text-[11px] font-bold text-center mt-1"></div>
+              </div>
             </div>
 
             <div class="bg-white p-6 border border-amber-200 shadow-sm space-y-4">
               <h3 class="font-black text-slate-900 text-lg">📝 Richiesta Tesseramento APS</h3>
-              <p class="text-xs text-slate-600">Compila i dati per richiedere l'ammissione a GIOCALTA. La presidenza esaminerà la richiesta.</p>
+              <p class="text-xs text-slate-600">Compila i dati per richiedere l'ammissione a GIOCALTA.</p>
               <div class="space-y-3">
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1">Nome e Cognome</label>
@@ -691,6 +669,10 @@
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1">Telefono (WhatsApp)</label>
                   <input type="text" id="regTel" class="w-full p-2 bg-slate-50 border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                  <input type="password" id="regPassword" placeholder="Scegli una password" class="w-full p-2 bg-slate-50 border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
                 </div>
                 <button onclick="eseguiRegistrazioneSocio()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 text-xs transition-all shadow">Invia Richiesta Iscrizione</button>
               </div>
@@ -729,15 +711,47 @@
       }
     }
 
+    function toggleBoxRecupero() {
+      const box = document.getElementById('boxRecuperoPass');
+      if (box) box.classList.toggle('hidden');
+    }
+
+    function inviaRichiestaRecupero() {
+      let identificativo = document.getElementById('recuperoInput').value.trim();
+      let msgBox = document.getElementById('recuperoMsg');
+      if (!identificativo) {
+        msgBox.className = "text-[11px] font-bold text-center mt-1 text-rose-600";
+        msgBox.textContent = "Inserisci la tua email o telefono!";
+        return;
+      }
+      msgBox.className = "text-[11px] font-bold text-center mt-1 text-slate-600";
+      msgBox.textContent = "Invio richiesta in corso...";
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'recuperaPassword', identificativo })
+      })
+      .then(res => res.json())
+      .then(data => {
+        msgBox.className = "text-[11px] font-bold text-center mt-1 " + (data.status === 'success' ? 'text-emerald-600' : 'text-rose-600');
+        msgBox.textContent = data.message;
+      })
+      .catch(err => {
+        msgBox.className = "text-[11px] font-bold text-center mt-1 text-rose-600";
+        msgBox.textContent = "Errore di connessione.";
+      });
+    }
+
     function eseguiRegistrazioneSocio() {
       let nome = document.getElementById('regNome').value.trim();
       let email = document.getElementById('regEmail').value.trim();
       let telefono = document.getElementById('regTel').value.trim();
+      let password = document.getElementById('regPassword').value.trim();
       let msgBox = document.getElementById('regMsg');
 
-      if (!nome || !email || !telefono) {
+      if (!nome || !email || !telefono || !password) {
         msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
-        msgBox.textContent = "Compila tutti i campi obbligatori!";
+        msgBox.textContent = "Compila tutti i campi inclusa la password!";
         return;
       }
 
@@ -746,7 +760,7 @@
 
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify({ action: 'registratiSocio', nome, email, telefono })
+        body: JSON.stringify({ action: 'registratiSocio', nome, email, telefono, password })
       })
       .then(res => res.json())
       .then(data => {
@@ -761,11 +775,12 @@
 
     function eseguiLoginSocio() {
       let email = document.getElementById('loginEmailInput').value.trim();
+      let password = document.getElementById('loginPasswordInput').value.trim();
       let msgBox = document.getElementById('loginMsg');
 
-      if (!email) {
+      if (!email || !password) {
         msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
-        msgBox.textContent = "Inserisci la tua email!";
+        msgBox.textContent = "Inserisci email e password!";
         return;
       }
 
@@ -774,7 +789,7 @@
 
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify({ action: 'loginSocio', email })
+        body: JSON.stringify({ action: 'loginSocio', email, password })
       })
       .then(res => res.json())
       .then(data => {
@@ -916,7 +931,6 @@
       if (el) { el.scrollBy({ left: quantita, behavior: 'smooth' }); }
     }
 
-    // POPOLA AUTOMATICAMENTE LA TENDINA DELLE CATEGORIE PRINCIPALI DALLA COLONNA P
     function popolaDropdownCategoriePrincipali() {
       const selectMain = document.getElementById('mainCategoryFilter');
       if (!selectMain) return;
@@ -1779,7 +1793,7 @@
     document.getElementById('searchInput').addEventListener('input', applicaFiltri);
 
     window.addEventListener('DOMContentLoaded', function() {
-      const hashIniziale = window.location.hash.replace('#', '');
+      let hashIniziale = window.location.hash.replace('#', '');
       if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'areaSoci', 'info', 'contatti'].includes(hashIniziale)) {
         cambiaSezione(hashIniziale);
       } else {
@@ -1801,3 +1815,40 @@
   </script>
 </body>
 </html>
+
+          <div class="overflow-hidden border border-slate-200 h-64 md:h-auto min-h-[250px]">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25438.455648834615!2d14.500000000000002!3d37.23333333333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x131102e3b8b1a45d%3A0x400b047c2096ee0!2s95041%20Caltagirone%20CT!5e0!3m2!1sit!2sit!4v1680000000000!5m2!1sit!2sit" 
+              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
+    <div id="viewGioco" class="hidden">
+      <button onclick="tornaAlCatalogo(true)" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
+        ⬅️ Torna indietro
+      </button>
+      <div id="dettaglioGiocoContainer" class="bg-white shadow-sm border border-slate-200 overflow-hidden"></div>
+    </div>
+
+    <!-- SEZIONE 5: DETTAGLIO EVENTO -->
+    <div id="viewEvento" class="hidden space-y-4">
+      <button onclick="tornaIndietroEvento()" class="mb-2 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
+        ⬅️ Torna indietro
+      </button>
+      <div id="dettaglioEventoContainer" class="bg-white shadow-sm border border-slate-200 p-6 md:p-8 space-y-6 relative overflow-hidden"></div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER IN BLU NOTTE ANCORA PIÙ SCURO -->
+  <footer class="bg-[#172554] text-amber-100 border-t border-blue-950 py-8 text-center text-xs space-y-3 mt-auto shadow-inner">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
+      <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-8 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.textContent='GIOCALTA';">
+      <p class="text-amber-100/80 font-medium">Noleggio Giochi da Tavolo a Caltagirone</p>
+      <p class="text-[11px] text-amber-200/60">© 2026 GIOCALTA - Tutti i diritti riservati.</p>
+    </div>
+  </footer>
