@@ -546,10 +546,48 @@
               </div>
             </div>
           </div>
+
+          <div class="overflow-hidden border border-slate-200 h-64 md:h-auto min-h-[250px]">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25438.455648834615!2d14.500000000000002!3d37.23333333333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x131102e3b8b1a45d%3A0x400b047c2096ee0!2s95041%20Caltagirone%20CT!5e0!3m2!1sit!2sit!4v1680000000000!5m2!1sit!2sit" 
+              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
+    <div id="viewGioco" class="hidden">
+      <button onclick="tornaAlCatalogo(true)" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
+        ⬅️ Torna indietro
+      </button>
+      <div id="dettaglioGiocoContainer" class="bg-white shadow-sm border border-slate-200 overflow-hidden"></div>
+    </div>
+
+    <!-- SEZIONE 5: DETTAGLIO EVENTO -->
+    <div id="viewEvento" class="hidden space-y-4">
+      <button onclick="tornaIndietroEvento()" class="mb-2 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
+        ⬅️ Torna indietro
+      </button>
+      <div id="dettaglioEventoContainer" class="bg-white shadow-sm border border-slate-200 p-6 md:p-8 space-y-6 relative overflow-hidden"></div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER IN BLU NOTTE ANCORA PIÙ SCURO -->
+  <footer class="bg-[#172554] text-amber-100 border-t border-blue-950 py-8 text-center text-xs space-y-3 mt-auto shadow-inner">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
+      <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-8 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.textContent='GIOCALTA';">
+      <p class="text-amber-100/80 font-medium">Noleggio Giochi da Tavolo a Caltagirone</p>
+      <p class="text-[11px] text-amber-200/60">© 2026 GIOCALTA - Tutti i diritti riservati.</p>
+    </div>
+  </footer>
   <script>
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjC2QzxqNzeDpb81SSFQpRQaz9xbh8oIFyWhXqo0p5OxI8yO5BzKmepow4ZdtrBp45zw/exec';
+    // AGGIORNATO CON IL TUO NUOVO URL DI APPS SCRIPT
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkeG_2hniKHsjE_qrOZcNGm-SIwVFjL4DNjuDfBkzUodmTEjEDBabQcn95fU0Nh6Msog/exec';
 
     let giochiData = [];
     let eventiData = [];
@@ -676,6 +714,7 @@
                 </div>
                 <button onclick="eseguiRegistrazioneSocio()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 text-xs transition-all shadow">Invia Richiesta Iscrizione</button>
               </div>
+              <!-- Messaggio chiaro con avviso approvazione -->
               <div id="regMsg" class="text-xs font-bold text-center mt-2"></div>
             </div>
           </div>
@@ -764,8 +803,18 @@
       })
       .then(res => res.json())
       .then(data => {
-        msgBox.className = "text-xs font-bold text-center mt-2 " + (data.status === 'success' ? 'text-emerald-600' : 'text-rose-600');
-        msgBox.textContent = data.message;
+        if (data.status === 'success') {
+          // Messaggio chiaro che avvisa l'utente di attendere l'approvazione
+          msgBox.className = "text-xs font-bold text-center mt-2 text-amber-600 bg-amber-50 p-2 border border-amber-200 rounded";
+          msgBox.textContent = "⏳ Richiesta inviata con successo! Il tuo account è in attesa di approvazione da parte della presidenza.";
+          document.getElementById('regNome').value = '';
+          document.getElementById('regEmail').value = '';
+          document.getElementById('regTel').value = '';
+          document.getElementById('regPassword').value = '';
+        } else {
+          msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
+          msgBox.textContent = data.message;
+        }
       })
       .catch(err => {
         msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
@@ -1815,40 +1864,3 @@
   </script>
 </body>
 </html>
-
-          <div class="overflow-hidden border border-slate-200 h-64 md:h-auto min-h-[250px]">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25438.455648834615!2d14.500000000000002!3d37.23333333333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x131102e3b8b1a45d%3A0x400b047c2096ee0!2s95041%20Caltagirone%20CT!5e0!3m2!1sit!2sit!4v1680000000000!5m2!1sit!2sit" 
-              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SEZIONE 4: SCHEDA SINGOLO GIOCO -->
-    <div id="viewGioco" class="hidden">
-      <button onclick="tornaAlCatalogo(true)" class="mb-4 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
-        ⬅️ Torna indietro
-      </button>
-      <div id="dettaglioGiocoContainer" class="bg-white shadow-sm border border-slate-200 overflow-hidden"></div>
-    </div>
-
-    <!-- SEZIONE 5: DETTAGLIO EVENTO -->
-    <div id="viewEvento" class="hidden space-y-4">
-      <button onclick="tornaIndietroEvento()" class="mb-2 inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium text-xs md:text-sm cursor-pointer">
-        ⬅️ Torna indietro
-      </button>
-      <div id="dettaglioEventoContainer" class="bg-white shadow-sm border border-slate-200 p-6 md:p-8 space-y-6 relative overflow-hidden"></div>
-    </div>
-
-  </main>
-
-  <!-- FOOTER IN BLU NOTTE ANCORA PIÙ SCURO -->
-  <footer class="bg-[#172554] text-amber-100 border-t border-blue-950 py-8 text-center text-xs space-y-3 mt-auto shadow-inner">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
-      <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-8 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.textContent='GIOCALTA';">
-      <p class="text-amber-100/80 font-medium">Noleggio Giochi da Tavolo a Caltagirone</p>
-      <p class="text-[11px] text-amber-200/60">© 2026 GIOCALTA - Tutti i diritti riservati.</p>
-    </div>
-  </footer>
