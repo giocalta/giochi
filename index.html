@@ -12,7 +12,7 @@
     body {
       letter-spacing: -0.01em;
     }
-    * {
+    - {
       -webkit-font-smoothing: antialiased;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
@@ -1671,10 +1671,9 @@
       btn.disabled = true;
       btn.textContent = 'Registrazione in corso...';
 
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'registratiSocio', nome, email, telefono, password })
-      })
+      const url = APPS_SCRIPT_URL + '?action=registratiSocio&nome=' + encodeURIComponent(nome) + '&email=' + encodeURIComponent(email) + '&telefono=' + encodeURIComponent(telefono) + '&password=' + encodeURIComponent(password);
+
+      fetch(url)
       .then(res => res.json())
       .then(data => {
         msgBox.textContent = data.message;
@@ -1707,10 +1706,9 @@
       btn.disabled = true;
       btn.textContent = 'Invio in corso...';
 
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'recuperoPassword', email })
-      })
+      const url = APPS_SCRIPT_URL + '?action=recuperoPassword&email=' + encodeURIComponent(email);
+
+      fetch(url)
       .then(res => res.json())
       .then(data => {
         msgBox.textContent = data.message;
