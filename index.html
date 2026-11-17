@@ -596,7 +596,22 @@
     let ultimaSezioneVisitata = 'home';
     let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
     let socioCorrente = JSON.parse(localStorage.getItem('giocalta_socio') || 'null');
-
+// Caricamento dati da Google Sheets
+fetch(APPS_SCRIPT_URL + '?action=getGiochi')
+  .then(res => res.json())
+  .then(data => {
+    console.log("Dati ricevuti da Google Sheets:", data);
+    if (Array.isArray(data) && data.length > 0) {
+      if (typeof processGoogleSheetsData === 'function') {
+        processGoogleSheetsData(data);
+      } else {
+        console.warn("La funzione processGoogleSheetsData non è definita.");
+      }
+    } else {
+      console.error("Il foglio è vuoto o il formato non è un array valido:", data);
+    }
+  })
+  .catch(err => console.error("Errore di connessione fetch:", err));
     function aggiornaContatorePreferiti() {
       const badge = document.getElementById('prefCounterBadge');
       if (badge) {
