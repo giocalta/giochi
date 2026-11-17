@@ -599,11 +599,13 @@
 
     function aggiornaContatorePreferiti() {
       const badge = document.getElementById('prefCounterBadge');
-      if (preferitiIds.length > 0) {
-        badge.textContent = preferitiIds.length;
-        badge.classList.remove('hidden');
-      } else {
-        badge.classList.add('hidden');
+      if (badge) {
+        if (preferitiIds.length > 0) {
+          badge.textContent = preferitiIds.length;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
       }
     }
 
@@ -872,7 +874,8 @@
         .then(res => res.json())
         .then(data => { renderSondaggi(data); })
         .catch(err => {
-          document.getElementById('boxSondaggiLista').innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo al momento.</p>';
+          const boxSondaggi = document.getElementById('boxSondaggiLista');
+          if (boxSondaggi) boxSondaggi.innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo al momento.</p>';
         });
     }
 
@@ -1029,7 +1032,8 @@
       window.location.hash = nomeSezione;
 
       ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewAreaSoci', 'viewInfo', 'viewContatti', 'viewGioco', 'viewEvento'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
       });
 
       const stickyContainer = document.getElementById('stickySearchContainer');
@@ -1099,7 +1103,8 @@
         mostraDettaglioEvento(e.state.eventoId, false);
       } else {
         ['viewGioco', 'viewEvento', 'viewInfo', 'viewContatti', 'viewGalleria', 'viewPreferiti', 'viewAreaSoci', 'viewHome', 'viewCatalogo'].forEach(id => {
-          document.getElementById(id).classList.add('hidden');
+          const el = document.getElementById(id);
+          if (el) el.classList.add('hidden');
         });
         const stickyContainer = document.getElementById('stickySearchContainer');
 
@@ -1127,7 +1132,7 @@
 
     function toggleFiltriModale() {
       const modal = document.getElementById('filterModal');
-      modal.classList.toggle('hidden');
+      if (modal) modal.classList.toggle('hidden');
     }
 
     function applicaFiltriModal() {
@@ -1136,17 +1141,26 @@
     }
 
     function azzeraFiltriModal() {
-      document.getElementById('mainCategoryFilter').value = '';
-      document.getElementById('specificCategoryFilter').value = '';
-      document.getElementById('playersFilter').value = '';
-      document.getElementById('timeFilter').value = '';
-      document.getElementById('difficultyFilter').value = '';
-      document.getElementById('statusFilter').value = '';
-      document.getElementById('sortOrder').value = 'recenti';
+      const mainCat = document.getElementById('mainCategoryFilter');
+      const specCat = document.getElementById('specificCategoryFilter');
+      const players = document.getElementById('playersFilter');
+      const timeF = document.getElementById('timeFilter');
+      const diffF = document.getElementById('difficultyFilter');
+      const statF = document.getElementById('statusFilter');
+      const sortO = document.getElementById('sortOrder');
+
+      if (mainCat) mainCat.value = '';
+      if (specCat) specCat.value = '';
+      if (players) players.value = '';
+      if (timeF) timeF.value = '';
+      if (diffF) diffF.value = '';
+      if (statF) statF.value = '';
+      if (sortO) sortO.value = 'recenti';
     }
 
     function azzeraFiltri() {
-      document.getElementById('searchInput').value = '';
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
       azzeraFiltriModal();
       applicaFiltri();
     }
@@ -1465,14 +1479,17 @@
       if (!evento) return;
 
       ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewAreaSoci', 'viewInfo', 'viewContatti', 'viewGioco'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
       });
-      document.getElementById('viewEvento').classList.remove('hidden');
+      const viewEvento = document.getElementById('viewEvento');
+      if (viewEvento) viewEvento.classList.remove('hidden');
 
       const stickyContainer = document.getElementById('stickySearchContainer');
       if (stickyContainer) stickyContainer.classList.add('hidden');
 
       const container = document.getElementById('dettaglioEventoContainer');
+      if (!container) return;
 
       container.style.background = '';
       container.style.backgroundImage = '';
@@ -1688,14 +1705,18 @@
       if (!gioco) return;
 
       ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewAreaSoci', 'viewInfo', 'viewContatti', 'viewEvento'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
       });
-      document.getElementById('viewGioco').classList.remove('hidden');
+      const viewGioco = document.getElementById('viewGioco');
+      if (viewGioco) viewGioco.classList.remove('hidden');
 
       const stickyContainer = document.getElementById('stickySearchContainer');
       if (stickyContainer) stickyContainer.classList.add('hidden');
 
       const container = document.getElementById('dettaglioGiocoContainer');
+      if (!container) return;
+
       const isPref = preferitiIds.includes(gioco.id);
       
       const heartBtnSvg = isPref 
@@ -1744,7 +1765,6 @@
                 ${gioco.peso ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Complessità</span><span class="font-extrabold text-slate-800 text-xs flex items-center justify-center gap-1"><svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>' + gioco.peso + '</span></div>' : ''}
               </div>
 
-              <!-- DESCRIZIONE MODERNA CON CARATTERE -->
               <div class="bg-gradient-to-br from-amber-50/70 via-white to-amber-50/30 p-5 rounded-xl border border-amber-200/80 shadow-inner space-y-3">
                 <div class="flex items-center justify-between border-b border-amber-200/60 pb-2">
                   <h3 class="text-xs font-black text-orange-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -1771,18 +1791,29 @@
     }
 
     function applicaFiltri() {
-      const textQuery = document.getElementById('searchInput').value.toLowerCase();
-      const playersQuery = document.getElementById('playersFilter').value;
-      const mainCatQuery = document.getElementById('mainCategoryFilter').value;
-      const specificCatQuery = document.getElementById('specificCategoryFilter').value.toLowerCase();
-      const statusQuery = document.getElementById('statusFilter').value;
-      const sortQuery = document.getElementById('sortOrder').value;
-      const diffQuery = document.getElementById('difficultyFilter').value.toLowerCase();
-      const timeQuery = document.getElementById('timeFilter').value;
+      const searchInput = document.getElementById('searchInput');
+      const playersFilter = document.getElementById('playersFilter');
+      const mainCategoryFilter = document.getElementById('mainCategoryFilter');
+      const specificCategoryFilter = document.getElementById('specificCategoryFilter');
+      const statusFilter = document.getElementById('statusFilter');
+      const sortOrder = document.getElementById('sortOrder');
+      const difficultyFilter = document.getElementById('difficultyFilter');
+      const timeFilter = document.getElementById('timeFilter');
+
+      const textQuery = searchInput ? searchInput.value.toLowerCase() : '';
+      const playersQuery = playersFilter ? playersFilter.value : '';
+      const mainCatQuery = mainCategoryFilter ? mainCategoryFilter.value : '';
+      const specificCatQuery = specificCategoryFilter ? specificCategoryFilter.value.toLowerCase() : '';
+      const statusQuery = statusFilter ? statusFilter.value : '';
+      const sortQuery = sortOrder ? sortOrder.value : 'recenti';
+      const diffQuery = difficultyFilter ? difficultyFilter.value.toLowerCase() : '';
+      const timeQuery = timeFilter ? timeFilter.value : '';
 
       const hasActiveFilters = playersQuery !== '' || mainCatQuery !== '' || specificCatQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
       const badge = document.getElementById('activeFiltersBadge');
-      if (hasActiveFilters) badge.classList.remove('hidden'); else badge.classList.add('hidden');
+      if (badge) {
+        if (hasActiveFilters) badge.classList.remove('hidden'); else badge.classList.add('hidden');
+      }
 
       let filtrati = giochiData.filter(function(g) {
         const matchTitle = g.titolo.toLowerCase().indexOf(textQuery) !== -1;
@@ -1828,20 +1859,33 @@
     const searchInputEl = document.getElementById('searchInput');
     if (searchInputEl) searchInputEl.addEventListener('input', applicaFiltri);
 
-    // --- FUNZIONE UNIFICATA DI CARICAMENTO DATI INIZIALI ---
     function inizializzaDatiSito() {
-      // 1. Caricamento Giochi
-      fetch(APPS_SCRIPT_URL)
+      // 1. Caricamento Giochi (con fallback sicuro)
+      fetch(APPS_SCRIPT_URL + '?action=getGiochi')
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data)) {
             processGoogleSheetsData(data);
           } else {
-            console.error("Formato JSON non valido (atteso Array):", data);
-            const loading = document.getElementById('loading');
-            const err = document.getElementById('errorMessage');
-            if (loading) loading.classList.add('hidden');
-            if (err) err.classList.remove('hidden');
+            fetch(APPS_SCRIPT_URL)
+              .then(res2 => res2.json())
+              .then(data2 => {
+                if (Array.isArray(data2)) {
+                  processGoogleSheetsData(data2);
+                } else {
+                  console.error("Formato JSON non valido (atteso Array):", data2);
+                  const loading = document.getElementById('loading');
+                  const err = document.getElementById('errorMessage');
+                  if (loading) loading.classList.add('hidden');
+                  if (err) err.classList.remove('hidden');
+                }
+              })
+              .catch(e => {
+                const loading = document.getElementById('loading');
+                const err = document.getElementById('errorMessage');
+                if (loading) loading.classList.add('hidden');
+                if (err) err.classList.remove('hidden');
+              });
           }
         })
         .catch(err => {
@@ -1859,10 +1903,7 @@
           if (Array.isArray(data)) processAgendaData(data);
         })
         .catch(err => {
-          fetch(APPS_SCRIPT_URL)
-            .then(res => res.json())
-            .then(data => { if (Array.isArray(data)) processAgendaData(data); })
-            .catch(e => console.error("Errore agenda:", e));
+          console.error("Errore agenda:", err);
         });
     }
 
