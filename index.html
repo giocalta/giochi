@@ -43,7 +43,7 @@
         </div>
 
         <!-- NAVIGAZIONE ORIZZONTALE -->
-        <nav class="flex items-center gap-1 bg-orange-900/30 p-1 rounded-md text-[11px] md:text-xs backdrop-blur-md border border-white/10 shadow-inner">
+        <nav class="flex items-center gap-1 bg-orange-900/30 p-1 rounded-md text-[11px] md:text-xs backdrop-blur-md border border-white/10 shadow-inner flex-wrap justify-end">
           <button onclick="cambiaSezione('home')" id="nav-home" class="px-2.5 py-1.5 rounded font-bold transition-all bg-white text-orange-600 shadow-sm flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             <span class="hidden sm:inline">Home</span>
@@ -60,6 +60,10 @@
             <svg class="w-3.5 h-3.5 text-rose-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             <span class="hidden sm:inline">Preferiti</span> 
             <span id="prefCounterBadge" class="bg-rose-500 text-white text-[9px] px-1 py-0.1 rounded-full font-black hidden shadow">0</span>
+          </button>
+          <button onclick="cambiaSezione('registrazione')" id="nav-registrazione" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+            <span class="hidden sm:inline">Area Soci</span>
           </button>
           <button onclick="cambiaSezione('info')" id="nav-info" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -350,6 +354,73 @@
         </button>
       </div>
       <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
+    </div>
+
+    <!-- SEZIONE 1.8: AREA SOCI (REGISTRAZIONE E RECUPERO PASSWORD) -->
+    <div id="viewRegistrazione" class="hidden space-y-6 max-w-xl mx-auto mb-12">
+      <!-- FORM REGISTRAZIONE -->
+      <div id="boxFormRegistrazione" class="bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900 mb-1">Unisciti a GIOCALTA 🎲</h2>
+          <p class="text-xs md:text-sm text-slate-600">Crea il tuo account per accedere ai servizi soci e rimanere aggiornato.</p>
+        </div>
+
+        <form id="formRegistrazione" onsubmit="inviaRegistrazioneSocio(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nome e Cognome *</label>
+            <input type="text" id="regNome" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Email *</label>
+            <input type="email" id="regEmail" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Telefono / WhatsApp *</label>
+            <input type="tel" id="regTelefono" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Password *</label>
+            <input type="password" id="regPassword" required placeholder="Minimo 6 caratteri" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+          </div>
+          <button type="submit" id="btnInviaReg" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 text-xs md:text-sm shadow transition-all">
+            Registrati
+          </button>
+        </form>
+
+        <div class="text-center pt-2 border-t border-slate-100">
+          <button onclick="mostraFormRecupero()" class="text-xs text-orange-600 font-bold hover:underline">
+            Hai dimenticato la password? Clicca qui per recuperarla
+          </button>
+        </div>
+
+        <div id="regMessaggio" class="hidden text-center text-xs font-bold p-3"></div>
+      </div>
+
+      <!-- FORM RECUPERO PASSWORD (NASCOSTO DI DEFAULT) -->
+      <div id="boxFormRecupero" class="hidden bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 mb-1">Recupera Password 🔑</h2>
+          <p class="text-xs md:text-sm text-slate-600">Inserisci la tua email associata all'account. Ti invieremo la password direttamente via email.</p>
+        </div>
+
+        <form id="formRecupero" onsubmit="inviaRecuperoPassword(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">La tua Email *</label>
+            <input type="email" id="recEmail" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+          </div>
+          <button type="submit" id="btnInviaRec" class="w-full bg-[#1E3A8A] hover:bg-blue-900 text-white font-bold py-3 text-xs md:text-sm shadow transition-all">
+            Invia Richiesta di Recupero
+          </button>
+        </form>
+
+        <div class="text-center pt-2 border-t border-slate-100">
+          <button onclick="tornaAlLogin()" class="text-xs text-slate-600 font-bold hover:underline">
+            ⬅️ Torna alla registrazione
+          </button>
+        </div>
+
+        <div id="recMessaggio" class="hidden text-center text-xs font-bold p-3"></div>
+      </div>
     </div>
 
     <!-- SEZIONE 2: INFO & GUIDA -->
@@ -768,13 +839,13 @@
       ultimaSezioneVisitata = nomeSezione;
       window.location.hash = nomeSezione;
 
-      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewGioco', 'viewEvento'].forEach(id => {
+      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewRegistrazione', 'viewInfo', 'viewContatti', 'viewGioco', 'viewEvento'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
 
       const stickyContainer = document.getElementById('stickySearchContainer');
 
-      ['home', 'catalogo', 'galleria', 'preferiti', 'info', 'contatti'].forEach(s => {
+      ['home', 'catalogo', 'galleria', 'preferiti', 'registrazione', 'info', 'contatti'].forEach(s => {
         const btn = document.getElementById('nav-' + s);
         if (btn) {
           btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
@@ -810,6 +881,12 @@
         if (stickyContainer) stickyContainer.classList.add('hidden');
         renderPreferiti();
         window.scrollTo(0, 0);
+      } else if (nomeSezione === 'registrazione') {
+        document.getElementById('viewRegistrazione').classList.remove('hidden');
+        document.getElementById('nav-registrazione').classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
+        document.getElementById('nav-registrazione').classList.remove('text-amber-100', 'font-semibold');
+        if (stickyContainer) stickyContainer.classList.add('hidden');
+        window.scrollTo(0, 0);
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
         document.getElementById('nav-info').classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
@@ -831,7 +908,7 @@
       } else if (e.state && e.state.vista === 'evento') {
         mostraDettaglioEvento(e.state.eventoId, false);
       } else {
-        ['viewGioco', 'viewEvento', 'viewInfo', 'viewContatti', 'viewGalleria', 'viewPreferiti', 'viewHome', 'viewCatalogo'].forEach(id => {
+        ['viewGioco', 'viewEvento', 'viewInfo', 'viewContatti', 'viewGalleria', 'viewPreferiti', 'viewRegistrazione', 'viewHome', 'viewCatalogo'].forEach(id => {
           document.getElementById(id).classList.add('hidden');
         });
         const stickyContainer = document.getElementById('stickySearchContainer');
@@ -844,6 +921,10 @@
           document.getElementById('viewPreferiti').classList.remove('hidden');
           if (stickyContainer) stickyContainer.classList.add('hidden');
           window.scrollTo(0, savedScrollPosition);
+        } else if (ultimaSezioneVisitata === 'registrazione') {
+          document.getElementById('viewRegistrazione').classList.remove('hidden');
+          if (stickyContainer) stickyContainer.classList.add('hidden');
+          window.scrollTo(0, 0);
         } else {
           document.getElementById('viewHome').classList.remove('hidden');
           if (stickyContainer) stickyContainer.classList.add('hidden');
@@ -1184,7 +1265,7 @@
       const evento = eventiData.find(e => e.id === idEvento);
       if (!evento) return;
 
-      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewGioco'].forEach(id => {
+      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewRegistrazione', 'viewInfo', 'viewContatti', 'viewGioco'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
       document.getElementById('viewEvento').classList.remove('hidden');
@@ -1406,7 +1487,7 @@
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) return;
 
-      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewEvento'].forEach(id => {
+      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewRegistrazione', 'viewInfo', 'viewContatti', 'viewEvento'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
       document.getElementById('viewGioco').classList.remove('hidden');
@@ -1560,12 +1641,98 @@
 
     window.addEventListener('DOMContentLoaded', function() {
       const hashIniziale = window.location.hash.replace('#', '');
-      if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'info', 'contatti'].includes(hashIniziale)) {
+      if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'registrazione', 'info', 'contatti'].includes(hashIniziale)) {
         cambiaSezione(hashIniziale);
       } else {
         cambiaSezione('home');
       }
     });
+
+    // Funzioni per la Gestione Soci (Registrazione e Recupero Password)
+    function mostraFormRecupero() {
+      document.getElementById('boxFormRegistrazione').classList.add('hidden');
+      document.getElementById('boxFormRecupero').classList.remove('hidden');
+    }
+
+    function tornaAlLogin() {
+      document.getElementById('boxFormRecupero').classList.add('hidden');
+      document.getElementById('boxFormRegistrazione').classList.remove('hidden');
+    }
+
+    function inviaRegistrazioneSocio(e) {
+      e.preventDefault();
+      const nome = document.getElementById('regNome').value;
+      const email = document.getElementById('regEmail').value;
+      const telefono = document.getElementById('regTelefono').value;
+      const password = document.getElementById('regPassword').value;
+      const btn = document.getElementById('btnInviaReg');
+      const msgBox = document.getElementById('regMessaggio');
+
+      btn.disabled = true;
+      btn.textContent = 'Registrazione in corso...';
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'registratiSocio', nome, email, telefono, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        msgBox.textContent = data.message;
+        if (data.status === 'success') {
+          msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
+          document.getElementById('formRegistrazione').reset();
+        } else {
+          msgBox.className = "text-center text-xs font-bold p-3 bg-rose-50 text-rose-700 border border-rose-200";
+        }
+        msgBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Registrati';
+      })
+      .catch(err => {
+        console.error(err);
+        msgBox.textContent = "Errore di connessione. Riprova.";
+        msgBox.className = "text-center text-xs font-bold p-3 bg-rose-50 text-rose-700 border border-rose-200";
+        msgBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Registrati';
+      });
+    }
+
+    function inviaRecuperoPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('recEmail').value;
+      const btn = document.getElementById('btnInviaRec');
+      const msgBox = document.getElementById('recMessaggio');
+
+      btn.disabled = true;
+      btn.textContent = 'Invio in corso...';
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'recuperoPassword', email })
+      })
+      .then(res => res.json())
+      .then(data => {
+        msgBox.textContent = data.message;
+        if (data.status === 'success') {
+          msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
+          document.getElementById('formRecupero').reset();
+        } else {
+          msgBox.className = "text-center text-xs font-bold p-3 bg-rose-50 text-rose-700 border border-rose-200";
+        }
+        msgBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Invia Richiesta di Recupero';
+      })
+      .catch(err => {
+        console.error(err);
+        msgBox.textContent = "Errore di connessione. Riprova.";
+        msgBox.className = "text-center text-xs font-bold p-3 bg-rose-50 text-rose-700 border border-rose-200";
+        msgBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Invia Richiesta di Recupero';
+      });
+    }
 
     const scriptGiochi = document.createElement('script');
     scriptGiochi.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
