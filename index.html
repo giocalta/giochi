@@ -312,7 +312,7 @@
 
       <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 border border-red-200 p-6">
         <p class="font-bold text-sm mb-1">Impossibile caricare i dati dal foglio Google.</p>
-        <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
+        <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio o l'URL di Apps Script.</p>
       </div>
 
       <div id="gamesGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
@@ -612,7 +612,7 @@
         .then(res => res.json())
         .then(data => {
           preferitiGlobaliMap = {};
-          if (data && data.length > 1) {
+          if (data && Array.isArray(data) && data.length > 1) {
             for (let i = 1; i < data.length; i++) {
               let id = data[i][0];
               let voti = Number(data[i][1]) || 0;
@@ -878,7 +878,7 @@
       if (!box) return;
       box.innerHTML = '';
 
-      if (!data || data.length <= 1) {
+      if (!data || !Array.isArray(data) || data.length <= 1) {
         box.innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo al momento.</p>';
         return;
       }
@@ -1174,23 +1174,6 @@
       return clean;
     }
 
-    function ottieniLinkTutorial(cellObj, titoloGioco) {
-      if (!cellObj) return '';
-      let valV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
-      let valF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
-      let matchV = valV.match(/(https?:\/\/[^\s"']+)/i);
-      if (matchV) return matchV[1];
-      let matchF = valF.match(/(https?:\/\/[^\s"']+)/i);
-      if (matchF) return matchF[1];
-      if (valV.indexOf('youtube.com') !== -1 || valV.indexOf('youtu.be') !== -1) {
-        return valV.startsWith('http') ? valV : 'https://' + valV;
-      }
-      if (titoloGioco && valV !== '') {
-        return 'https://www.youtube.com/results?search_query=' + encodeURIComponent('tutorial ' + titoloGioco + ' gioco da tavolo');
-      }
-      return '';
-    }
-
     function estraiMinuti(tempoStr) {
       if (!tempoStr) return 0;
       let str = tempoStr.toLowerCase();
@@ -1261,17 +1244,19 @@
       const errorEl = document.getElementById('errorMessage');
 
       try {
-        if (!rows || !Array.isArray(rows)) throw new Error("Formato dati non valido");
+        if (!rows || !Array.isArray(rows)) {
+          throw new Error("I dati ricevuti non sono in un formato array valido.");
+        }
         giochiData = [];
 
         let startIdx = (rows[0] && rows[0][2] && String(rows[0][2]).toLowerCase() === 'titolo') ? 1 : 0;
 
         for (let i = startIdx; i < rows.length; i++) {
           let r = rows[i];
-          if (!r || r.length === 0) continue;
+          if (!r || !Array.isArray(r) || r.length === 0) continue;
 
           function getVal(idx) {
-            return r[idx] !== null && r[idx] !== undefined ? String(r[idx]).trim() : '';
+            return (r[idx] !== null && r[idx] !== undefined) ? String(r[idx]).trim() : '';
           }
 
           let idFisso = parseInt(getVal(0), 10) || i;
@@ -1326,7 +1311,7 @@
         caricaPreferitiGlobali();
         caricaSondaggi();
       } catch (err) {
-        console.error(err);
+        console.error("Errore elaborazione foglio:", err);
         loadingEl.classList.add('hidden');
         errorEl.classList.remove('hidden');
       }
@@ -1341,10 +1326,10 @@
 
         for (let i = startIdx; i < rows.length; i++) {
           let r = rows[i];
-          if (!r || r.length === 0) continue;
+          if (!r || !Array.isArray(r) || r.length === 0) continue;
 
           function getVal(idx) {
-            return r[idx] !== null && r[idx] !== undefined ? String(r[idx]).trim() : '';
+            return (r[idx] !== null && r[idx] !== undefined) ? String(r[idx]).trim() : '';
           }
 
           let giorno = getVal(0);
@@ -1638,6 +1623,7 @@
 
     function renderGrigliaGiochi(lista, containerId) {
       const gridEl = document.getElementById(containerId);
+      if (!gridEl) return;
       gridEl.innerHTML = '';
       if (lista.length === 0) {
         gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12 text-xs font-medium">Nessun gioco trovato in questa sezione.</p>';
@@ -1836,7 +1822,8 @@
       renderGiochi(filtrati);
     }
 
-    document.getElementById('searchInput').addEventListener('input', applicaFiltri);
+    const searchInputEl = document.getElementById('searchInput');
+    if (searchInputEl) searchInputEl.addEventListener('input', applicaFiltri);
 
     window.addEventListener('DOMContentLoaded', function() {
       let hashIniziale = window.location.hash.replace('#', '');
@@ -1847,14 +1834,20 @@
       }
     });
 
-    // --- CARICAMENTO DATI TRAMITE IL NOSTRO APPS SCRIPT (CORRETTO) ---
+    // --- CARICAMENTO DATI TRAMITE APPS SCRIPT CON CONTROLLO DI SICUREZZA ---
     fetch(APPS_SCRIPT_URL)
       .then(res => res.json())
       .then(data => {
-        processGoogleSheetsData(data);
+        if (Array.isArray(data)) {
+          processGoogleSheetsData(data);
+        } else {
+          console.error("Formato JSON non valido (atteso Array):", data);
+          document.getElementById('loading').classList.add('hidden');
+          document.getElementById('errorMessage').classList.remove('hidden');
+        }
       })
       .catch(err => {
-        console.error("Errore caricamento giochi:", err);
+        console.error("Errore fetch giochi:", err);
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('errorMessage').classList.remove('hidden');
       });
@@ -1862,12 +1855,12 @@
     fetch(APPS_SCRIPT_URL + '?action=getAgenda')
       .then(res => res.json())
       .then(data => {
-        processAgendaData(data);
+        if (Array.isArray(data)) processAgendaData(data);
       })
       .catch(err => {
         fetch(APPS_SCRIPT_URL)
           .then(res => res.json())
-          .then(data => { processAgendaData(data); })
+          .then(data => { if (Array.isArray(data)) processAgendaData(data); })
           .catch(e => console.error("Errore agenda:", e));
       });
   </script>
