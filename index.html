@@ -1264,7 +1264,6 @@
         if (!rows || !Array.isArray(rows)) throw new Error("Formato dati non valido");
         giochiData = [];
 
-        // Ignoriamo la prima riga se contiene le intestazioni (es. 'ID', 'Titolo')
         let startIdx = (rows[0] && rows[0][2] && String(rows[0][2]).toLowerCase() === 'titolo') ? 1 : 0;
 
         for (let i = startIdx; i < rows.length; i++) {
@@ -1848,7 +1847,7 @@
       }
     });
 
-    // --- CARICAMENTO DATI TRAMITE IL NOSTRO APPS SCRIPT ---
+    // --- CARICAMENTO DATI TRAMITE IL NOSTRO APPS SCRIPT (CORRETTO) ---
     fetch(APPS_SCRIPT_URL)
       .then(res => res.json())
       .then(data => {
@@ -1866,7 +1865,6 @@
         processAgendaData(data);
       })
       .catch(err => {
-        // Fallback o tentativo alternativo se action getAgenda non è mappata nello script
         fetch(APPS_SCRIPT_URL)
           .then(res => res.json())
           .then(data => { processAgendaData(data); })
