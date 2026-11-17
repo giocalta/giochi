@@ -43,32 +43,29 @@
         </div>
 
         <!-- NAVIGAZIONE ORIZZONTALE -->
-        <nav class="flex items-center gap-1 bg-orange-900/30 p-1 rounded-md text-[11px] md:text-xs backdrop-blur-md border border-white/10 shadow-inner overflow-x-auto no-scrollbar">
-          <button onclick="cambiaSezione('home')" id="nav-home" class="px-2.5 py-1.5 rounded font-bold transition-all bg-white text-orange-600 shadow-sm flex items-center gap-1.5 shrink-0">
+        <nav class="flex items-center gap-1 bg-orange-900/30 p-1 rounded-md text-[11px] md:text-xs backdrop-blur-md border border-white/10 shadow-inner">
+          <button onclick="cambiaSezione('home')" id="nav-home" class="px-2.5 py-1.5 rounded font-bold transition-all bg-white text-orange-600 shadow-sm flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             <span class="hidden sm:inline">Home</span>
           </button>
-          <button onclick="apriCatalogoPuro()" id="nav-catalogo" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 shrink-0">
+          <button onclick="apriCatalogoPuro()" id="nav-catalogo" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             <span class="hidden sm:inline">Catalogo</span>
           </button>
-          <button onclick="cambiaSezione('galleria')" id="nav-galleria" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 shrink-0">
+          <button onclick="cambiaSezione('galleria')" id="nav-galleria" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
             <span class="hidden sm:inline">Galleria</span>
           </button>
-          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 relative shrink-0">
+          <button onclick="cambiaSezione('preferiti')" id="nav-preferiti" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 relative">
             <svg class="w-3.5 h-3.5 text-rose-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             <span class="hidden sm:inline">Preferiti</span> 
             <span id="prefCounterBadge" class="bg-rose-500 text-white text-[9px] px-1 py-0.1 rounded-full font-black hidden shadow">0</span>
           </button>
-          <button onclick="cambiaSezione('areaSoci')" id="nav-areaSoci" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 shrink-0">
-            <span>👤</span><span class="hidden sm:inline">Area Soci</span>
-          </button>
-          <button onclick="cambiaSezione('info')" id="nav-info" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 shrink-0">
+          <button onclick="cambiaSezione('info')" id="nav-info" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <span class="hidden sm:inline">Info</span>
           </button>
-          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5 shrink-0">
+          <button onclick="cambiaSezione('contatti')" id="nav-contatti" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             <span class="hidden sm:inline">Contatti</span>
           </button>
@@ -84,12 +81,12 @@
             <div class="relative flex-grow min-w-0">
               <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               <input type="text" id="searchInput" placeholder="Cerca gioco..." 
-                     class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#172554] focus:bg-white text-xs md:text-sm transition-all font-medium">
+                     class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:bg-white text-xs md:text-sm transition-all font-medium">
             </div>
-            <button onclick="toggleFiltriModale()" id="btnToggleFiltri" class="bg-[#172554] hover:bg-black text-white font-bold text-xs px-4 py-1.5 md:py-2 transition-all flex items-center gap-1.5 shrink-0 shadow-sm">
+            <button onclick="toggleFiltriModale()" id="btnToggleFiltri" class="bg-[#1E3A8A] hover:bg-blue-950 text-white font-bold text-xs px-4 py-1.5 md:py-2 transition-all flex items-center gap-1.5 shrink-0 shadow-sm">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.172a1 1 0 01-.553.894l-4 2A1 1 0 017 18.28v-5.172a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z"></path></svg>
               <span>Filtri</span>
-              <span id="activeFiltersBadge" class="hidden bg-white text-[#172554] text-[10px] px-1.5 py-0.2 rounded-full font-black ml-1">!</span>
+              <span id="activeFiltersBadge" class="hidden bg-white text-[#1E3A8A] text-[10px] px-1.5 py-0.2 rounded-full font-black ml-1">!</span>
             </button>
             <button onclick="azzeraFiltri()" title="Azzera Ricerca" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-2.5 py-1.5 md:py-2 transition-all flex items-center shrink-0">
               <span>↺</span>
@@ -103,31 +100,37 @@
               <!-- 1. CATEGORIA PRINCIPALE -->
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                   <span>Cat. Principale</span>
                 </div>
-                <select id="mainCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
+                <select id="mainCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
                   <option value="">Tutte</option>
+                  <option value="party">🎉 Party Game</option>
+                  <option value="famiglia">👨‍👩‍👧‍👦 Introduttivi Family</option>
+                  <option value="strategia">🧠 Strategia</option>
+                  <option value="avventura">⚔️ Avventura e Tematici</option>
+                  <option value="cooperativo">🤝 Cooperativi</option>
+                  <option value="carte">🃏 Carte / Astratti</option>
                 </select>
               </div>
 
               <!-- 2. GENERE SPECIFICO -->
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                   <span>Genere Specifico</span>
                 </div>
-                <select id="specificCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
+                <select id="specificCategoryFilter" onchange="applicaFiltri()" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
                   <option value="">Tutti i generi</option>
                 </select>
               </div>
 
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                   <span>Giocatori</span>
                 </div>
-                <select id="playersFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
+                <select id="playersFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
                   <option value="">Tutti</option>
                   <option value="1">1 Giocatore</option>
                   <option value="2">2 Giocatori</option>
@@ -140,10 +143,10 @@
 
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                   <span>Tempo</span>
                 </div>
-                <select id="timeFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
+                <select id="timeFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
                   <option value="">Tutti</option>
                   <option value="30">Max 30 min</option>
                   <option value="60">Max 1 ora</option>
@@ -153,10 +156,10 @@
 
               <div class="flex flex-col gap-1 pb-1 border-b border-slate-100 lg:border-b-0">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
                   <span>Complessità</span>
                 </div>
-                <select id="difficultyFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
+                <select id="difficultyFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
                   <option value="">Tutti</option>
                   <option value="semplice">Semplice</option>
                   <option value="media">Media</option>
@@ -166,10 +169,10 @@
 
               <div class="flex flex-col gap-1">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                   <span>Stato</span>
                 </div>
-                <select id="statusFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#172554]">
+                <select id="statusFilter" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
                   <option value="">Tutti</option>
                   <option value="disponibile">Disponibili</option>
                   <option value="noleggiato">Noleggiati</option>
@@ -178,10 +181,10 @@
 
               <div class="flex flex-col gap-1">
                 <div class="flex items-center gap-1.5 text-slate-700 font-bold">
-                  <svg class="w-3.5 h-3.5 text-[#172554] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+                  <svg class="w-3.5 h-3.5 text-[#1E3A8A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
                   <span>Ordina per</span>
                 </div>
-                <select id="sortOrder" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-[#172554] font-bold focus:outline-none focus:ring-1 focus:ring-[#172554]">
+                <select id="sortOrder" class="w-full py-1 px-1.5 bg-slate-50 border border-slate-200 text-[#1E3A8A] font-bold focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]">
                   <option value="recenti">✨ Recenti</option>
                   <option value="az">🔤 A - Z</option>
                   <option value="za">🔤 Z - A</option>
@@ -194,7 +197,7 @@
               <button onclick="azzeraFiltriModal()" class="w-1/2 bg-white hover:bg-slate-100 text-rose-600 border border-rose-300 font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
                 Cancella
               </button>
-              <button onclick="applicaFiltriModal()" class="w-1/2 bg-[#172554] hover:bg-black text-white font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
+              <button onclick="applicaFiltriModal()" class="w-1/2 bg-[#1E3A8A] hover:bg-blue-950 text-white font-bold py-1.5 px-4 text-xs transition-all shadow-sm">
                 Applica
               </button>
             </div>
@@ -220,7 +223,7 @@
           </div>
         </div>
         <div class="flex gap-3 z-10 shrink-0">
-          <button onclick="apriCatalogoPuro()" class="bg-[#172554] text-white hover:bg-black font-extrabold text-xs md:text-sm px-4 py-2 shadow transition-transform hover:scale-105 flex items-center gap-2">
+          <button onclick="apriCatalogoPuro()" class="bg-[#1E3A8A] text-white hover:bg-blue-950 font-extrabold text-xs md:text-sm px-4 py-2 shadow transition-transform hover:scale-105 flex items-center gap-2">
             <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             Sfoglia Catalogo
           </button>
@@ -248,11 +251,11 @@
         </div>
       </div>
 
-      <!-- SONDAGGI (PROTETTI PER I SOCI) -->
+      <!-- SONDAGGI -->
       <div id="sondaggiContainerHome" class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4">
         <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2 px-2 md:px-0">
           <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-          Sondaggi della Community (Riservato ai Soci)
+          Sondaggi della Community
         </h2>
         <div id="boxSondaggiLista" class="space-y-4 px-2 md:px-0">
           <p class="text-slate-400 text-xs">Caricamento sondaggi in corso...</p>
@@ -312,7 +315,7 @@
 
       <div id="errorMessage" class="hidden text-center py-12 bg-red-50 text-red-600 border border-red-200 p-6">
         <p class="font-bold text-sm mb-1">Impossibile caricare i dati dal foglio Google.</p>
-        <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio o l'URL di Apps Script.</p>
+        <p class="text-xs text-red-500">Verifica le impostazioni di condivisione del foglio.</p>
       </div>
 
       <div id="gamesGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
@@ -349,23 +352,10 @@
       <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
     </div>
 
-    <!-- SEZIONE 1.8: AREA SOCI & ABBONAMENTI -->
-    <div id="viewAreaSoci" class="hidden space-y-6">
-      <div class="bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
-        <div class="border-b border-slate-100 pb-4">
-          <h2 class="text-2xl md:text-3xl font-black text-slate-900 flex items-center gap-2">
-            <span>👤</span> Area Riservata Soci GIOCALTA
-          </h2>
-          <p class="text-xs md:text-sm text-slate-500 mt-1">Accedi con email e password per partecipare ai sondaggi ufficiali e concordare i ritiri.</p>
-        </div>
-        <div id="areaSociContent"></div>
-      </div>
-    </div>
-
     <!-- SEZIONE 2: INFO & GUIDA -->
     <div id="viewInfo" class="hidden space-y-6">
       
-      <!-- BANNER SUPERIORE INFO -->
+      <!-- BANNER SUPERIORE INFO CON IMMAGINE DI SFONDO E LOGO UFFICIALE -->
       <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4 border border-orange-500/40">
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center opacity-15 pointer-events-none"></div>
         <div class="absolute inset-0 bg-slate-950/20 pointer-events-none"></div>
@@ -575,19 +565,19 @@
 
   </main>
 
-  <!-- FOOTER IN BLU NOTTE ANCORA PIÙ SCURO -->
-  <footer class="bg-[#172554] text-amber-100 border-t border-blue-950 py-8 text-center text-xs space-y-3 mt-auto shadow-inner">
+  <!-- FOOTER AGGIORNATO IN BLU SCURO COORDINATO -->
+  <footer class="bg-[#1E3A8A] text-amber-100 border-t border-blue-900 py-8 text-center text-xs space-y-3 mt-auto shadow-inner">
     <div class="max-w-6xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
       <img src="logo-bianco.png" alt="GIOCALTA Logo" class="h-8 w-auto object-contain drop-shadow" onerror="this.onerror=null; this.textContent='GIOCALTA';">
       <p class="text-amber-100/80 font-medium">Noleggio Giochi da Tavolo a Caltagirone</p>
       <p class="text-[11px] text-amber-200/60">© 2026 GIOCALTA - Tutti i diritti riservati.</p>
     </div>
   </footer>
-  
+
   <script>
     const NUMERO_WHATSAPP = '393333455179';
     const SPREADSHEET_ID = '1ALGM_zFq0ES2E_evYvDP9bCw-_OkbMC7RQe_zSrGeEE';
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx6iDH72KzUjakzw115F3kUnlGBfwF2A1eDMtIft51K5Ur49-WCKUC7SYu_WkBEYOhq4Q/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjC2QzxqNzeDpb81SSFQpRQaz9xbh8oIFyWhXqo0p5OxI8yO5BzKmepow4ZdtrBp45zw/exec';
 
     let giochiData = [];
     let eventiData = [];
@@ -595,32 +585,14 @@
     let savedScrollPosition = 0;
     let ultimaSezioneVisitata = 'home';
     let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
-    let socioCorrente = JSON.parse(localStorage.getItem('giocalta_socio') || 'null');
-// Caricamento dati da Google Sheets
-fetch(APPS_SCRIPT_URL + '?action=getGiochi')
-  .then(res => res.json())
-  .then(data => {
-    console.log("Dati ricevuti da Google Sheets:", data);
-    if (Array.isArray(data) && data.length > 0) {
-      if (typeof processGoogleSheetsData === 'function') {
-        processGoogleSheetsData(data);
-      } else {
-        console.warn("La funzione processGoogleSheetsData non è definita.");
-      }
-    } else {
-      console.error("Il foglio è vuoto o il formato non è un array valido:", data);
-    }
-  })
-  .catch(err => console.error("Errore di connessione fetch:", err));
+
     function aggiornaContatorePreferiti() {
       const badge = document.getElementById('prefCounterBadge');
-      if (badge) {
-        if (preferitiIds.length > 0) {
-          badge.textContent = preferitiIds.length;
-          badge.classList.remove('hidden');
-        } else {
-          badge.classList.add('hidden');
-        }
+      if (preferitiIds.length > 0) {
+        badge.textContent = preferitiIds.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
       }
     }
 
@@ -629,7 +601,7 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
         .then(res => res.json())
         .then(data => {
           preferitiGlobaliMap = {};
-          if (data && Array.isArray(data) && data.length > 1) {
+          if (data && data.length > 1) {
             for (let i = 1; i < data.length; i++) {
               let id = data[i][0];
               let voti = Number(data[i][1]) || 0;
@@ -657,12 +629,9 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({ action: 'votaPreferito', idGioco: idGioco, tipo: aggiungi ? 'aggiungi' : 'rimuovi' })
-      })
-      .then(res => res.text())
-      .then(() => {
+      }).then(() => {
         caricaPreferitiGlobali();
-      })
-      .catch(err => console.error("Errore salvataggio preferito:", err));
+      }).catch(err => console.error("Errore salvataggio preferito:", err));
       
       if (!document.getElementById('viewCatalogo').classList.contains('hidden')) {
         applicaFiltri();
@@ -675,222 +644,14 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       }
     }
 
-    // --- GESTIONE AREA SOCI & LOGIN CON PASSWORD & RECUPERO INTEGRATO ---
-    function renderAreaSoci() {
-      const container = document.getElementById('areaSociContent');
-      if (!container) return;
-
-      if (!socioCorrente) {
-        container.innerHTML = `
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-amber-50/60 p-6 border border-amber-200 shadow-sm space-y-4">
-              <h3 class="font-black text-slate-900 text-lg">🔑 Accedi alla tua Area</h3>
-              <p class="text-xs text-slate-600">Inserisci l'email e la password associate al tuo tesseramento.</p>
-              <div class="space-y-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">Email del Socio</label>
-                  <input type="email" id="loginEmailInput" placeholder="tu@email.it" class="w-full p-2 bg-white border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
-                  <input type="password" id="loginPasswordInput" placeholder="Password" class="w-full p-2 bg-white border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
-                </div>
-                <div class="flex justify-between items-center text-xs">
-                  <button onclick="toggleBoxRecupero()" class="text-orange-600 font-bold hover:underline">Password dimenticata?</button>
-                </div>
-                <button onclick="eseguiLoginSocio()" class="w-full bg-[#172554] hover:bg-black text-white font-bold py-2.5 text-xs transition-all shadow">Accedi</button>
-              </div>
-              <div id="loginMsg" class="text-xs font-bold text-center mt-2"></div>
-
-              <!-- BOX RECUPERO PASSWORD -->
-              <div id="boxRecuperoPass" class="hidden pt-4 border-t border-amber-200 space-y-2 mt-4 bg-white p-4 shadow-sm">
-                <h4 class="font-bold text-slate-800 text-xs">🔄 Recupero Password</h4>
-                <p class="text-[11px] text-slate-500">Inserisci la tua email o il numero di telefono registrato:</p>
-                <input type="text" id="recuperoInput" placeholder="Email o Telefono" class="w-full p-2 bg-slate-50 border border-slate-300 text-xs">
-                <button onclick="inviaRichiestaRecupero()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 text-xs">Invia Nuova Password</button>
-                <div id="recuperoMsg" class="text-[11px] font-bold text-center mt-1"></div>
-              </div>
-            </div>
-
-            <div class="bg-white p-6 border border-amber-200 shadow-sm space-y-4">
-              <h3 class="font-black text-slate-900 text-lg">📝 Richiesta Tesseramento APS</h3>
-              <p class="text-xs text-slate-600">Compila i dati per richiedere l'ammissione a GIOCALTA.</p>
-              <div class="space-y-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">Nome e Cognome</label>
-                  <input type="text" id="regNome" class="w-full p-2 bg-slate-50 border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">Email</label>
-                  <input type="email" id="regEmail" class="w-full p-2 bg-slate-50 border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">Telefono (WhatsApp)</label>
-                  <input type="text" id="regTel" class="w-full p-2 bg-slate-50 border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
-                  <input type="password" id="regPassword" placeholder="Scegli una password" class="w-full p-2 bg-slate-50 border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-orange-600 focus:outline-none">
-                </div>
-                <button onclick="eseguiRegistrazioneSocio()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 text-xs transition-all shadow">Invia Richiesta Iscrizione</button>
-              </div>
-              <div id="regMsg" class="text-xs font-bold text-center mt-2"></div>
-            </div>
-          </div>
-        `;
-      } else {
-        let msgRitiroWA = encodeURIComponent(`Ciao Giuseppe! Sono ${socioCorrente.nome}, socio di GIOCALTA, e vorrei concordare un ritiro per i giochi in prestito.`);
-        let urlRitiro = `https://wa.me/${NUMERO_WHATSAPP}?text=${msgRitiroWA}`;
-
-        container.innerHTML = `
-          <div class="bg-emerald-50 border border-emerald-200 p-6 space-y-4">
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div>
-                <span class="bg-emerald-200 text-emerald-900 text-[10px] font-black uppercase px-2.5 py-1">Socio Approvato 🏆</span>
-                <h3 class="text-xl font-black text-slate-900 mt-2">Benvenuto, ${socioCorrente.nome}!</h3>
-                <p class="text-xs text-slate-600">Email registrata: <strong class="text-slate-800">${socioCorrente.email}</strong></p>
-              </div>
-              <button onclick="eseguiLogoutSocio()" class="bg-white hover:bg-rose-50 text-rose-600 border border-rose-300 font-bold px-4 py-2 text-xs transition-all shadow-sm">Esci dall'Account</button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-emerald-200">
-              <div class="bg-white p-4 border border-emerald-200 shadow-sm space-y-2">
-                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">💬 Concorda Ritiro / Riconsegna</h4>
-                <p class="text-xs text-slate-600">Hai prenotato o vuoi restituire dei giochi? Contatta direttamente la presidenza su WhatsApp.</p>
-                <a href="${urlRitiro}" target="_blank" rel="noopener noreferrer" class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2 px-4 shadow">Apri WhatsApp per Ritiro ➔</a>
-              </div>
-              <div class="bg-white p-4 border border-emerald-200 shadow-sm space-y-2">
-                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">📊 Votazione Sondaggi</h4>
-                <p class="text-xs text-slate-600">Come socio approvato, puoi votare nei sondaggi ufficiali della community in totale sicurezza (un voto per socio).</p>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    function toggleBoxRecupero() {
-      const box = document.getElementById('boxRecuperoPass');
-      if (box) box.classList.toggle('hidden');
-    }
-
-    function inviaRichiestaRecupero() {
-      let identificativo = document.getElementById('recuperoInput').value.trim();
-      let msgBox = document.getElementById('recuperoMsg');
-      if (!identificativo) {
-        msgBox.className = "text-[11px] font-bold text-center mt-1 text-rose-600";
-        msgBox.textContent = "Inserisci la tua email o telefono!";
-        return;
-      }
-      msgBox.className = "text-[11px] font-bold text-center mt-1 text-slate-600";
-      msgBox.textContent = "Invio richiesta in corso...";
-
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'recuperaPassword', identificativo })
-      })
-      .then(res => res.json())
-      .then(data => {
-        msgBox.className = "text-[11px] font-bold text-center mt-1 " + (data.status === 'success' ? 'text-emerald-600' : 'text-rose-600');
-        msgBox.textContent = data.message;
-      })
-      .catch(err => {
-        msgBox.className = "text-[11px] font-bold text-center mt-1 text-rose-600";
-        msgBox.textContent = "Errore di connessione.";
-      });
-    }
-
-    function eseguiRegistrazioneSocio() {
-      let nome = document.getElementById('regNome').value.trim();
-      let email = document.getElementById('regEmail').value.trim();
-      let telefono = document.getElementById('regTel').value.trim();
-      let password = document.getElementById('regPassword').value.trim();
-      let msgBox = document.getElementById('regMsg');
-
-      if (!nome || !email || !telefono || !password) {
-        msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
-        msgBox.textContent = "Compila tutti i campi inclusa la password!";
-        return;
-      }
-
-      msgBox.className = "text-xs font-bold text-center mt-2 text-slate-600";
-      msgBox.textContent = "Invio richiesta in corso...";
-
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'registratiSocio', nome, email, telefono, password })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'success') {
-          msgBox.className = "text-xs font-bold text-center mt-2 text-amber-600 bg-amber-50 p-2 border border-amber-200 rounded";
-          msgBox.textContent = "⏳ Richiesta inviata con successo! Il tuo account è in attesa di approvazione da parte della presidenza.";
-          document.getElementById('regNome').value = '';
-          document.getElementById('regEmail').value = '';
-          document.getElementById('regTel').value = '';
-          document.getElementById('regPassword').value = '';
-        } else {
-          msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
-          msgBox.textContent = data.message;
-        }
-      })
-      .catch(err => {
-        msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
-        msgBox.textContent = "Errore di connessione.";
-      });
-    }
-
-    function eseguiLoginSocio() {
-      let email = document.getElementById('loginEmailInput').value.trim();
-      let password = document.getElementById('loginPasswordInput').value.trim();
-      let msgBox = document.getElementById('loginMsg');
-
-      if (!email || !password) {
-        msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
-        msgBox.textContent = "Inserisci email e password!";
-        return;
-      }
-
-      msgBox.className = "text-xs font-bold text-center mt-2 text-slate-600";
-      msgBox.textContent = "Verifica in corso...";
-
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'loginSocio', email, password })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'approved') {
-          socioCorrente = { nome: data.nome, email: data.email };
-          localStorage.setItem('giocalta_socio', JSON.stringify(socioCorrente));
-          renderAreaSoci();
-          caricaSondaggi();
-        } else {
-          msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
-          msgBox.textContent = data.message;
-        }
-      })
-      .catch(err => {
-        msgBox.className = "text-xs font-bold text-center mt-2 text-rose-600";
-        msgBox.textContent = "Errore di connessione.";
-      });
-    }
-
-    function eseguiLogoutSocio() {
-      socioCorrente = null;
-      localStorage.removeItem('giocalta_socio');
-      renderAreaSoci();
-      caricaSondaggi();
-    }
-
-    // --- SONDAGGI PROTETTI ---
     function caricaSondaggi() {
       fetch(APPS_SCRIPT_URL + '?action=getSondaggi')
         .then(res => res.json())
-        .then(data => { renderSondaggi(data); })
+        .then(data => {
+          renderSondaggi(data);
+        })
         .catch(err => {
-          const boxSondaggi = document.getElementById('boxSondaggiLista');
-          if (boxSondaggi) boxSondaggi.innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo al momento.</p>';
+          document.getElementById('boxSondaggiLista').innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo al momento.</p>';
         });
     }
 
@@ -899,7 +660,7 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       if (!box) return;
       box.innerHTML = '';
 
-      if (!data || !Array.isArray(data) || data.length <= 1) {
+      if (!data || data.length <= 1) {
         box.innerHTML = '<p class="text-slate-400 text-xs">Nessun sondaggio attivo al momento.</p>';
         return;
       }
@@ -926,11 +687,8 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
         let htmlOpzioni = '';
         sond.opzioni.forEach(opz => {
           let perc = totaleVoti > 0 ? Math.round((opz.voti / totaleVoti) * 100) : 0;
-          let clickAction = socioCorrente ? `votaSondaggioSicuro('${sond.titolo}','${opz.idOpz}')` : `cambiaSezione('areaSoci');`;
-          let titoloTooltip = socioCorrente ? 'Clicca per votare' : 'Accedi all\'Area Soci per votare';
-
           htmlOpzioni += `
-            <div class="space-y-1 cursor-pointer group" onclick="${clickAction}" title="${titoloTooltip}">
+            <div class="space-y-1 cursor-pointer group" onclick="votaSondaggio('${sond.titolo}','${opz.idOpz}')">
               <div class="flex justify-between text-xs font-bold text-slate-700 bg-white/75 px-1 py-0.5">
                 <span>${opz.testoOpz}</span>
                 <span class="text-orange-600">${opz.voti} voti (${perc}%)</span>
@@ -951,6 +709,7 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
         if (sond.customSfondo) {
           let opacitaVal = sond.trasparenza !== '' ? sond.trasparenza : '1';
           opacityStyle = `style="opacity: ${opacitaVal};"`;
+
           let sfondoPulito = pulisciUrlFoto(sond.customSfondo);
           if (sfondoPulito.startsWith('http') || sfondoPulito.includes('drive.google.com') || sfondoPulito.includes('lh3.googleusercontent.com')) {
             styleBg = `background-image: url('${sfondoPulito}'); background-size: cover; background-position: center;`;
@@ -960,13 +719,10 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
         }
         card.setAttribute('style', styleBg);
 
-        let warningLogin = !socioCorrente ? `<p class="text-[11px] text-rose-600 font-bold bg-white/90 p-1 rounded">🔒 Accedi all'Area Soci per esprimere il tuo voto.</p>` : '';
-
         card.innerHTML = `
           <div class="absolute inset-0 bg-white/30 pointer-events-none" ${opacityStyle}></div>
           <div class="relative z-10 bg-white/95 p-3 rounded space-y-3 shadow-sm">
             <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">📊 ${sond.titolo}</h3>
-            ${warningLogin}
             <div class="space-y-2.5">${htmlOpzioni}</div>
           </div>
         `;
@@ -974,22 +730,14 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       });
     }
 
-    function votaSondaggioSicuro(idSondaggio, idOpzione) {
-      if (!socioCorrente) {
-        cambiaSezione('areaSoci');
-        return;
-      }
-
+    function votaSondaggio(idSondaggio, idOpzione) {
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify({ action: 'votaSondaggioSicuro', idSondaggio, idOpzione, email: socioCorrente.email })
+        body: JSON.stringify({ action: 'votaSondaggio', idSondaggio: idSondaggio, idOpzione: idOpzione })
       })
       .then(res => res.json())
-      .then(data => {
-        alert(data.message);
-        caricaSondaggi();
-      })
-      .catch(err => console.error("Errore voto protetto:", err));
+      .then(() => { caricaSondaggi(); })
+      .catch(err => console.error("Errore voto sondaggio:", err));
     }
 
     function apriCatalogoPuro() { cambiaSezione('catalogo'); }
@@ -997,32 +745,6 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
     function scorriCarosello(idElemento, quantita) {
       const el = document.getElementById(idElemento);
       if (el) { el.scrollBy({ left: quantita, behavior: 'smooth' }); }
-    }
-
-    function popolaDropdownCategoriePrincipali() {
-      const selectMain = document.getElementById('mainCategoryFilter');
-      if (!selectMain) return;
-      const valoreAttuale = selectMain.value;
-      
-      let setCat = new Set();
-      giochiData.forEach(g => {
-        if (g.categoriaPrincipale) {
-          g.categoriaPrincipale.split(',').forEach(c => {
-            let pulito = c.trim();
-            if (pulito) setCat.add(pulito);
-          });
-        }
-      });
-
-      let categorieUniche = [...setCat].sort();
-      selectMain.innerHTML = '<option value="">Tutte</option>';
-      categorieUniche.forEach(cat => {
-        let opt = document.createElement('option');
-        opt.value = cat.toLowerCase();
-        opt.textContent = cat;
-        selectMain.appendChild(opt);
-      });
-      selectMain.value = valoreAttuale;
     }
 
     function popolaDropdownGeneriSpecifici() {
@@ -1046,14 +768,13 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       ultimaSezioneVisitata = nomeSezione;
       window.location.hash = nomeSezione;
 
-      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewAreaSoci', 'viewInfo', 'viewContatti', 'viewGioco', 'viewEvento'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
+      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewGioco', 'viewEvento'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
       });
 
       const stickyContainer = document.getElementById('stickySearchContainer');
 
-      ['home', 'catalogo', 'galleria', 'preferiti', 'areaSoci', 'info', 'contatti'].forEach(s => {
+      ['home', 'catalogo', 'galleria', 'preferiti', 'info', 'contatti'].forEach(s => {
         const btn = document.getElementById('nav-' + s);
         if (btn) {
           btn.classList.remove('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
@@ -1089,13 +810,6 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
         if (stickyContainer) stickyContainer.classList.add('hidden');
         renderPreferiti();
         window.scrollTo(0, 0);
-      } else if (nomeSezione === 'areaSoci') {
-        document.getElementById('viewAreaSoci').classList.remove('hidden');
-        document.getElementById('nav-areaSoci').classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
-        document.getElementById('nav-areaSoci').classList.remove('text-amber-100', 'font-semibold');
-        if (stickyContainer) stickyContainer.classList.add('hidden');
-        renderAreaSoci();
-        window.scrollTo(0, 0);
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
         document.getElementById('nav-info').classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
@@ -1117,9 +831,8 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       } else if (e.state && e.state.vista === 'evento') {
         mostraDettaglioEvento(e.state.eventoId, false);
       } else {
-        ['viewGioco', 'viewEvento', 'viewInfo', 'viewContatti', 'viewGalleria', 'viewPreferiti', 'viewAreaSoci', 'viewHome', 'viewCatalogo'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.classList.add('hidden');
+        ['viewGioco', 'viewEvento', 'viewInfo', 'viewContatti', 'viewGalleria', 'viewPreferiti', 'viewHome', 'viewCatalogo'].forEach(id => {
+          document.getElementById(id).classList.add('hidden');
         });
         const stickyContainer = document.getElementById('stickySearchContainer');
 
@@ -1147,7 +860,7 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
 
     function toggleFiltriModale() {
       const modal = document.getElementById('filterModal');
-      if (modal) modal.classList.toggle('hidden');
+      modal.classList.toggle('hidden');
     }
 
     function applicaFiltriModal() {
@@ -1156,26 +869,17 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
     }
 
     function azzeraFiltriModal() {
-      const mainCat = document.getElementById('mainCategoryFilter');
-      const specCat = document.getElementById('specificCategoryFilter');
-      const players = document.getElementById('playersFilter');
-      const timeF = document.getElementById('timeFilter');
-      const diffF = document.getElementById('difficultyFilter');
-      const statF = document.getElementById('statusFilter');
-      const sortO = document.getElementById('sortOrder');
-
-      if (mainCat) mainCat.value = '';
-      if (specCat) specCat.value = '';
-      if (players) players.value = '';
-      if (timeF) timeF.value = '';
-      if (diffF) diffF.value = '';
-      if (statF) statF.value = '';
-      if (sortO) sortO.value = 'recenti';
+      document.getElementById('mainCategoryFilter').value = '';
+      document.getElementById('specificCategoryFilter').value = '';
+      document.getElementById('playersFilter').value = '';
+      document.getElementById('timeFilter').value = '';
+      document.getElementById('difficultyFilter').value = '';
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('sortOrder').value = 'recenti';
     }
 
     function azzeraFiltri() {
-      const searchInput = document.getElementById('searchInput');
-      if (searchInput) searchInput.value = '';
+      document.getElementById('searchInput').value = '';
       azzeraFiltriModal();
       applicaFiltri();
     }
@@ -1204,6 +908,23 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
         if (matchId && matchId[1]) { return 'https://lh3.googleusercontent.com/d/' + matchId[1] + '=s800'; }
       }
       return clean;
+    }
+
+    function ottieniLinkTutorial(cellObj, titoloGioco) {
+      if (!cellObj) return '';
+      let valV = (cellObj.v !== null && cellObj.v !== undefined) ? String(cellObj.v).trim() : '';
+      let valF = (cellObj.f !== null && cellObj.f !== undefined) ? String(cellObj.f).trim() : '';
+      let matchV = valV.match(/(https?:\/\/[^\s"']+)/i);
+      if (matchV) return matchV[1];
+      let matchF = valF.match(/(https?:\/\/[^\s"']+)/i);
+      if (matchF) return matchF[1];
+      if (valV.indexOf('youtube.com') !== -1 || valV.indexOf('youtu.be') !== -1) {
+        return valV.startsWith('http') ? valV : 'https://' + valV;
+      }
+      if (titoloGioco && valV !== '') {
+        return 'https://www.youtube.com/results?search_query=' + encodeURIComponent('tutorial ' + titoloGioco + ' gioco da tavolo');
+      }
+      return '';
     }
 
     function estraiMinuti(tempoStr) {
@@ -1246,80 +967,51 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       return new Date(a, m, g).getTime();
     }
 
-    function arricchisciDescrizione(titolo, tipo, descOriginale) {
-      if (descOriginale && descOriginale.length > 30 && !descOriginale.includes('Nessuna descrizione')) {
-        return descOriginale;
-      }
-      let t = tipo.toLowerCase();
-      let base = descOriginale && descOriginale.length > 5 ? descOriginale : '';
-      
-      if (t.includes('party') || t.includes('bluff') || t.includes('deduz')) {
-        return base ? `${base} Preparati a risate a non finire, colpi di scena fulminei e sguardi di fuoco al tavolo. Ideale per sbloccare qualsiasi serata in compagnia!` 
-                    : `Un'esperienza esplosiva e divertentissima! Perfetto per rompere il ghiaccio, scatenare il caos al tavolo e mettere alla prova la complicità (o il bluff) di tutto il gruppo.`;
-      } else if (t.includes('strategia') || t.includes('gestion') || t.includes('euro') || t.includes('piazzamento')) {
-        return base ? `${base} Ogni mossa richiede calcolo e visione d'insieme: pianifica la tua strategia per superare gli avversari e conquistare la vittoria.` 
-                    : `Pane per i denti dei veri strateghi! Gestisci le tue risorse con precisione millimetrica e anticipa le mosse degli avversari in una sfida profonda e appagante.`;
-      } else if (t.includes('cooperativo') || t.includes('collaborativ')) {
-        return base ? `${base} Qui si vince o si perde tutti insieme: la comunicazione e il lavoro di squadra sono l'unica via per la salvezza.` 
-                    : `Tutti uniti per un unico obiettivo comune! Mettete da parte la rivalità e collaborate gomito a gomito: ogni decisione presa insieme farà la differenza tra il trionfo e la sconfitta.`;
-      } else if (t.includes('avventura') || t.includes('tematic') || t.includes('dungeon') || t.includes('miniatur')) {
-        return base ? `${base} Tuffati in un'ambientazione ricca di atmosfera dove ogni scelta scriverà una nuova ed epica pagina della vostra avventura.` 
-                    : `Un viaggio straordinario in un mondo fantastico! Preparati a vivere un'immersione totale tra sfide epiche, componenti curatissimi e momenti indimenticabili al tavolo.`;
-      } else {
-        return base ? `${base} Un titolo imperdibile per arricchire la tua serata ludica con meccaniche coinvolgenti e tanto divertimento.` 
-                    : `Un gioco da tavolo eccezionale, selezionato con cura per garantire ore di puro divertimento, sfide stimolanti e ottima compagnia a Caltagirone.`;
-      }
-    }
-
-    function processGoogleSheetsData(rows) {
+    function processGoogleSheetsData(json) {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
 
       try {
-        if (!rows || !Array.isArray(rows)) {
-          throw new Error("I dati ricevuti non sono in un formato array valido.");
-        }
+        if (!json || !json.table || !json.table.rows) throw new Error("Formato dati non valido");
+        const rows = json.table.rows;
         giochiData = [];
 
-        let startIdx = (rows[0] && rows[0][2] && String(rows[0][2]).toLowerCase() === 'titolo') ? 1 : 0;
-
-        for (let i = startIdx; i < rows.length; i++) {
-          let r = rows[i];
-          if (!r || !Array.isArray(r) || r.length === 0) continue;
-
-          function getVal(idx) {
-            return (r[idx] !== null && r[idx] !== undefined) ? String(r[idx]).trim() : '';
+        rows.forEach(function(r) {
+          const c = r.c || [];
+          function getFormattedVal(idx) {
+            if (!c[idx]) return '';
+            let val = '';
+            if (c[idx].f !== null && c[idx].f !== undefined) val = String(c[idx].f).trim();
+            else if (c[idx].v !== null && c[idx].v !== undefined) val = String(c[idx].v).trim();
+            return pulisciValore(val);
           }
 
-          let idFisso = parseInt(getVal(0), 10) || i;
-          let foto = pulisciUrlFoto(getVal(1));
-          let titolo = getVal(2);
-          let persone = getVal(3);
-          let topPersone = getVal(4);
-          let tempo = getVal(5) || '-';
-          let difficolta = getVal(6) || '-';
-          let tipo = getVal(7) || 'Generico';
-          let tutorial = getVal(8);
-          let eta = getVal(9);
-          let voto = getVal(10);
-          let peso = getVal(11);
-          let dispStr = getVal(12).trim().toUpperCase();
-          let descrizioneBrutta = getVal(13);
-          let visibileStr = getVal(14).toLowerCase();
-          let categoriaPrincipale = getVal(15) || ''; 
+          let idFisso = parseInt(getFormattedVal(0), 10) || 0;
+          let foto = pulisciUrlFoto((c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : '');
+          let titolo = getFormattedVal(2);
+          let persone = getFormattedVal(3);
+          let topPersone = getFormattedVal(4);
+          let tempo = getFormattedVal(5) || '-';
+          let difficolta = getFormattedVal(6) || '-';
+          let tipo = getFormattedVal(7) || 'Generico';
+          let tutorial = ottieniLinkTutorial(c[8], titolo);
+          let eta = getFormattedVal(9);
+          let voto = getFormattedVal(10);
+          let peso = getFormattedVal(11);
+          let dispStr = getFormattedVal(12).trim().toUpperCase();
+          let descrizione = getFormattedVal(13);
+          let visibileStr = getFormattedVal(14).toLowerCase();
 
-          if (!titolo || titolo.toLowerCase() === 'titolo') continue;
-          if (visibileStr === 'no') continue;
+          if (!titolo || titolo.toLowerCase() === 'titolo') return;
+          if (visibileStr === 'no') return;
 
           const isDisp = dispStr === '' || !['NO', 'NOLEGGIATO', 'OCCUPATO', 'FALSE', '0', 'NON DISPONIBILE'].includes(dispStr);
-          let descrizioneConCarattere = arricchisciDescrizione(titolo, tipo, descrizioneBrutta);
 
           giochiData.push({
             id: generaSlug(titolo),
             idFisso: idFisso, 
             titolo: titolo,
             tipo: tipo,
-            categoriaPrincipale: categoriaPrincipale,
             persone: persone || '-',
             topPersone: topPersone,
             tempo: tempo,
@@ -1330,38 +1022,35 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
             voto: voto,
             peso: peso ? peso + ' / 5' : '',
             disponibile: isDisp,
-            descrizione: descrizioneConCarattere,
+            descrizione: descrizione || 'Nessuna descrizione dettagliata disponibile al momento.',
             foto: foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'
           });
-        }
+        });
 
-        if (loadingEl) loadingEl.classList.add('hidden');
-        popolaDropdownCategoriePrincipali();
+        loadingEl.classList.add('hidden');
         popolaDropdownGeneriSpecifici();
         aggiornaContatorePreferiti();
         applicaFiltri();
         caricaPreferitiGlobali();
         caricaSondaggi();
       } catch (err) {
-        console.error("Errore elaborazione foglio:", err);
-        if (loadingEl) loadingEl.classList.add('hidden');
-        if (errorEl) errorEl.classList.remove('hidden');
+        console.error(err);
+        loadingEl.classList.add('hidden');
+        errorEl.classList.remove('hidden');
       }
     }
 
-    function processAgendaData(rows) {
+    function processAgendaData(json) {
       try {
-        if (!rows || !Array.isArray(rows)) return;
+        if (!json || !json.table || !json.table.rows) return;
+        const rows = json.table.rows;
         eventiData = [];
 
-        let startIdx = (rows[0] && rows[0][3] && String(rows[0][3]).toLowerCase() === 'titolo') ? 1 : 0;
-
-        for (let i = startIdx; i < rows.length; i++) {
-          let r = rows[i];
-          if (!r || !Array.isArray(r) || r.length === 0) continue;
-
+        rows.forEach(function(r) {
+          const c = r.c || [];
           function getVal(idx) {
-            return (r[idx] !== null && r[idx] !== undefined) ? String(r[idx]).trim() : '';
+            if (!c[idx]) return '';
+            return c[idx].f !== null && c[idx].f !== undefined ? String(c[idx].f).trim() : (c[idx].v !== null && c[idx].v !== undefined ? String(c[idx].v).trim() : '');
           }
 
           let giorno = getVal(0);
@@ -1370,14 +1059,16 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
           let titolo = getVal(3);
           let descrizione = getVal(4);
           let tipo = getVal(5) || 'Evento';
-          let fotoHome = pulisciUrlFoto(getVal(6));
-          let rawAltreFoto = getVal(7);
+          let fotoHome = pulisciUrlFoto((c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : '');
+          
+          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : '';
           let altreFotoList = rawAltreFoto ? rawAltreFoto.split(',').map(link => pulisciUrlFoto(link)).filter(l => l !== '') : [];
+
           let mostraInGalleriaStr = getVal(8).toLowerCase();
           let customSfondo = getVal(9); 
           let trasparenzaSfondo = getVal(10); 
 
-          if (!titolo || titolo.toLowerCase() === 'titolo') continue;
+          if (!titolo || titolo.toLowerCase() === 'titolo') return;
 
           let fotoHomeDefinitiva = fotoHome || (altreFotoList.length > 0 ? altreFotoList[0] : '');
           let timestamp = convertiDataInTimestamp(giorno, mese, anno);
@@ -1392,7 +1083,7 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
             customSfondo: customSfondo || '',
             trasparenzaSfondo: trasparenzaSfondo || ''
           });
-        }
+        });
 
         eventiData.sort((a, b) => b.timestamp - a.timestamp);
         renderAgenda();
@@ -1493,18 +1184,15 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       const evento = eventiData.find(e => e.id === idEvento);
       if (!evento) return;
 
-      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewAreaSoci', 'viewInfo', 'viewContatti', 'viewGioco'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
+      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewGioco'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
       });
-      const viewEvento = document.getElementById('viewEvento');
-      if (viewEvento) viewEvento.classList.remove('hidden');
+      document.getElementById('viewEvento').classList.remove('hidden');
 
       const stickyContainer = document.getElementById('stickySearchContainer');
       if (stickyContainer) stickyContainer.classList.add('hidden');
 
       const container = document.getElementById('dettaglioEventoContainer');
-      if (!container) return;
 
       container.style.background = '';
       container.style.backgroundImage = '';
@@ -1658,7 +1346,6 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
 
     function renderGrigliaGiochi(lista, containerId) {
       const gridEl = document.getElementById(containerId);
-      if (!gridEl) return;
       gridEl.innerHTML = '';
       if (lista.length === 0) {
         gridEl.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12 text-xs font-medium">Nessun gioco trovato in questa sezione.</p>';
@@ -1719,19 +1406,15 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) return;
 
-      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewAreaSoci', 'viewInfo', 'viewContatti', 'viewEvento'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
+      ['viewHome', 'viewCatalogo', 'viewGalleria', 'viewPreferiti', 'viewInfo', 'viewContatti', 'viewEvento'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
       });
-      const viewGioco = document.getElementById('viewGioco');
-      if (viewGioco) viewGioco.classList.remove('hidden');
+      document.getElementById('viewGioco').classList.remove('hidden');
 
       const stickyContainer = document.getElementById('stickySearchContainer');
       if (stickyContainer) stickyContainer.classList.add('hidden');
 
       const container = document.getElementById('dettaglioGiocoContainer');
-      if (!container) return;
-
       const isPref = preferitiIds.includes(gioco.id);
       
       const heartBtnSvg = isPref 
@@ -1780,6 +1463,7 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
                 ${gioco.peso ? '<div class="bg-amber-50/70 p-3 border border-amber-100"><span class="text-[10px] text-slate-400 block font-semibold mb-0.5">Complessità</span><span class="font-extrabold text-slate-800 text-xs flex items-center justify-center gap-1"><svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>' + gioco.peso + '</span></div>' : ''}
               </div>
 
+              <!-- DESCRIZIONE MODERNA STILE FOGLIO CON IMMAGINE INTEGRATA -->
               <div class="bg-gradient-to-br from-amber-50/70 via-white to-amber-50/30 p-5 rounded-xl border border-amber-200/80 shadow-inner space-y-3">
                 <div class="flex items-center justify-between border-b border-amber-200/60 pb-2">
                   <h3 class="text-xs font-black text-orange-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -1806,29 +1490,18 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
     }
 
     function applicaFiltri() {
-      const searchInput = document.getElementById('searchInput');
-      const playersFilter = document.getElementById('playersFilter');
-      const mainCategoryFilter = document.getElementById('mainCategoryFilter');
-      const specificCategoryFilter = document.getElementById('specificCategoryFilter');
-      const statusFilter = document.getElementById('statusFilter');
-      const sortOrder = document.getElementById('sortOrder');
-      const difficultyFilter = document.getElementById('difficultyFilter');
-      const timeFilter = document.getElementById('timeFilter');
-
-      const textQuery = searchInput ? searchInput.value.toLowerCase() : '';
-      const playersQuery = playersFilter ? playersFilter.value : '';
-      const mainCatQuery = mainCategoryFilter ? mainCategoryFilter.value : '';
-      const specificCatQuery = specificCategoryFilter ? specificCategoryFilter.value.toLowerCase() : '';
-      const statusQuery = statusFilter ? statusFilter.value : '';
-      const sortQuery = sortOrder ? sortOrder.value : 'recenti';
-      const diffQuery = difficultyFilter ? difficultyFilter.value.toLowerCase() : '';
-      const timeQuery = timeFilter ? timeFilter.value : '';
+      const textQuery = document.getElementById('searchInput').value.toLowerCase();
+      const playersQuery = document.getElementById('playersFilter').value;
+      const mainCatQuery = document.getElementById('mainCategoryFilter').value;
+      const specificCatQuery = document.getElementById('specificCategoryFilter').value.toLowerCase();
+      const statusQuery = document.getElementById('statusFilter').value;
+      const sortQuery = document.getElementById('sortOrder').value;
+      const diffQuery = document.getElementById('difficultyFilter').value.toLowerCase();
+      const timeQuery = document.getElementById('timeFilter').value;
 
       const hasActiveFilters = playersQuery !== '' || mainCatQuery !== '' || specificCatQuery !== '' || statusQuery !== '' || diffQuery !== '' || timeQuery !== '' || sortQuery !== 'recenti';
       const badge = document.getElementById('activeFiltersBadge');
-      if (badge) {
-        if (hasActiveFilters) badge.classList.remove('hidden'); else badge.classList.add('hidden');
-      }
+      if (hasActiveFilters) badge.classList.remove('hidden'); else badge.classList.add('hidden');
 
       let filtrati = giochiData.filter(function(g) {
         const matchTitle = g.titolo.toLowerCase().indexOf(textQuery) !== -1;
@@ -1836,8 +1509,20 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
         
         let matchMainCat = true;
         if (mainCatQuery !== '') {
-          let gameCats = g.categoriaPrincipale.toLowerCase().split(',').map(c => c.trim());
-          matchMainCat = gameCats.includes(mainCatQuery.toLowerCase());
+          let tipoLower = g.tipo.toLowerCase();
+          if (mainCatQuery === 'party') {
+            matchMainCat = tipoLower.includes('party') || tipoLower.includes('filler') || tipoLower.includes('bluff') || tipoLower.includes('deduz');
+          } else if (mainCatQuery === 'famiglia') {
+            matchMainCat = tipoLower.includes('famiglia') || tipoLower.includes('family') || tipoLower.includes('introduttiv') || tipoLower.includes('bambin');
+          } else if (mainCatQuery === 'strategia') {
+            matchMainCat = tipoLower.includes('strategia') || tipoLower.includes('strategy') || tipoLower.includes('gestion') || tipoLower.includes('euro') || tipoLower.includes('piazzamento') || tipoLower.includes('economico');
+          } else if (mainCatQuery === 'avventura') {
+            matchMainCat = tipoLower.includes('avventura') || tipoLower.includes('tematic') || tipoLower.includes('dungeon') || tipoLower.includes('miniatur') || tipoLower.includes('ambientat') || tipoLower.includes('narrativ');
+          } else if (mainCatQuery === 'cooperativo') {
+            matchMainCat = tipoLower.includes('cooperat') || tipoLower.includes('collaborativ');
+          } else if (mainCatQuery === 'carte') {
+            matchMainCat = tipoLower.includes('carte') || tipoLower.includes('card') || tipoLower.includes('astratta') || tipoLower.includes('astratto') || tipoLower.includes('deckbuilding');
+          }
         }
 
         let matchSpecificCat = specificCatQuery === '' || g.tipo.toLowerCase().includes(specificCatQuery);
@@ -1871,67 +1556,28 @@ fetch(APPS_SCRIPT_URL + '?action=getGiochi')
       renderGiochi(filtrati);
     }
 
-    const searchInputEl = document.getElementById('searchInput');
-    if (searchInputEl) searchInputEl.addEventListener('input', applicaFiltri);
-
-    function inizializzaDatiSito() {
-      // 1. Caricamento Giochi (con fallback sicuro)
-      fetch(APPS_SCRIPT_URL + '?action=getGiochi')
-        .then(res => res.json())
-        .then(data => {
-          if (Array.isArray(data)) {
-            processGoogleSheetsData(data);
-          } else {
-            fetch(APPS_SCRIPT_URL)
-              .then(res2 => res2.json())
-              .then(data2 => {
-                if (Array.isArray(data2)) {
-                  processGoogleSheetsData(data2);
-                } else {
-                  console.error("Formato JSON non valido (atteso Array):", data2);
-                  const loading = document.getElementById('loading');
-                  const err = document.getElementById('errorMessage');
-                  if (loading) loading.classList.add('hidden');
-                  if (err) err.classList.remove('hidden');
-                }
-              })
-              .catch(e => {
-                const loading = document.getElementById('loading');
-                const err = document.getElementById('errorMessage');
-                if (loading) loading.classList.add('hidden');
-                if (err) err.classList.remove('hidden');
-              });
-          }
-        })
-        .catch(err => {
-          console.error("Errore fetch giochi:", err);
-          const loading = document.getElementById('loading');
-          const errorMsg = document.getElementById('errorMessage');
-          if (loading) loading.classList.add('hidden');
-          if (errorMsg) errorMsg.classList.remove('hidden');
-        });
-
-      // 2. Caricamento Agenda
-      fetch(APPS_SCRIPT_URL + '?action=getAgenda')
-        .then(res => res.json())
-        .then(data => {
-          if (Array.isArray(data)) processAgendaData(data);
-        })
-        .catch(err => {
-          console.error("Errore agenda:", err);
-        });
-    }
+    document.getElementById('searchInput').addEventListener('input', applicaFiltri);
 
     window.addEventListener('DOMContentLoaded', function() {
-      inizializzaDatiSito();
-
-      let hashIniziale = window.location.hash.replace('#', '');
-      if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'areaSoci', 'info', 'contatti'].includes(hashIniziale)) {
+      const hashIniziale = window.location.hash.replace('#', '');
+      if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'info', 'contatti'].includes(hashIniziale)) {
         cambiaSezione(hashIniziale);
       } else {
         cambiaSezione('home');
       }
     });
+
+    const scriptGiochi = document.createElement('script');
+    scriptGiochi.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
+    scriptGiochi.onerror = function() {
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('errorMessage').classList.remove('hidden');
+    };
+    document.body.appendChild(scriptGiochi);
+
+    const scriptAgenda = document.createElement('script');
+    scriptAgenda.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?sheet=Agenda&tqx=responseHandler:processAgendaData';
+    document.body.appendChild(scriptAgenda);
   </script>
 </body>
 </html>
