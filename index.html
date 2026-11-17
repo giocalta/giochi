@@ -583,10 +583,10 @@
       <p class="text-[11px] text-amber-200/60">© 2026 GIOCALTA - Tutti i diritti riservati.</p>
     </div>
   </footer>
+  
   <script>
     const NUMERO_WHATSAPP = '393333455179';
-   const SPREADSHEET_ID = '1Fr0NXlOIL-BroetF0y3Ye0cnjnwx4xZ0ev253rHGg_0';
-    // AGGIORNATO CON IL TUO NUOVO URL DI APPS SCRIPT
+    const SPREADSHEET_ID = '1Fr0NXlOIL-BroetF0y3Ye0cnjnwx4xZ0ev253rHGg_0';
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzak09gorV6t4Jp8XsO1vuFr5JyJZqSpcsZt--i47HlEhP31oP5chJM3DnmxF34yNxEfQ/exec';
 
     let giochiData = [];
@@ -714,7 +714,6 @@
                 </div>
                 <button onclick="eseguiRegistrazioneSocio()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 text-xs transition-all shadow">Invia Richiesta Iscrizione</button>
               </div>
-              <!-- Messaggio chiaro con avviso approvazione -->
               <div id="regMsg" class="text-xs font-bold text-center mt-2"></div>
             </div>
           </div>
@@ -804,7 +803,6 @@
       .then(res => res.json())
       .then(data => {
         if (data.status === 'success') {
-          // Messaggio chiaro che avvisa l'utente di attendere l'approvazione
           msgBox.className = "text-xs font-bold text-center mt-2 text-amber-600 bg-amber-50 p-2 border border-amber-200 rounded";
           msgBox.textContent = "⏳ Richiesta inviata con successo! Il tuo account è in attesa di approvazione da parte della presidenza.";
           document.getElementById('regNome').value = '';
@@ -1258,44 +1256,44 @@
       }
     }
 
-    function processGoogleSheetsData(json) {
+    function processGoogleSheetsData(rows) {
       const loadingEl = document.getElementById('loading');
       const errorEl = document.getElementById('errorMessage');
 
       try {
-        if (!json || !json.table || !json.table.rows) throw new Error("Formato dati non valido");
-        const rows = json.table.rows;
+        if (!rows || !Array.isArray(rows)) throw new Error("Formato dati non valido");
         giochiData = [];
 
-        rows.forEach(function(r) {
-          const c = r.c || [];
-          function getFormattedVal(idx) {
-            if (!c[idx]) return '';
-            let val = '';
-            if (c[idx].f !== null && c[idx].f !== undefined) val = String(c[idx].f).trim();
-            else if (c[idx].v !== null && c[idx].v !== undefined) val = String(c[idx].v).trim();
-            return pulisciValore(val);
+        // Ignoriamo la prima riga se contiene le intestazioni (es. 'ID', 'Titolo')
+        let startIdx = (rows[0] && rows[0][2] && String(rows[0][2]).toLowerCase() === 'titolo') ? 1 : 0;
+
+        for (let i = startIdx; i < rows.length; i++) {
+          let r = rows[i];
+          if (!r || r.length === 0) continue;
+
+          function getVal(idx) {
+            return r[idx] !== null && r[idx] !== undefined ? String(r[idx]).trim() : '';
           }
 
-          let idFisso = parseInt(getFormattedVal(0), 10) || 0;
-          let foto = pulisciUrlFoto((c[1] && (c[1].f || c[1].v)) ? String(c[1].f || c[1].v) : '');
-          let titolo = getFormattedVal(2);
-          let persone = getFormattedVal(3);
-          let topPersone = getFormattedVal(4);
-          let tempo = getFormattedVal(5) || '-';
-          let difficolta = getFormattedVal(6) || '-';
-          let tipo = getFormattedVal(7) || 'Generico';
-          let tutorial = ottieniLinkTutorial(c[8], titolo);
-          let eta = getFormattedVal(9);
-          let voto = getFormattedVal(10);
-          let peso = getFormattedVal(11);
-          let dispStr = getFormattedVal(12).trim().toUpperCase();
-          let descrizioneBrutta = getFormattedVal(13);
-          let visibileStr = getFormattedVal(14).toLowerCase();
-          let categoriaPrincipale = getFormattedVal(15) || ''; 
+          let idFisso = parseInt(getVal(0), 10) || i;
+          let foto = pulisciUrlFoto(getVal(1));
+          let titolo = getVal(2);
+          let persone = getVal(3);
+          let topPersone = getVal(4);
+          let tempo = getVal(5) || '-';
+          let difficolta = getVal(6) || '-';
+          let tipo = getVal(7) || 'Generico';
+          let tutorial = getVal(8);
+          let eta = getVal(9);
+          let voto = getVal(10);
+          let peso = getVal(11);
+          let dispStr = getVal(12).trim().toUpperCase();
+          let descrizioneBrutta = getVal(13);
+          let visibileStr = getVal(14).toLowerCase();
+          let categoriaPrincipale = getVal(15) || ''; 
 
-          if (!titolo || titolo.toLowerCase() === 'titolo') return;
-          if (visibileStr === 'no') return;
+          if (!titolo || titolo.toLowerCase() === 'titolo') continue;
+          if (visibileStr === 'no') continue;
 
           const isDisp = dispStr === '' || !['NO', 'NOLEGGIATO', 'OCCUPATO', 'FALSE', '0', 'NON DISPONIBILE'].includes(dispStr);
           let descrizioneConCarattere = arricchisciDescrizione(titolo, tipo, descrizioneBrutta);
@@ -1319,7 +1317,7 @@
             descrizione: descrizioneConCarattere,
             foto: foto || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80'
           });
-        });
+        }
 
         loadingEl.classList.add('hidden');
         popolaDropdownCategoriePrincipali();
@@ -1335,17 +1333,19 @@
       }
     }
 
-    function processAgendaData(json) {
+    function processAgendaData(rows) {
       try {
-        if (!json || !json.table || !json.table.rows) return;
-        const rows = json.table.rows;
+        if (!rows || !Array.isArray(rows)) return;
         eventiData = [];
 
-        rows.forEach(function(r) {
-          const c = r.c || [];
+        let startIdx = (rows[0] && rows[0][3] && String(rows[0][3]).toLowerCase() === 'titolo') ? 1 : 0;
+
+        for (let i = startIdx; i < rows.length; i++) {
+          let r = rows[i];
+          if (!r || r.length === 0) continue;
+
           function getVal(idx) {
-            if (!c[idx]) return '';
-            return c[idx].f !== null && c[idx].f !== undefined ? String(c[idx].f).trim() : (c[idx].v !== null && c[idx].v !== undefined ? String(c[idx].v).trim() : '');
+            return r[idx] !== null && r[idx] !== undefined ? String(r[idx]).trim() : '';
           }
 
           let giorno = getVal(0);
@@ -1354,16 +1354,14 @@
           let titolo = getVal(3);
           let descrizione = getVal(4);
           let tipo = getVal(5) || 'Evento';
-          let fotoHome = pulisciUrlFoto((c[6] && (c[6].f || c[6].v)) ? String(c[6].f || c[6].v) : '');
-          
-          let rawAltreFoto = (c[7] && (c[7].f || c[7].v)) ? String(c[7].f || c[7].v) : '';
+          let fotoHome = pulisciUrlFoto(getVal(6));
+          let rawAltreFoto = getVal(7);
           let altreFotoList = rawAltreFoto ? rawAltreFoto.split(',').map(link => pulisciUrlFoto(link)).filter(l => l !== '') : [];
-
           let mostraInGalleriaStr = getVal(8).toLowerCase();
           let customSfondo = getVal(9); 
           let trasparenzaSfondo = getVal(10); 
 
-          if (!titolo || titolo.toLowerCase() === 'titolo') return;
+          if (!titolo || titolo.toLowerCase() === 'titolo') continue;
 
           let fotoHomeDefinitiva = fotoHome || (altreFotoList.length > 0 ? altreFotoList[0] : '');
           let timestamp = convertiDataInTimestamp(giorno, mese, anno);
@@ -1378,7 +1376,7 @@
             customSfondo: customSfondo || '',
             trasparenzaSfondo: trasparenzaSfondo || ''
           });
-        });
+        }
 
         eventiData.sort((a, b) => b.timestamp - a.timestamp);
         renderAgenda();
@@ -1850,17 +1848,30 @@
       }
     });
 
-    const scriptGiochi = document.createElement('script');
-    scriptGiochi.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=responseHandler:processGoogleSheetsData';
-    scriptGiochi.onerror = function() {
-      document.getElementById('loading').classList.add('hidden');
-      document.getElementById('errorMessage').classList.remove('hidden');
-    };
-    document.body.appendChild(scriptGiochi);
+    // --- CARICAMENTO DATI TRAMITE IL NOSTRO APPS SCRIPT ---
+    fetch(APPS_SCRIPT_URL)
+      .then(res => res.json())
+      .then(data => {
+        processGoogleSheetsData(data);
+      })
+      .catch(err => {
+        console.error("Errore caricamento giochi:", err);
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('errorMessage').classList.remove('hidden');
+      });
 
-    const scriptAgenda = document.createElement('script');
-    scriptAgenda.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?sheet=Agenda&tqx=responseHandler:processAgendaData';
-    document.body.appendChild(scriptAgenda);
+    fetch(APPS_SCRIPT_URL + '?action=getAgenda')
+      .then(res => res.json())
+      .then(data => {
+        processAgendaData(data);
+      })
+      .catch(err => {
+        // Fallback o tentativo alternativo se action getAgenda non è mappata nello script
+        fetch(APPS_SCRIPT_URL)
+          .then(res => res.json())
+          .then(data => { processAgendaData(data); })
+          .catch(e => console.error("Errore agenda:", e));
+      });
   </script>
 </body>
 </html>
