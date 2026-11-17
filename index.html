@@ -640,9 +640,12 @@
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({ action: 'votaPreferito', idGioco: idGioco, tipo: aggiungi ? 'aggiungi' : 'rimuovi' })
-      }).then(() => {
+      })
+      .then(res => res.text())
+      .then(() => {
         caricaPreferitiGlobali();
-      }).catch(err => console.error("Errore salvataggio preferito:", err));
+      })
+      .catch(err => console.error("Errore salvataggio preferito:", err));
       
       if (!document.getElementById('viewCatalogo').classList.contains('hidden')) {
         applicaFiltri();
@@ -1834,7 +1837,7 @@
       }
     });
 
-    // --- CARICAMENTO DATI TRAMITE APPS SCRIPT CON CONTROLLO DI SICUREZZA ---
+    // --- CARICAMENTO DATI TRAMITE APPS SCRIPT (SOLO GET CORRETTO) ---
     fetch(APPS_SCRIPT_URL)
       .then(res => res.json())
       .then(data => {
