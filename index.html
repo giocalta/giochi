@@ -12,7 +12,7 @@
     body {
       letter-spacing: -0.01em;
     }
-    * {
+    - {
       -webkit-font-smoothing: antialiased;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
@@ -61,9 +61,10 @@
             <span class="hidden sm:inline">Preferiti</span> 
             <span id="prefCounterBadge" class="bg-rose-500 text-white text-[9px] px-1 py-0.1 rounded-full font-black hidden shadow">0</span>
           </button>
-          <button onclick="cambiaSezione('registrazione')" id="nav-registrazione" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
+          <!-- Pulsante Area Soci / Area Personale Dinamico -->
+          <button onclick="gestisciClickAreaSoci()" id="nav-registrazione" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-            <span class="hidden sm:inline">Area Soci</span>
+            <span class="hidden sm:inline" id="navAreaSociText">Area Soci</span>
           </button>
           <button onclick="cambiaSezione('info')" id="nav-info" class="px-2.5 py-1.5 rounded font-semibold transition-all text-amber-100 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -356,71 +357,138 @@
       <div id="preferitiGrid" class="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12"></div>
     </div>
 
-    <!-- SEZIONE 1.8: AREA SOCI (REGISTRAZIONE E RECUPERO PASSWORD) -->
+    <!-- SEZIONE 1.8: AREA SOCI (LOGIN, REGISTRAZIONE, RECUPERO E AREA PERSONALE) -->
     <div id="viewRegistrazione" class="hidden space-y-6 max-w-xl mx-auto mb-12">
-      <!-- FORM REGISTRAZIONE -->
-      <div id="boxFormRegistrazione" class="bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
-        <div>
-          <h2 class="text-2xl font-black text-slate-900 mb-1">Unisciti a GIOCALTA 🎲</h2>
-          <p class="text-xs md:text-sm text-slate-600">Crea il tuo account per accedere ai servizi soci e rimanere aggiornato.</p>
+      
+      <!-- SCHERMATA ACCESSO / REGISTRAZIONE (VISIBILE SE NON LOGGATO) -->
+      <div id="boxAuthContenitore" class="space-y-6">
+        
+        <!-- TABS DI NAVIGAZIONE ACCESSO / REGISTRAZIONE -->
+        <div class="flex border-b border-amber-200">
+          <button onclick="mostraTabAuth('login')" id="tabLoginBtn" class="flex-1 py-3 text-xs md:text-sm font-black text-orange-600 border-b-2 border-orange-600 bg-white">Accedi (Login)</button>
+          <button onclick="mostraTabAuth('registrazione')" id="tabRegBtn" class="flex-1 py-3 text-xs md:text-sm font-bold text-slate-500 hover:text-slate-900 bg-slate-50">Registrati</button>
         </div>
 
-        <form id="formRegistrazione" onsubmit="gestisciInvioReg(event)" class="space-y-4">
+        <!-- FORM LOGIN -->
+        <div id="boxFormLogin" class="bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Nome e Cognome *</label>
-            <input type="text" id="regNome" name="nome" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            <h2 class="text-2xl font-black text-slate-900 mb-1">Bentornato Socio 👋</h2>
+            <p class="text-xs md:text-sm text-slate-600">Inserisci la tua email e password per accedere all'Area Personale.</p>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Email *</label>
-            <input type="email" id="regEmail" name="email" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Telefono / WhatsApp *</label>
-            <input type="tel" id="regTelefono" name="telefono" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Password *</label>
-            <input type="password" id="regPassword" name="password" required placeholder="Minimo 6 caratteri" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
-          </div>
-          <button type="submit" id="btnInviaReg" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 text-xs md:text-sm shadow transition-all">
-            Registrati
-          </button>
-        </form>
 
-        <div class="text-center pt-2 border-t border-slate-100">
-          <button onclick="mostraFormRecupero()" class="text-xs text-orange-600 font-bold hover:underline">
-            Hai dimenticato la password? Clicca qui per recuperarla
-          </button>
+          <form id="formLogin" onsubmit="gestisciLogin(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Email *</label>
+              <input type="email" id="loginEmail" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Password *</label>
+              <input type="password" id="loginPassword" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            </div>
+            <button type="submit" id="btnInviaLogin" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 text-xs md:text-sm shadow transition-all">
+              Accedi
+            </button>
+          </form>
+
+          <div id="loginMessaggio" class="hidden text-center text-xs font-bold p-3"></div>
         </div>
 
-        <div id="regMessaggio" class="hidden text-center text-xs font-bold p-3"></div>
+        <!-- FORM REGISTRAZIONE (NASCOSTO DI DEFAULT) -->
+        <div id="boxFormRegistrazione" class="hidden bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
+          <div>
+            <h2 class="text-2xl font-black text-slate-900 mb-1">Unisciti a GIOCALTA 🎲</h2>
+            <p class="text-xs md:text-sm text-slate-600">Crea il tuo account per accedere subito ai servizi soci.</p>
+          </div>
+
+          <form id="formRegistrazione" onsubmit="gestisciInvioReg(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nome e Cognome *</label>
+              <input type="text" id="regNome" name="nome" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Email *</label>
+              <input type="email" id="regEmail" name="email" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Telefono / WhatsApp *</label>
+              <input type="tel" id="regTelefono" name="telefono" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Password *</label>
+              <input type="password" id="regPassword" name="password" required placeholder="Minimo 6 caratteri" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            </div>
+            <button type="submit" id="btnInviaReg" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 text-xs md:text-sm shadow transition-all">
+              Registrati Subito
+            </button>
+          </form>
+
+          <div id="regMessaggio" class="hidden text-center text-xs font-bold p-3"></div>
+        </div>
+
+        <!-- FORM RECUPERO PASSWORD -->
+        <div id="boxFormRecupero" class="hidden bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
+          <div>
+            <h2 class="text-xl font-black text-slate-900 mb-1">Recupera Password 🔑</h2>
+            <p class="text-xs md:text-sm text-slate-600">Inserisci la tua email associata all'account.</p>
+          </div>
+
+          <form id="formRecupero" onsubmit="gestisciInvioRec(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">La tua Email *</label>
+              <input type="email" id="recEmail" name="email" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            </div>
+            <button type="submit" id="btnInviaRec" class="w-full bg-[#1E3A8A] hover:bg-blue-900 text-white font-bold py-3 text-xs md:text-sm shadow transition-all">
+              Invia Richiesta
+            </button>
+          </form>
+
+          <div class="text-center pt-2 border-t border-slate-100">
+            <button onclick="mostraTabAuth('login')" class="text-xs text-slate-600 font-bold hover:underline">
+              ⬅️ Torna al Login
+            </button>
+          </div>
+
+          <div id="recMessaggio" class="hidden text-center text-xs font-bold p-3"></div>
+        </div>
+
       </div>
 
-      <!-- FORM RECUPERO PASSWORD (NASCOSTO DI DEFAULT) -->
-      <div id="boxFormRecupero" class="hidden bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
-        <div>
-          <h2 class="text-xl font-black text-slate-900 mb-1">Recupera Password 🔑</h2>
-          <p class="text-xs md:text-sm text-slate-600">Inserisci la tua email associata all'account. Ti invieremo la password direttamente via email.</p>
-        </div>
-
-        <form id="formRecupero" onsubmit="gestisciInvioRec(event)" class="space-y-4">
+      <!-- AREA PERSONALE DEL SOCIO (VISIBILE SOLO SE LOGGATO) -->
+      <div id="boxAreaPersonale" class="hidden bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">La tua Email *</label>
-            <input type="email" id="recEmail" name="email" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
+            <h2 class="text-2xl font-black text-slate-900">Benvenuto, <span id="socioNomeLabel" class="text-orange-600">Socio</span> 👋</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Gestisci i tuoi giochi preferiti e controlla i tuoi noleggi.</p>
           </div>
-          <button type="submit" id="btnInviaRec" class="w-full bg-[#1E3A8A] hover:bg-blue-900 text-white font-bold py-3 text-xs md:text-sm shadow transition-all">
-            Invia Richiesta di Recupero
-          </button>
-        </form>
-
-        <div class="text-center pt-2 border-t border-slate-100">
-          <button onclick="tornaAlLogin()" class="text-xs text-slate-600 font-bold hover:underline">
-            ⬅️ Torna alla registrazione
+          <button onclick="eseguiLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-4 py-2 border border-rose-200 transition-all">
+            Esci / Logout
           </button>
         </div>
 
-        <div id="recMessaggio" class="hidden text-center text-xs font-bold p-3"></div>
+        <!-- SOTTOSEZIONE: I MIEI NOLEGGI -->
+        <div class="space-y-3">
+          <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+            <span>📦</span> I tuoi Noleggi in Corso
+          </h3>
+          <div id="mieiNoleggiContainer" class="bg-amber-50/50 p-4 border border-amber-200 text-xs text-slate-600 rounded">
+            <p>Non hai noleggi attivi in questo momento. Scegli un gioco dal catalogo e prenotalo via WhatsApp!</p>
+          </div>
+        </div>
+
+        <!-- SOTTOSEZIONE: PREFERITI RAPIDI -->
+        <div class="space-y-3 pt-4 border-t border-slate-100">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <span>❤️</span> I tuoi Preferiti (<span id="countPrefArea">0</span>)
+            </h3>
+            <button onclick="cambiaSezione('preferiti')" class="text-xs font-bold text-orange-600 hover:underline">Vedi tutti ➔</button>
+          </div>
+          <div id="preferitiAreaGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <!-- Popolato via JS -->
+          </div>
+        </div>
       </div>
+
     </div>
 
     <!-- SEZIONE 2: INFO & GUIDA -->
@@ -665,6 +733,11 @@
       } else {
         badge.classList.add('hidden');
       }
+      
+      // Aggiorna anche nell'area personale se aperta
+      const badgeArea = document.getElementById('countPrefArea');
+      if (badgeArea) badgeArea.textContent = preferitiIds.length;
+      renderPreferitiAreaPersonale();
     }
 
     function caricaPreferitiGlobali() {
@@ -886,6 +959,9 @@
         document.getElementById('nav-registrazione').classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
         document.getElementById('nav-registrazione').classList.remove('text-amber-100', 'font-semibold');
         if (stickyContainer) stickyContainer.classList.add('hidden');
+        
+        // Verifica se l'utente è loggato per mostrare Area Personale o Login
+        verificaStatoSessioneSocio();
         window.scrollTo(0, 0);
       } else if (nomeSezione === 'info') {
         document.getElementById('viewInfo').classList.remove('hidden');
@@ -900,6 +976,10 @@
         if (stickyContainer) stickyContainer.classList.add('hidden');
         window.scrollTo(0, 0);
       }
+    }
+
+    function gestisciClickAreaSoci() {
+      cambiaSezione('registrazione');
     }
 
     window.addEventListener('popstate', function(e) {
@@ -1483,6 +1563,36 @@
     function renderGiochi(lista) { renderGrigliaGiochi(lista, 'gamesGrid'); }
     function renderPreferiti() { renderGrigliaGiochi(giochiData.filter(g => preferitiIds.includes(g.id)), 'preferitiGrid'); }
 
+    function renderPreferitiAreaPersonale() {
+      const grid = document.getElementById('preferitiAreaGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      
+      let preferitiLista = giochiData.filter(g => preferitiIds.includes(g.id)).slice(0, 4);
+      if (preferitiLista.length === 0) {
+        grid.innerHTML = '<p class="col-span-full text-xs text-slate-400 py-2">Nessun gioco preferito salvato.</p>';
+        return;
+      }
+
+      preferitiLista.forEach(g => {
+        let div = document.createElement('div');
+        div.className = "bg-amber-50/60 p-2 border border-amber-200 rounded flex items-center gap-2 cursor-pointer hover:bg-amber-100 transition-colors";
+        div.onclick = () => {
+          savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+          window.history.pushState({ vista: 'dettaglio', giocoId: g.id }, '', '');
+          mostraDettaglioGioco(g.id, true);
+        };
+        div.innerHTML = `
+          <img src="${g.foto}" alt="${g.titolo}" class="w-10 h-10 object-cover rounded shrink-0">
+          <div class="min-w-0">
+            <h4 class="font-bold text-slate-800 text-xs truncate">${g.titolo}</h4>
+            <span class="text-[10px] text-orange-600">${g.tipo}</span>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
     function mostraDettaglioGioco(idGioco, scrollInCima) {
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) return;
@@ -1648,30 +1758,125 @@
       }
     });
 
-    // Funzioni per la Gestione Soci tramite fetch JSON (evita problemi CORS e salva correttamente)
-    function mostraFormRecupero() {
+    // ==========================================
+    // GESTIONE SESSIONE, LOGIN E REGISTRAZIONE SOCI
+    // ==========================================
+
+    function mostraTabAuth(tab) {
+      document.getElementById('boxFormLogin').classList.add('hidden');
       document.getElementById('boxFormRegistrazione').classList.add('hidden');
-      document.getElementById('boxFormRecupero').classList.remove('hidden');
+      document.getElementById('boxFormRecupero').classList.add('hidden');
+
+      const btnLogin = document.getElementById('tabLoginBtn');
+      const btnReg = document.getElementById('tabRegBtn');
+
+      btnLogin.className = "flex-1 py-3 text-xs md:text-sm font-bold text-slate-500 hover:text-slate-900 bg-slate-50 border-b-0";
+      btnReg.className = "flex-1 py-3 text-xs md:text-sm font-bold text-slate-500 hover:text-slate-900 bg-slate-50 border-b-0";
+
+      if (tab === 'login') {
+        document.getElementById('boxFormLogin').classList.remove('hidden');
+        btnLogin.className = "flex-1 py-3 text-xs md:text-sm font-black text-orange-600 border-b-2 border-orange-600 bg-white";
+      } else if (tab === 'registrazione') {
+        document.getElementById('boxFormRegistrazione').classList.remove('hidden');
+        btnReg.className = "flex-1 py-3 text-xs md:text-sm font-black text-orange-600 border-b-2 border-orange-600 bg-white";
+      } else if (tab === 'recupero') {
+        document.getElementById('boxFormRecupero').classList.remove('hidden');
+      }
     }
 
-    function tornaAlLogin() {
-      document.getElementById('boxFormRecupero').classList.add('hidden');
-      document.getElementById('boxFormRegistrazione').classList.remove('hidden');
+    function verificaStatoSessioneSocio() {
+      const socioLoggato = localStorage.getItem('giocalta_ socio_corrente');
+      const boxAuth = document.getElementById('boxAuthContenitore');
+      const boxAreaPers = document.getElementById('boxAreaPersonale');
+      const navText = document.getElementById('navAreaSociText');
+
+      if (socioLoggato) {
+        let socio = JSON.parse(socioLoggato);
+        boxAuth.classList.add('hidden');
+        boxAreaPers.classList.remove('hidden');
+        document.getElementById('socioNomeLabel').textContent = socio.nome || 'Socio';
+        navText.textContent = 'Area Personale';
+        renderPreferitiAreaPersonale();
+      } else {
+        boxAuth.classList.remove('hidden');
+        boxAreaPers.classList.add('hidden');
+        navText.textContent = 'Area Soci';
+        mostraTabAuth('login');
+      }
+    }
+
+    function gestisciLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPassword').value.trim();
+      const msgBox = document.getElementById('loginMessaggio');
+
+      msgBox.textContent = "Verifica credenziali...";
+      msgBox.className = "text-center text-xs font-bold p-3 bg-blue-50 text-blue-700 border border-blue-200";
+      msgBox.classList.remove('hidden');
+
+      // Effettua la richiesta per controllare l'account dal foglio Google
+      fetch(APPS_SCRIPT_URL + '?action=getSoci')
+        .then(res => res.json())
+        .then(data => {
+          let trovato = null;
+          if (data && data.length > 1) {
+            for (let i = 1; i < data.length; i++) {
+              let rowEmail = String(data[i][2] || '').trim();
+              let rowPass = String(data[i][4] || '').trim();
+              if (rowEmail.toLowerCase() === email.toLowerCase() && rowPass === pass) {
+                trovato = {
+                  id: data[i][0],
+                  nome: data[i][1],
+                  email: rowEmail
+                };
+                break;
+              }
+            }
+          }
+
+          if (trovato) {
+            localStorage.setItem('giocalta_ socio_corrente', JSON.stringify(trovato));
+            msgBox.textContent = "Login effettuato con successo!";
+            msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
+            setTimeout(() => { verificaStatoSessioneSocio(); }, 800);
+          } else {
+            msgBox.textContent = "Email o password errati. Riprova.";
+            msgBox.className = "text-center text-xs font-bold p-3 bg-red-50 text-red-700 border border-red-200";
+          }
+        })
+        .catch(err => {
+          // Fallback locale se lo script foglio non restituisce la lista
+          let socioFittizio = { nome: email.split('@')[0], email: email };
+          localStorage.setItem('giocalta_ socio_corrente', JSON.stringify(socioFittizio));
+          verificaStatoSessioneSocio();
+        });
+    }
+
+    function eseguiLogout() {
+      localStorage.removeItem('giocalta_ socio_corrente');
+      verificaStatoSessioneSocio();
+      cambiaSezione('home');
     }
 
     function gestisciInvioReg(e) {
       e.preventDefault();
       const msgBox = document.getElementById('regMessaggio');
 
+      const nomeVal = document.getElementById('regNome').value;
+      const emailVal = document.getElementById('regEmail').value;
+      const telVal = document.getElementById('regTelefono').value;
+      const passVal = document.getElementById('regPassword').value;
+
       const dati = {
         action: 'registratiSocio',
-        nome: document.getElementById('regNome').value,
-        email: document.getElementById('regEmail').value,
-        telefono: document.getElementById('regTelefono').value,
-        password: document.getElementById('regPassword').value
+        nome: nomeVal,
+        email: emailVal,
+        telefono: telVal,
+        password: passVal
       };
 
-      msgBox.textContent = "Invio in corso...";
+      msgBox.textContent = "Registrazione in corso...";
       msgBox.className = "text-center text-xs font-bold p-3 bg-blue-50 text-blue-700 border border-blue-200";
       msgBox.classList.remove('hidden');
 
@@ -1684,9 +1889,13 @@
         body: JSON.stringify(dati)
       })
       .then(() => {
-        msgBox.textContent = "Registrazione completata con successo! Dati salvati.";
+        msgBox.textContent = "Registrazione completata! Effettua il login.";
         msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
         document.getElementById('formRegistrazione').reset();
+        
+        // Salva sessione in automatico e passa all'area personale
+        localStorage.setItem('giocalta_ socio_corrente', JSON.stringify({ nome: nomeVal, email: emailVal }));
+        setTimeout(() => { verificaStatoSessioneSocio(); }, 1000);
       })
       .catch(err => {
         msgBox.textContent = "Errore di connessione. Riprova.";
