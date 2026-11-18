@@ -1648,7 +1648,7 @@
       }
     });
 
-    // Funzioni per la Gestione Soci tramite form invisibile (affidabile e compatibile con Apps Script)
+    // Funzioni per la Gestione Soci tramite POST pulita (URLSearchParams)
     function mostraFormRecupero() {
       document.getElementById('boxFormRegistrazione').classList.add('hidden');
       document.getElementById('boxFormRecupero').classList.remove('hidden');
@@ -1672,48 +1672,37 @@
       btn.disabled = true;
       btn.textContent = 'Registrazione in corso...';
 
-      const iframeName = 'hidden_iframe_' + Date.now();
-      const iframe = document.createElement('iframe');
-      iframe.name = iframeName;
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
+      const formData = new URLSearchParams();
+      formData.append('action', 'registratiSocio');
+      formData.append('nome', nome);
+      formData.append('email', email);
+      formData.append('telefono', telefono);
+      formData.append('password', password);
 
-      const form = document.createElement('form');
-      form.method = 'GET';
-      form.action = APPS_SCRIPT_URL;
-      form.target = iframeName;
-
-      const dati = {
-        action: 'registratiSocio',
-        nome: nome,
-        email: email,
-        telefono: telefono,
-        password: password
-      };
-
-      for (const key in dati) {
-        if (dati.hasOwnProperty(key)) {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = dati[key];
-          form.appendChild(input);
-        }
-      }
-
-      document.body.appendChild(form);
-      form.submit();
-
-      setTimeout(() => {
-        form.remove();
-        iframe.remove();
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString()
+      })
+      .then(() => {
         msgBox.textContent = "Registrazione completata con successo! Account creato.";
         msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
         msgBox.classList.remove('hidden');
         document.getElementById('formRegistrazione').reset();
         btn.disabled = false;
         btn.textContent = 'Registrati';
-      }, 1000);
+      })
+      .catch(err => {
+        console.error(err);
+        msgBox.textContent = "Errore di connessione. Riprova.";
+        msgBox.className = "text-center text-xs font-bold p-3 bg-rose-50 text-rose-700 border border-rose-200";
+        msgBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Registrati';
+      });
     }
 
     function inviaRecuperoPassword(e) {
@@ -1725,42 +1714,34 @@
       btn.disabled = true;
       btn.textContent = 'Invio in corso...';
 
-      const iframeName = 'hidden_iframe_rec_' + Date.now();
-      const iframe = document.createElement('iframe');
-      iframe.name = iframeName;
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
+      const formData = new URLSearchParams();
+      formData.append('action', 'recuperoPassword');
+      formData.append('email', email);
 
-      const form = document.createElement('form');
-      form.method = 'GET';
-      form.action = APPS_SCRIPT_URL;
-      form.target = iframeName;
-
-      const inputAction = document.createElement('input');
-      inputAction.type = 'hidden';
-      inputAction.name = 'action';
-      inputAction.value = 'recuperoPassword';
-      form.appendChild(inputAction);
-
-      const inputEmail = document.createElement('input');
-      inputEmail.type = 'hidden';
-      inputEmail.name = 'email';
-      inputEmail.value = email;
-      form.appendChild(inputEmail);
-
-      document.body.appendChild(form);
-      form.submit();
-
-      setTimeout(() => {
-        form.remove();
-        iframe.remove();
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString()
+      })
+      .then(() => {
         msgBox.textContent = "Richiesta inviata! Se l'email è registrata, riceverai i dati.";
         msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
         msgBox.classList.remove('hidden');
         document.getElementById('formRecupero').reset();
         btn.disabled = false;
         btn.textContent = 'Invia Richiesta di Recupero';
-      }, 1000);
+      })
+      .catch(err => {
+        console.error(err);
+        msgBox.textContent = "Errore di connessione. Riprova.";
+        msgBox.className = "text-center text-xs font-bold p-3 bg-rose-50 text-rose-700 border border-rose-200";
+        msgBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Invia Richiesta di Recupero';
+      });
     }
 
     const scriptGiochi = document.createElement('script');
