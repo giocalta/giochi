@@ -936,14 +936,30 @@
     }
 
     function votaDalSocio(idSondaggio, idOpzione) {
+      const socioLoggato = localStorage.getItem('giocalta_ socio_corrente');
+      if (!socioLoggato) {
+        alert("Devi effettuare il login per votare.");
+        return;
+      }
+      let socio = JSON.parse(socioLoggato);
+
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify({ action: 'votaSondaggio', idSondaggio: idSondaggio, idOpzione: idOpzione })
+        body: JSON.stringify({ 
+          action: 'votaSondaggio', 
+          idSondaggio: idSondaggio, 
+          idOpzione: idOpzione,
+          emailSocio: socio.email 
+        })
       })
       .then(res => res.json())
-      .then(() => { 
-        caricaSondaggiAreaPersonale(); 
-        caricaSondaggi(); // Aggiorna anche in home in tempo reale
+      .then(response => { 
+        if (response.status === 'già_votato') {
+          alert("Hai già votato questo sondaggio!");
+        } else {
+          caricaSondaggiAreaPersonale(); 
+          caricaSondaggi(); // Aggiorna in home
+        }
       })
       .catch(err => console.error("Errore voto socio:", err));
     }
