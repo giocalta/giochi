@@ -8,16 +8,9 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23ea580c%22/><text x=%2250%%22 y=%2255%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2260%22>🎲</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23ea580c%22/><text x=%2250%%22 y=%2255%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2260%22>🎲</text></svg>">
   <style>
-    body {
-      letter-spacing: -0.01em;
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+    body { letter-spacing: -0.01em; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col">
@@ -449,12 +442,11 @@
 
     <!-- SEZIONE 1.9: PANNELLO AMMINISTRATIVO (#staff) -->
     <div id="viewStaff" class="hidden space-y-6 max-w-4xl mx-auto mb-12">
-      <!-- LOGIN STAFF (NESSUNA PASSWORD IN CHIARO NELL'HTML) -->
       <div id="boxStaffLogin" class="bg-white p-6 md:p-8 border border-amber-200/80 shadow-sm max-w-md mx-auto space-y-5">
         <div>
           <span class="text-[10px] font-black uppercase tracking-wider text-orange-700 bg-orange-100 px-2.5 py-0.5 rounded">Gestione Interna</span>
           <h2 class="text-2xl font-black text-slate-900 mt-1">Pannello Staff GIOCALTA 🛡️</h2>
-          <p class="text-xs text-slate-600 mt-1">Inserisci la password staff verificata lato server su Google Apps Script.</p>
+          <p class="text-xs text-slate-600 mt-1">Inserisci la password staff verificata lato server tramite <code>STAFF_PASSWORD</code>.</p>
         </div>
         <form id="formStaffLogin" onsubmit="gestisciStaffLogin(event)" class="space-y-4">
           <div>
@@ -468,16 +460,15 @@
         <div id="staffLoginMsg" class="hidden text-center text-xs font-bold p-3 rounded"></div>
       </div>
 
-      <!-- DASHBOARD STAFF CON 4 SCHEDE -->
       <div id="boxStaffDashboard" class="hidden space-y-5">
         <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-orange-900 p-5 md:p-6 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-slate-700">
           <div>
             <span class="text-[10px] font-extrabold uppercase tracking-wider bg-orange-600 text-white px-2 py-0.5 rounded">Amministrazione</span>
             <h2 class="text-xl md:text-2xl font-black mt-1">Console Operativa GIOCALTA</h2>
-            <p class="text-xs text-amber-100/80">Noleggi, Soci, Sondaggi e Agenda & Catalogo</p>
+            <p class="text-xs text-amber-100/80" id="staffStatsSummary">Noleggi, Soci, Sondaggi e Agenda & Catalogo</p>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <button onclick="ricaricaDatiStaff()" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-3 py-2 rounded transition-colors">
+            <button onclick="caricaStaffOverview()" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-3 py-2 rounded transition-colors">
               ↻ Aggiorna
             </button>
             <button onclick="eseguiLogoutStaff()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3.5 py-2 rounded transition-colors">
@@ -508,31 +499,37 @@
         <div id="staffPanel-noleggi" class="bg-white p-5 md:p-6 border border-amber-200/80 shadow-sm space-y-6">
           <div>
             <h3 class="text-base font-black text-slate-900 mb-3">Assegna Nuovo Noleggio</h3>
-            <form id="formAssegnaNoleggio" onsubmit="gestisciAssegnaNoleggio(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
-              <div>
+            <form id="formAssegnaNoleggio" onsubmit="gestisciAssegnaNoleggio(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
+              <div class="md:col-span-2">
                 <label class="block text-[11px] font-bold text-slate-700 mb-1">Email o ID Socio *</label>
-                <input type="text" id="noleggioSocio" list="listaSociSuggest" required placeholder="socio@email.it" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none">
+                <input type="text" id="noleggioSocio" list="listaSociSuggest" required placeholder="socio@email.it o SOCIO-2" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none">
                 <datalist id="listaSociSuggest"></datalist>
               </div>
-              <div>
+              <div class="md:col-span-2">
                 <label class="block text-[11px] font-bold text-slate-700 mb-1">Titolo Gioco *</label>
                 <input type="text" id="noleggioGioco" list="listaGiochiSuggest" required placeholder="Es. Stone Age" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none">
                 <datalist id="listaGiochiSuggest"></datalist>
               </div>
               <div>
-                <label class="block text-[11px] font-bold text-slate-700 mb-1">Data Noleggio</label>
+                <label class="block text-[11px] font-bold text-slate-700 mb-1">Data</label>
                 <input type="date" id="noleggioData" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none">
               </div>
-              <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 text-xs shadow transition-colors">
-                + Assegna Noleggio
-              </button>
+              <div class="md:col-span-5 flex flex-wrap items-center justify-between gap-3 pt-1">
+                <label class="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                  <input type="checkbox" id="noleggioAggiornaDisp" checked class="rounded border-slate-300 text-orange-600 focus:ring-orange-600">
+                  <span>Segna automaticamente il gioco come non disponibile (NO)</span>
+                </label>
+                <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-5 text-xs shadow transition-colors">
+                  + Assegna Noleggio
+                </button>
+              </div>
             </form>
           </div>
 
           <div class="border-t border-slate-100 pt-5 space-y-3">
-            <h4 class="text-sm font-black text-slate-900">Elenco Noleggi (Restituzione & Stato)</h4>
+            <h4 class="text-sm font-black text-slate-900">Elenco Noleggi (Restituzione)</h4>
             <div id="staffNoleggiLista" class="space-y-2 text-xs">
-              <p class="text-slate-400">Clicca su "Aggiorna" per caricare i noleggi dal foglio.</p>
+              <p class="text-slate-400">Caricamento noleggi...</p>
             </div>
           </div>
         </div>
@@ -541,7 +538,7 @@
         <div id="staffPanel-soci" class="hidden bg-white p-5 md:p-6 border border-amber-200/80 shadow-sm space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-base font-black text-slate-900">Gestione Soci & Richieste</h3>
-            <span class="text-[11px] text-slate-500">Approva i profili in attesa per abilitare il login</span>
+            <span class="text-[11px] text-slate-500">Attiva i soci per consentire l'accesso</span>
           </div>
           <div id="staffSociLista" class="space-y-2.5 text-xs">
             <p class="text-slate-400">Caricamento soci...</p>
@@ -592,7 +589,6 @@
 
         <!-- SCHEDA 4: AGENDA & CATALOGO -->
         <div id="staffPanel-agenda-catalogo" class="hidden bg-white p-5 md:p-6 border border-amber-200/80 shadow-sm space-y-8">
-          <!-- AGGIUNGI EVENTO IN AGENDA -->
           <div class="space-y-4">
             <h3 class="text-base font-black text-slate-900">Aggiungi Evento in Agenda</h3>
             <form id="formAggiungiEvento" onsubmit="gestisciAggiungiEvento(event)" class="space-y-3">
@@ -617,17 +613,21 @@
                 </div>
                 <div>
                   <label class="block text-[11px] font-bold text-slate-700 mb-1">Tipologia</label>
-                  <input type="text" id="eventoTipo" placeholder="Serata in Sede" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none">
+                  <input type="text" id="eventoTipo" placeholder="Serata Ludica" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none">
                 </div>
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-700 mb-1">Descrizione *</label>
                 <textarea id="eventoDescrizione" rows="2" required placeholder="Dettagli sull'incontro, orari e giochi previsti..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none"></textarea>
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label class="block text-[11px] font-bold text-slate-700 mb-1">Foto Copertina (URL)</label>
                   <input type="text" id="eventoFoto" placeholder="https://..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-700 mb-1">Altre Foto (URL separati da virgola)</label>
+                  <input type="text" id="eventoAltreFoto" placeholder="https://..., https://..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs focus:ring-1 focus:ring-orange-600 focus:outline-none">
                 </div>
                 <div class="flex items-end pb-1">
                   <label class="inline-flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
@@ -642,7 +642,6 @@
             </form>
           </div>
 
-          <!-- AGGIORNA DISPONIBILITÀ / CATALOGO -->
           <div class="border-t border-slate-100 pt-6 space-y-4">
             <h3 class="text-base font-black text-slate-900">Aggiorna Disponibilità Gioco a Catalogo</h3>
             <form id="formAggiornaDisponibilita" onsubmit="gestisciAggiornaDisponibilita(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
@@ -653,8 +652,8 @@
               <div>
                 <label class="block text-[11px] font-bold text-slate-700 mb-1">Nuovo Stato *</label>
                 <select id="dispNuovoStato" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs font-bold focus:ring-1 focus:ring-orange-600 focus:outline-none">
-                  <option value="SI">Disponibile (SI)</option>
-                  <option value="NO">Noleggiato (NO)</option>
+                  <option value="true">Disponibile (SI)</option>
+                  <option value="false">Noleggiato (NO)</option>
                 </select>
               </div>
               <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 text-xs shadow transition-colors">
@@ -791,8 +790,9 @@
     // Password staff tenuta solo in memoria di sessione (mai in chiaro nell'HTML o in localStorage)
     let staffSessionPassword = '';
     let staffAuthenticated = false;
-    let staffSociCache = [];
-    let staffNoleggiCache = [];
+    let staffSociList = [];
+    let staffNoleggiList = [];
+    let staffGiochiList = [];
 
     let giochiData = [];
     let eventiData = [];
@@ -1160,7 +1160,7 @@
             for (let i = 1; i < data.length; i++) {
               let idSocioCol = String(data[i][0] || '').trim();
               let statoCol = String(data[i][3] || 'In corso').trim();
-              if ((idSocioCol.toLowerCase() === socio.email.toLowerCase() || idSocioCol === socio.id) && statoCol.toLowerCase() !== 'restituito') {
+              if ((idSocioCol.toLowerCase() === socio.email.toLowerCase() || idSocioCol.toLowerCase() === String(socio.id || '').toLowerCase()) && statoCol.toLowerCase() !== 'restituito') {
                 mieiNoleggi.push({
                   gioco: data[i][1],
                   data: formattaDataItaliana(data[i][2]),
@@ -2257,7 +2257,12 @@
         action: 'recuperaPassword',
         email: document.getElementById('recEmail').value.trim()
       })
-      .then(() => {
+      .then(res => {
+        if (res && res.status === 'error') {
+          msgBox.textContent = res.message || "Email non trovata.";
+          msgBox.className = "text-center text-xs font-bold p-3 bg-red-50 text-red-700 border border-red-200";
+          return;
+        }
         msgBox.textContent = "Se l'email è registrata, riceverai la password via email.";
         msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
         document.getElementById('formRecupero').reset();
@@ -2269,7 +2274,7 @@
     }
 
     // ==========================================
-    // PANNELLO AMMINISTRATIVO (#staff)
+    // PANNELLO AMMINISTRATIVO (#staff) ALLINEATO A Codice.gs
     // ==========================================
     function mostraFeedbackStaff(messaggio, tipo = 'ok') {
       const box = document.getElementById('staffGlobalFeedback');
@@ -2288,7 +2293,7 @@
         loginBox.classList.add('hidden');
         dashBox.classList.remove('hidden');
         aggiornaDatalistStaff();
-        ricaricaDatiStaff();
+        caricaStaffOverview();
       } else {
         loginBox.classList.remove('hidden');
         dashBox.classList.add('hidden');
@@ -2304,26 +2309,25 @@
       msg.className = "text-center text-xs font-bold p-3 rounded bg-blue-50 text-blue-700 border border-blue-200";
       msg.classList.remove('hidden');
 
-      chiamaAppsScript({
-        action: 'loginStaff',
-        staffPassword: pwd
-      })
-      .then(res => {
-        if (res && res.status === 'success') {
-          staffSessionPassword = pwd;
-          staffAuthenticated = true;
-          document.getElementById('staffPasswordInput').value = '';
-          msg.classList.add('hidden');
-          aggiornaVistaStaff();
-        } else {
-          msg.textContent = (res && res.message) ? res.message : "Password staff non valida.";
-          msg.className = "text-center text-xs font-bold p-3 rounded bg-red-50 text-red-700 border border-red-200";
-        }
-      })
-      .catch(() => {
-        msg.textContent = "Errore di connessione verso Google Apps Script.";
-        msg.className = "text-center text-xs font-bold p-3 rounded bg-red-50 text-red-700 border border-red-200";
-      });
+      fetch(APPS_SCRIPT_URL + '?action=staffOverview&staffPassword=' + encodeURIComponent(pwd))
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.status === 'success') {
+            staffSessionPassword = pwd;
+            staffAuthenticated = true;
+            document.getElementById('staffPasswordInput').value = '';
+            msg.classList.add('hidden');
+            aggiornaVistaStaff();
+            applicaOverviewStaff(data);
+          } else {
+            msg.textContent = (data && data.message) ? data.message : "Password staff non valida.";
+            msg.className = "text-center text-xs font-bold p-3 rounded bg-red-50 text-red-700 border border-red-200";
+          }
+        })
+        .catch(() => {
+          msg.textContent = "Errore di connessione verso Google Apps Script.";
+          msgBox.className = "text-center text-xs font-bold p-3 rounded bg-red-50 text-red-700 border border-red-200";
+        });
     }
 
     function eseguiLogoutStaff() {
@@ -2351,127 +2355,110 @@
     function aggiornaDatalistStaff() {
       const dlGiochi = document.getElementById('listaGiochiSuggest');
       if (dlGiochi) {
-        dlGiochi.innerHTML = giochiData.map(g => `<option value="${g.titolo}"></option>`).join('');
+        const titoli = staffGiochiList.length > 0 ? staffGiochiList.map(g => g.titolo) : giochiData.map(g => g.titolo);
+        dlGiochi.innerHTML = titoli.map(t => `<option value="${t}"></option>`).join('');
       }
       const dlSoci = document.getElementById('listaSociSuggest');
       if (dlSoci) {
-        dlSoci.innerHTML = staffSociCache.map(s => `<option value="${s.email}">${s.nome}</option>`).join('');
+        dlSoci.innerHTML = staffSociList.map(s => `<option value="${s.email}">${s.nome}</option>`).join('');
       }
     }
 
-    function ricaricaDatiStaff() {
-      if (!staffAuthenticated) return;
-      caricaSociStaff();
-      caricaNoleggiStaff();
+    function caricaStaffOverview() {
+      if (!staffAuthenticated || !staffSessionPassword) return;
+      fetch(APPS_SCRIPT_URL + '?action=staffOverview&staffPassword=' + encodeURIComponent(staffSessionPassword))
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.status === 'success') {
+            applicaOverviewStaff(data);
+          } else {
+            mostraFeedbackStaff((data && data.message) || "Errore nel caricamento dati staff.", 'err');
+          }
+        })
+        .catch(() => mostraFeedbackStaff("Errore di rete durante il caricamento staff.", 'err'));
     }
 
-    function caricaSociStaff() {
+    function applicaOverviewStaff(data) {
+      staffSociList = data.soci || [];
+      staffNoleggiList = data.noleggi || [];
+      staffGiochiList = data.giochi || [];
+
+      const summary = document.getElementById('staffStatsSummary');
+      if (summary) {
+        summary.textContent = `Soci: ${staffSociList.length} • Noleggi: ${staffNoleggiList.length} • Sondaggi: ${data.sondaggiCount || 0} • Eventi: ${data.agendaCount || 0}`;
+      }
+
+      aggiornaDatalistStaff();
+      renderStaffSoci();
+      renderStaffNoleggi();
+    }
+
+    function renderStaffSoci() {
       const container = document.getElementById('staffSociLista');
       if (!container) return;
 
-      fetch(APPS_SCRIPT_URL + '?action=getSoci')
-        .then(res => res.json())
-        .then(data => {
-          staffSociCache = [];
-          if (data && data.length > 1) {
-            for (let i = 1; i < data.length; i++) {
-              staffSociCache.push({
-                id: data[i][0] || '',
-                nome: data[i][1] || '',
-                email: data[i][2] || '',
-                telefono: data[i][3] || '',
-                stato: String(data[i][6] || 'in attesa').trim()
-              });
-            }
-          }
-          aggiornaDatalistStaff();
+      if (staffSociList.length === 0) {
+        container.innerHTML = '<p class="text-slate-400">Nessun socio presente nel foglio.</p>';
+        return;
+      }
 
-          if (staffSociCache.length === 0) {
-            container.innerHTML = '<p class="text-slate-400">Nessun socio presente nel foglio.</p>';
-            return;
-          }
-
-          container.innerHTML = staffSociCache.map(s => {
-            const isAttivo = s.stato.toLowerCase() === 'attivo';
-            return `
-              <div class="p-3 border border-amber-200/80 rounded bg-amber-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <div class="font-extrabold text-slate-900">${s.nome || 'Senza nome'} <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isAttivo ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${s.stato}</span></div>
-                  <div class="text-[11px] text-slate-600">${s.email} ${s.telefono ? '• ' + s.telefono : ''}</div>
-                </div>
-                <div class="flex gap-2 shrink-0">
-                  ${!isAttivo ? `<button onclick="approvaSocioStaff('${encodeURIComponent(s.email)}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded text-[11px]">Approva Socio</button>` : ''}
-                </div>
-              </div>
-            `;
-          }).join('');
-        })
-        .catch(() => {
-          container.innerHTML = '<p class="text-red-600">Errore nel caricamento soci.</p>';
-        });
+      container.innerHTML = staffSociList.map(s => {
+        const isAttivo = String(s.stato || '').trim().toLowerCase() === 'attivo';
+        return `
+          <div class="p-3 border border-amber-200/80 rounded bg-amber-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="font-extrabold text-slate-900">${s.nome || 'Senza nome'} <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isAttivo ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${s.stato}</span></div>
+              <div class="text-[11px] text-slate-600">${s.email} ${s.telefono ? '• ' + s.telefono : ''} ${s.id ? '• ' + s.id : ''}</div>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              ${!isAttivo ? `<button onclick="attivaSocioStaff(${s.riga})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded text-[11px]">Approva Socio</button>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
-    function approvaSocioStaff(emailEnc) {
-      const email = decodeURIComponent(emailEnc);
+    function attivaSocioStaff(riga) {
       chiamaAppsScript({
-        action: 'approvaSocio',
+        action: 'attivaSocio',
         staffPassword: staffSessionPassword,
-        email: email
+        riga: riga,
+        stato: 'Attivo'
       })
       .then(res => {
-        if (res && res.status === 'error') {
-          mostraFeedbackStaff(res.message || "Errore durante l'approvazione socio.", 'err');
+        if (res && res.status === 'success') {
+          mostraFeedbackStaff("Socio attivato con successo.", 'ok');
+          caricaStaffOverview();
         } else {
-          mostraFeedbackStaff("Socio approvato e attivato con successo.", 'ok');
-          caricaSociStaff();
+          mostraFeedbackStaff((res && res.message) || "Errore durante l'attivazione socio.", 'err');
         }
       })
-      .catch(() => mostraFeedbackStaff("Errore di rete durante l'approvazione socio.", 'err'));
+      .catch(() => mostraFeedbackStaff("Errore di rete durante l'attivazione socio.", 'err'));
     }
 
-    function caricaNoleggiStaff() {
+    function renderStaffNoleggi() {
       const container = document.getElementById('staffNoleggiLista');
       if (!container) return;
 
-      fetch(APPS_SCRIPT_URL + '?action=getNoleggi')
-        .then(res => res.json())
-        .then(data => {
-          staffNoleggiCache = [];
-          if (data && data.length > 1) {
-            for (let i = 1; i < data.length; i++) {
-              staffNoleggiCache.push({
-                rowIndex: i + 1,
-                socio: data[i][0] || '',
-                gioco: data[i][1] || '',
-                data: formattaDataItaliana(data[i][2]),
-                stato: String(data[i][3] || 'In corso').trim()
-              });
-            }
-          }
+      if (staffNoleggiList.length === 0) {
+        container.innerHTML = '<p class="text-slate-400">Nessun noleggio registrato.</p>';
+        return;
+      }
 
-          if (staffNoleggiCache.length === 0) {
-            container.innerHTML = '<p class="text-slate-400">Nessun noleggio registrato.</p>';
-            return;
-          }
-
-          container.innerHTML = staffNoleggiCache.map(n => {
-            const isRestituito = n.stato.toLowerCase() === 'restituito';
-            return `
-              <div class="p-3 border border-slate-200 rounded bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <div class="font-extrabold text-slate-900">🎲 ${n.gioco} <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isRestituito ? 'bg-slate-200 text-slate-700' : 'bg-orange-100 text-orange-800'}">${n.stato}</span></div>
-                  <div class="text-[11px] text-slate-600">Socio: <strong>${n.socio}</strong> • Data: ${n.data || '-'}</div>
-                </div>
-                <div class="shrink-0">
-                  ${!isRestituito ? `<button onclick="restituisciNoleggioStaff('${encodeURIComponent(n.gioco)}', '${encodeURIComponent(n.socio)}', ${n.rowIndex})" class="bg-slate-900 hover:bg-slate-950 text-white font-bold px-3 py-1.5 rounded text-[11px]">Segna Restituito</button>` : ''}
-                </div>
-              </div>
-            `;
-          }).join('');
-        })
-        .catch(() => {
-          container.innerHTML = '<p class="text-red-600">Errore nel caricamento noleggi.</p>';
-        });
+      container.innerHTML = staffNoleggiList.map(n => {
+        const isRestituito = String(n.stato || '').trim().toLowerCase() === 'restituito';
+        return `
+          <div class="p-3 border border-slate-200 rounded bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="font-extrabold text-slate-900">🎲 ${n.gioco} <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isRestituito ? 'bg-slate-200 text-slate-700' : 'bg-orange-100 text-orange-800'}">${n.stato}</span></div>
+              <div class="text-[11px] text-slate-600">Socio: <strong>${n.socio}</strong> • Data: ${formattaDataItaliana(n.data) || '-'}</div>
+            </div>
+            <div class="shrink-0">
+              ${!isRestituito ? `<button onclick="chiudiNoleggioStaff(${n.riga}, '${encodeURIComponent(n.gioco)}')" class="bg-slate-900 hover:bg-slate-950 text-white font-bold px-3 py-1.5 rounded text-[11px]">Chiudi / Restituito</button>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function gestisciAssegnaNoleggio(e) {
@@ -2479,51 +2466,48 @@
       const socio = document.getElementById('noleggioSocio').value.trim();
       const gioco = document.getElementById('noleggioGioco').value.trim();
       const dataNol = document.getElementById('noleggioData').value;
+      const aggiornaDisp = document.getElementById('noleggioAggiornaDisp').checked;
 
       chiamaAppsScript({
         action: 'assegnaNoleggio',
         staffPassword: staffSessionPassword,
         socio: socio,
-        emailSocio: socio,
         gioco: gioco,
-        titoloGioco: gioco,
-        data: dataNol
+        data: dataNol,
+        aggiornaDisponibilita: aggiornaDisp
       })
       .then(res => {
-        if (res && res.status === 'error') {
-          mostraFeedbackStaff(res.message || "Errore nell'assegnazione noleggio.", 'err');
-        } else {
-          mostraFeedbackStaff("Noleggio assegnato e disponibilità gioco aggiornata.", 'ok');
+        if (res && res.status === 'success') {
+          mostraFeedbackStaff("Noleggio assegnato e disponibilità aggiornata.", 'ok');
           document.getElementById('noleggioGioco').value = '';
-          caricaNoleggiStaff();
+          caricaStaffOverview();
           ricaricaCatalogoSheet();
+        } else {
+          mostraFeedbackStaff((res && res.message) || "Errore nell'assegnazione noleggio.", 'err');
         }
       })
       .catch(() => mostraFeedbackStaff("Errore di rete nell'assegnazione noleggio.", 'err'));
     }
 
-    function restituisciNoleggioStaff(giocoEnc, socioEnc, rowIndex) {
-      const gioco = decodeURIComponent(giocoEnc);
-      const socio = decodeURIComponent(socioEnc);
-
+    function chiudiNoleggioStaff(riga, giocoEnc) {
+      const gioco = decodeURIComponent(giocoEnc || '');
       chiamaAppsScript({
-        action: 'restituisciNoleggio',
+        action: 'chiudiNoleggio',
         staffPassword: staffSessionPassword,
+        riga: riga,
         gioco: gioco,
-        titoloGioco: gioco,
-        socio: socio,
-        rowIndex: rowIndex
+        aggiornaDisponibilita: true
       })
       .then(res => {
-        if (res && res.status === 'error') {
-          mostraFeedbackStaff(res.message || "Errore nella restituzione noleggio.", 'err');
-        } else {
-          mostraFeedbackStaff("Restituzione registrata e gioco tornato disponibile.", 'ok');
-          caricaNoleggiStaff();
+        if (res && res.status === 'success') {
+          mostraFeedbackStaff("Noleggio chiuso e gioco reso disponibile.", 'ok');
+          caricaStaffOverview();
           ricaricaCatalogoSheet();
+        } else {
+          mostraFeedbackStaff((res && res.message) || "Errore nella chiusura noleggio.", 'err');
         }
       })
-      .catch(() => mostraFeedbackStaff("Errore di rete nella restituzione noleggio.", 'err'));
+      .catch(() => mostraFeedbackStaff("Errore di rete nella chiusura noleggio.", 'err'));
     }
 
     function gestisciCreaSondaggio(e) {
@@ -2543,18 +2527,18 @@
         action: 'creaSondaggio',
         staffPassword: staffSessionPassword,
         titolo: titolo,
-        domanda: titolo,
         opzioni: opzioni,
         sfondo: sfondo,
         trasparenza: trasparenza
       })
       .then(res => {
-        if (res && res.status === 'error') {
-          mostraFeedbackStaff(res.message || "Errore nella creazione del sondaggio.", 'err');
-        } else {
+        if (res && res.status === 'success') {
           mostraFeedbackStaff("Sondaggio creato con successo.", 'ok');
           document.getElementById('formCreaSondaggio').reset();
           caricaSondaggi();
+          caricaStaffOverview();
+        } else {
+          mostraFeedbackStaff((res && res.message) || "Errore nella creazione del sondaggio.", 'err');
         }
       })
       .catch(() => mostraFeedbackStaff("Errore di rete nella creazione del sondaggio.", 'err'));
@@ -2569,22 +2553,24 @@
         mese: document.getElementById('eventoMese').value.trim(),
         anno: document.getElementById('eventoAnno').value.trim(),
         titolo: document.getElementById('eventoTitolo').value.trim(),
-        tipo: document.getElementById('eventoTipo').value.trim() || 'Evento',
+        tipo: document.getElementById('eventoTipo').value.trim() || 'Serata Ludica',
         descrizione: document.getElementById('eventoDescrizione').value.trim(),
-        foto: document.getElementById('eventoFoto').value.trim(),
-        galleria: document.getElementById('eventoGalleria').checked ? 'SI' : 'NO'
+        fotoHome: document.getElementById('eventoFoto').value.trim(),
+        altreFoto: document.getElementById('eventoAltreFoto').value.trim(),
+        mostraInGalleria: document.getElementById('eventoGalleria').checked ? 'SI' : 'NO'
       };
 
       chiamaAppsScript(payload)
         .then(res => {
-          if (res && res.status === 'error') {
-            mostraFeedbackStaff(res.message || "Errore nell'aggiunta dell'evento.", 'err');
-          } else {
+          if (res && res.status === 'success') {
             mostraFeedbackStaff("Evento aggiunto all'Agenda con successo.", 'ok');
             document.getElementById('formAggiungiEvento').reset();
             document.getElementById('eventoAnno').value = '2026';
             document.getElementById('eventoGalleria').checked = true;
             ricaricaAgendaSheet();
+            caricaStaffOverview();
+          } else {
+            mostraFeedbackStaff((res && res.message) || "Errore nell'aggiunta dell'evento.", 'err');
           }
         })
         .catch(() => mostraFeedbackStaff("Errore di rete nell'aggiunta dell'evento.", 'err'));
@@ -2592,22 +2578,22 @@
 
     function gestisciAggiornaDisponibilita(e) {
       e.preventDefault();
-      const titolo = document.getElementById('dispGiocoTitolo').value.trim();
-      const disponibile = document.getElementById('dispNuovoStato').value;
+      const gioco = document.getElementById('dispGiocoTitolo').value.trim();
+      const disponibile = document.getElementById('dispNuovoStato').value === 'true';
 
       chiamaAppsScript({
-        action: 'aggiornaDisponibilita',
+        action: 'aggiornaStatoGioco',
         staffPassword: staffSessionPassword,
-        titolo: titolo,
-        gioco: titolo,
+        gioco: gioco,
         disponibile: disponibile
       })
       .then(res => {
-        if (res && res.status === 'error') {
-          mostraFeedbackStaff(res.message || "Errore nell'aggiornamento disponibilità.", 'err');
-        } else {
+        if (res && res.status === 'success') {
           mostraFeedbackStaff("Disponibilità del gioco aggiornata.", 'ok');
           ricaricaCatalogoSheet();
+          caricaStaffOverview();
+        } else {
+          mostraFeedbackStaff((res && res.message) || "Errore nell'aggiornamento disponibilità.", 'err');
         }
       })
       .catch(() => mostraFeedbackStaff("Errore di rete nell'aggiornamento disponibilità.", 'err'));
