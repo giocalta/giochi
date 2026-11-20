@@ -1409,34 +1409,21 @@
         'https://www.io-gioco.it/feed/'
       ];
 
-      Promise.allSettled(
-        feeds.map(url =>
-          fetch('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(url))
-            .then(r => r.json())
-        )
-      ).then(results => {
-        let articoli = [];
-        results.forEach(res => {
-          if (res.status === 'fulfilled' && res.value && res.value.status === 'ok' && Array.isArray(res.value.items)) {
-            const fonte = (res.value.feed && res.value.feed.title) ? res.value.feed.title.split(' ')[0] : 'News Ludiche';
-            res.value.items.slice(0, 6).forEach(item => {
-              let img = item.thumbnail || (item.enclosure && item.enclosure.link) || '';
-              if (!img && item.description) {
-                const matchImg = item.description.match(/<img[^>]+src="([^">]+)"/i);
-                if (matchImg) img = matchImg[1];
-              }
-              const testoPulito = (item.description || '').replace(/<[^>]*>?/gm, '').trim();
-              articoli.push({
-                titolo: item.title || 'Novità dal mondo dei giochi da tavolo',
-                link: item.link || '#',
-                data: formattaDataItaliana(item.pubDate),
-                fonte: fonte,
-                estratto: testoPulito.slice(0, 120) + (testoPulito.length > 120 ? '...' : ''),
-                foto: img || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=600&q=80'
-              });
-            });
-          }
-        });
+fetch('https://script.google.com/macros/s/AKfycbx6iDH72KzUjakzw115F3kUnlGBfwF2A1eDMtIft51K5Ur49-WCKUC7SYu_WkBEYOhq4Q/exec?action=news')
+        .then(r => r.json())
+        .then(data => {
+          const lista = Array.isArray(data) ? data : (data.news || []);
+          let articoli = lista.map(item => {
+            const testoPulito = (item.descrizione || '').replace(/<[^>]*>?/gm, '').trim();
+            return {
+              titolo: item.titolo || 'Novità dal mondo dei giochi da tavolo',
+              link: item.link || '#',
+              data: item.data || '',
+              fonte: item.fonte || 'News Ludiche',
+              estratto: testoPulito.slice(0, 120) + (testoPulito.length > 120 ? '...' : ''),
+              foto: item.immagine || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=600&q=80'
+            };
+          });
 
         if (articoli.length === 0) {
           articoli = [
