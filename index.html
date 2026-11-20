@@ -461,7 +461,7 @@
               <input type="email" id="recEmail" name="email" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-xs md:text-sm focus:ring-2 focus:ring-orange-600 focus:outline-none">
             </div>
             <button type="submit" id="btnInviaRec" class="w-full bg-slate-900 hover:bg-slate-950 text-white font-bold py-3 text-xs md:text-sm shadow transition-all">
-              Invia Richiesta
+              Verifica Account
             </button>
           </form>
 
@@ -896,6 +896,7 @@
         </div>
       </div>
     </div>
+
     <!-- SEZIONE 2: INFO & REGOLAMENTO -->
     <div id="viewInfo" class="hidden space-y-6 max-w-4xl mx-auto mb-12">
       <div class="bg-white p-6 md:p-8 border border-amber-200/60 shadow-sm space-y-6">
@@ -1073,25 +1074,31 @@
       if (!document.getElementById('viewGioco').classList.contains('hidden')) mostraDettaglioGioco(idGioco, false);
 
       chiamaAppsScript({
-        action: 'togglePreferito',
+        action: 'votaPreferito',
         emailSocio: socio.email,
         idGioco: idGioco,
-        azione: nuovaAzione
+        tipo: nuovaAzione
       })
       .then(() => { caricaPreferitiGlobali(); })
       .catch(err => console.error("Errore salvataggio preferito:", err));
     }
 
     function caricaPreferitiGlobali() {
-      fetch(APPS_SCRIPT_URL + '?action=getPreferitiGlobali')
+      fetch(APPS_SCRIPT_URL + '?action=getPreferiti')
         .then(res => res.json())
-        .then(data => {
-          if (data && data.counts) {
-            preferitiGlobaliMap = data.counts;
-            if (!document.getElementById('viewHome').classList.contains('hidden')) renderHomeContenuti();
-            if (!document.getElementById('viewCatalogo').classList.contains('hidden')) applicaFiltri();
-            if (!document.getElementById('viewPreferiti').classList.contains('hidden')) renderPreferiti();
+        .then(rows => {
+          const nuovaMappa = {};
+          if (Array.isArray(rows) && rows.length > 1) {
+            for (let i = 1; i < rows.length; i++) {
+              const idG = String(rows[i][0] || '').trim();
+              const voti = parseInt(rows[i][1], 10) || 0;
+              if (idG) nuovaMappa[idG] = voti;
+            }
           }
+          preferitiGlobaliMap = nuovaMappa;
+          if (!document.getElementById('viewHome').classList.contains('hidden')) renderHomeContenuti();
+          if (!document.getElementById('viewCatalogo').classList.contains('hidden')) applicaFiltri();
+          if (!document.getElementById('viewPreferiti').classList.contains('hidden')) renderPreferiti();
         })
         .catch(() => {});
     }
@@ -1100,8 +1107,11 @@
       fetch(APPS_SCRIPT_URL + '?action=getSondaggi')
         .then(res => res.json())
         .then(data => {
-          sondaggiData = data || [];
+          sondaggiData = Array.isArray(data) ? data : [];
           renderSondaggiHome();
+          if (!document.getElementById('viewRegistrazione').classList.contains('hidden')) {
+            caricaSondaggiAreaPersonale();
+          }
         })
         .catch(() => {});
     }
@@ -1148,7 +1158,7 @@
             overlayHtml = `<div class="absolute inset-0 bg-white pointer-events-none" style="opacity: ${opacita};"></div>`;
           } else {
             stileCard = "p-4 border border-amber-200/80 rounded relative overflow-hidden";
-            overlayHtml = `<div class="absolute inset-0 pointer-events-none" style="background-color: ${s.sfondo}; opacity: ${opacita};"></div>`;
+            overlayHtml = `<div class="absolute inset-0 pointer-events-none" style="background-color: ${escapeHtml(s.sfondo)}; opacity: ${opacita};"></div>`;
           }
         }
 
@@ -1186,7 +1196,7 @@
         s.opzioni.forEach((opz, idx) => {
           let isSelected = (haGiaVotato && opzioneScelta === idx);
           opzioniHtml += `
-            <button type="button" onclick="votaSondaggioSocio('${s.id}', ${idx})"
+            <button type="button" onclick="votaSondaggioSocio('${escapeHtml(s.id)}', ${idx})"
                     class="w-full text-left p-2.5 border rounded mb-2 text-xs font-bold flex items-center justify-between transition-all ${isSelected ? 'bg-orange-600 text-white border-orange-600 shadow' : 'bg-white text-slate-800 border-amber-200 hover:bg-amber-50'}">
               <span>${escapeHtml(opz.testo)}</span>
               ${isSelected ? '<span class="text-[10px] bg-white/20 px-2 py-0.5 rounded font-black">✓ Votato</span>' : '<span class="text-[10px] text-orange-600 font-bold">Vota</span>'}
@@ -1220,33 +1230,40 @@
         return;
       }
 
+      const sondaggio = sondaggiData.find(item => item.id === idSondaggio);
+      const opzObj = (sondaggio && sondaggio.opzioni && sondaggio.opzioni[opzioneIdx]) ? sondaggio.opzioni[opzioneIdx] : null;
+      const idOpzione = opzObj && opzObj.id ? opzObj.id : ('OPZ-' + (opzioneIdx + 1));
+
       votoInCorso = true;
       let socio = JSON.parse(socioLoggato);
-      votiUtenteMap[idSondaggio] = opzioneIdx;
-      localStorage.setItem('giocalta_voti_sondaggi', JSON.stringify(votiUtenteMap));
-      caricaSondaggiAreaPersonale();
 
       chiamaAppsScript({
         action: 'votaSondaggio',
         idSondaggio: idSondaggio,
+        idOpzione: idOpzione,
         opzioneIdx: opzioneIdx,
         emailSocio: socio.email
       })
       .then(response => {
         votoInCorso = false;
-        if (response.status === 'già_votato') {
+        if (response && response.status === 'già_votato') {
+          votiUtenteMap[idSondaggio] = opzioneIdx;
+          localStorage.setItem('giocalta_voti_sondaggi', JSON.stringify(votiUtenteMap));
           alert("Hai già votato questo sondaggio!");
-        } else if (response.status === 'success') {
+          caricaSondaggi();
+        } else if (response && response.status === 'success') {
+          votiUtenteMap[idSondaggio] = opzioneIdx;
+          localStorage.setItem('giocalta_voti_sondaggi', JSON.stringify(votiUtenteMap));
           alert("Voto registrato con successo!");
-          caricaSondaggiAreaPersonale();
           caricaSondaggi();
         } else {
-          alert("Errore: " + (response.message || "Impossibile registrare il voto."));
+          alert("Errore: " + ((response && response.message) || "Impossibile registrare il voto."));
         }
       })
       .catch(err => {
         votoInCorso = false;
         console.error("Errore voto socio:", err);
+        alert("Errore di connessione durante il voto.");
       });
     }
 
@@ -1286,7 +1303,7 @@
         nuovaPassword: nuovaPass
       })
       .then(response => {
-        if (response.status === 'success') {
+        if (response && response.status === 'success') {
           msgBox.textContent = "Password aggiornata con successo!";
           msgBox.className = "text-xs font-bold p-2 text-center bg-emerald-50 text-emerald-700 border border-emerald-200";
           socioLoggato.password = nuovaPass;
@@ -1294,7 +1311,7 @@
           document.getElementById('nuovaPasswordInput').value = '';
           document.getElementById('profiloPassword').innerText = nuovaPass;
         } else {
-          msgBox.textContent = "Errore: " + (response.message || "Impossibile aggiornare.");
+          msgBox.textContent = "Errore: " + ((response && response.message) || "Impossibile aggiornare.");
           msgBox.className = "text-xs font-bold p-2 text-center bg-red-50 text-red-700 border border-red-200";
         }
       })
@@ -1316,7 +1333,7 @@
           if (!container) return;
 
           let mieiNoleggi = [];
-          if (data && data.length > 1) {
+          if (Array.isArray(data) && data.length > 1) {
             for (let i = 1; i < data.length; i++) {
               let idSocioCol = String(data[i][0] || '').trim();
               let statoCol = String(data[i][3] || 'In corso').trim();
@@ -1404,6 +1421,7 @@
         if (stickyContainer) stickyContainer.classList.add('hidden');
         renderHomeContenuti();
         caricaSondaggi();
+        caricaPreferitiGlobali();
         window.scrollTo(0, 0);
       } else if (nomeSezione === 'catalogo') {
         document.getElementById('viewCatalogo').classList.remove('hidden');
@@ -1430,6 +1448,7 @@
         document.getElementById('nav-registrazione').classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'font-bold');
         document.getElementById('nav-registrazione').classList.remove('text-amber-100', 'font-semibold');
         if (stickyContainer) stickyContainer.classList.add('hidden');
+        caricaSondaggi();
         verificaStatoSessioneSocio();
         window.scrollTo(0, 0);
       } else if (nomeSezione === 'staff') {
@@ -1698,6 +1717,7 @@
         renderStaffGiochiLista();
         aggiornaContatorePreferiti();
         applicaFiltri();
+        renderHomeContenuti();
         caricaPreferitiGlobali();
       } catch (err) {
         console.error(err);
@@ -2276,7 +2296,7 @@
 
       if (sortQuery === 'recenti') filtrati.sort((a, b) => b.idFisso - a.idFisso);
       else if (sortQuery === 'az') filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo, 'it'));
-      else if (sortQuery === 'za') filtrati.sort((a, b) => a.titolo.localeCompare(b.titolo, 'it'));
+      else if (sortQuery === 'za') filtrati.sort((a, b) => b.titolo.localeCompare(a.titolo, 'it'));
       else if (sortQuery === 'voto') filtrati.sort((a, b) => (parseFloat(b.voto) || 0) - (parseFloat(a.voto) || 0));
 
       renderGiochi(filtrati);
@@ -2376,7 +2396,7 @@
           let trovato = null;
           let statoSocio = '';
 
-          if (data && data.length > 1) {
+          if (Array.isArray(data) && data.length > 1) {
             for (let i = 1; i < data.length; i++) {
               let rowEmail = String(data[i][2] || '').trim();
               let rowPass = String(data[i][4] || '').trim();
@@ -2447,11 +2467,16 @@
       msgBox.classList.remove('hidden');
 
       chiamaAppsScript(dati)
-        .then(() => {
-          msgBox.innerHTML = "✅ Richiesta inviata con successo!<br>Riceverai conferma non appena il tuo profilo sarà attivato dallo staff.";
-          msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-800 border border-emerald-200";
-          document.getElementById('formRegistrazione').reset();
-          generaCaptcha();
+        .then(res => {
+          if (res && res.status === 'success') {
+            msgBox.innerHTML = "✅ Richiesta inviata con successo!<br>Riceverai conferma non appena il tuo profilo sarà attivato dallo staff.";
+            msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-800 border border-emerald-200";
+            document.getElementById('formRegistrazione').reset();
+            generaCaptcha();
+          } else {
+            msgBox.textContent = (res && res.message) || "Errore durante la registrazione.";
+            msgBox.className = "text-center text-xs font-bold p-3 bg-red-50 text-red-700 border border-red-200";
+          }
         })
         .catch(() => {
           msgBox.textContent = "Errore di connessione. Riprova.";
@@ -2461,25 +2486,39 @@
 
     function gestisciInvioRec(e) {
       e.preventDefault();
+      const emailCercata = document.getElementById('recEmail').value.trim().toLowerCase();
       const msgBox = document.getElementById('recMessaggio');
 
-      msgBox.textContent = "Invio richiesta in corso...";
+      msgBox.textContent = "Verifica account in corso...";
       msgBox.className = "text-center text-xs font-bold p-3 bg-blue-50 text-blue-700 border border-blue-200";
       msgBox.classList.remove('hidden');
 
-      chiamaAppsScript({
-        action: 'recuperaPassword',
-        email: document.getElementById('recEmail').value.trim()
-      })
-      .then(() => {
-        msgBox.textContent = "Se l'email è registrata, riceverai la password via email.";
-        msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
-        document.getElementById('formRecupero').reset();
-      })
-      .catch(() => {
-        msgBox.textContent = "Errore di connessione. Riprova.";
-        msgBox.className = "text-center text-xs font-bold p-3 bg-red-50 text-red-700 border border-red-200";
-      });
+      fetch(APPS_SCRIPT_URL + '?action=getSoci')
+        .then(res => res.json())
+        .then(rows => {
+          let trovato = false;
+          if (Array.isArray(rows) && rows.length > 1) {
+            for (let i = 1; i < rows.length; i++) {
+              const rowEmail = String(rows[i][2] || '').trim().toLowerCase();
+              if (rowEmail === emailCercata) {
+                trovato = true;
+                break;
+              }
+            }
+          }
+          if (trovato) {
+            msgBox.innerHTML = "Account trovato. Per reimpostare la password contattaci su WhatsApp al <strong>+39 329 224 2750</strong> oppure accedi e cambiala dalla tua Area Personale.";
+            msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-800 border border-emerald-200";
+          } else {
+            msgBox.textContent = "Nessun socio trovato con questa email.";
+            msgBox.className = "text-center text-xs font-bold p-3 bg-amber-50 text-amber-800 border border-amber-200";
+          }
+          document.getElementById('formRecupero').reset();
+        })
+        .catch(() => {
+          msgBox.textContent = "Errore di connessione. Riprova.";
+          msgBox.className = "text-center text-xs font-bold p-3 bg-red-50 text-red-700 border border-red-200";
+        });
     }
 
     // ==========================================
@@ -2799,8 +2838,8 @@
       document.getElementById('btnSalvaGiocoStaff').textContent = 'Salva Gioco';
     }
 
-    function caricaGiocoInFormStaff(titoloGioco) {
-      const g = giochiData.find(item => item.titolo === titoloGioco);
+    function caricaGiocoInFormStaff(idGioco) {
+      const g = giochiData.find(item => item.id === idGioco);
       if (!g) return;
 
       document.getElementById('giocoModificaTitoloOriginale').value = g.titolo;
@@ -2870,7 +2909,9 @@
         .catch(() => mostraFeedbackStaff("Errore di rete durante il salvataggio del gioco.", 'err'));
     }
 
-    function nascondiGiocoStaff(titoloGioco) {
+    function nascondiGiocoStaff(idGioco) {
+      const g = giochiData.find(item => item.id === idGioco);
+      const titoloGioco = g ? g.titolo : idGioco;
       if (!confirm('Nascondere "' + titoloGioco + '" dal catalogo (Visibile = NO)?')) return;
 
       chiamaAppsScript({
@@ -2919,11 +2960,11 @@
             <div class="text-[11px] text-slate-500 truncate">${escapeHtml(g.tipo)} • ${escapeHtml(g.persone)} • ${escapeHtml(g.tempo)}</div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
-            <button type="button" onclick="caricaGiocoInFormStaff('${encodeURIComponent(g.titolo)}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2.5 py-1 rounded text-[11px]">Modifica</button>
-            <button type="button" onclick="nascondiGiocoStaff('${encodeURIComponent(g.titolo)}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-2.5 py-1 rounded text-[11px]">Nascondi</button>
+            <button type="button" onclick="caricaGiocoInFormStaff('${encodeURIComponent(g.id)}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2.5 py-1 rounded text-[11px]">Modifica</button>
+            <button type="button" onclick="nascondiGiocoStaff('${encodeURIComponent(g.id)}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-2.5 py-1 rounded text-[11px]">Nascondi</button>
           </div>
         </div>
-      `).join('').replace(/caricaGiocoInFormStaff\('([^']+)'\)/g, (_, enc) => `caricaGiocoInFormStaff(decodeURIComponent('${enc}'))`).replace(/nascondiGiocoStaff\('([^']+)'\)/g, (_, enc) => `nascondiGiocoStaff(decodeURIComponent('${enc}'))`);
+      `).join('');
     }
 
     function gestisciAggiornaDisponibilita(e) {
