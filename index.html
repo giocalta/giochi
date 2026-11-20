@@ -225,7 +225,7 @@
 
   <main class="max-w-6xl mx-auto px-0 md:px-4 pt-3 pb-8 flex-grow w-full space-y-6">
 
-    <!-- SEZIONE 0: HOME -->
+    <!-- SEZIONE 0: HOME (ORDINE AGGIORNATO + CAROSELLO NEWS AUTOMATICO) -->
     <div id="viewHome" class="space-y-6">
 
       <!-- BANNER DI BENVENUTO -->
@@ -246,39 +246,7 @@
         </div>
       </div>
 
-      <!-- CAROSELLO 1: AGENDA -->
-      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
-        <div class="flex items-center justify-between px-2 md:px-0">
-          <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Agenda & Prossimi Eventi
-          </h2>
-          <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1">In Sede</span>
-        </div>
-
-        <div class="relative group">
-          <button onclick="scorriCarosello('agendaGrid', -320)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
-
-          <div id="agendaGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
-            <p class="text-slate-400 text-xs py-4 px-2">Caricamento eventi dall'agenda...</p>
-          </div>
-
-          <button onclick="scorriCarosello('agendaGrid', 320)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
-        </div>
-      </div>
-
-      <!-- SONDAGGI (SOLO RISULTATI IN HOME) -->
-      <div id="sondaggiContainerHome" class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4">
-        <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2 px-2 md:px-0">
-          <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-          Sondaggi della Community (Risultati)
-        </h2>
-        <div id="boxSondaggiLista" class="space-y-4 px-2 md:px-0">
-          <p class="text-slate-400 text-xs">Caricamento sondaggi in corso...</p>
-        </div>
-      </div>
-
-      <!-- CAROSELLO 2: ULTIMI GIOCHI -->
+      <!-- 1. CAROSELLO: ULTIMI GIOCHI INSERITI -->
       <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
@@ -299,7 +267,49 @@
         </div>
       </div>
 
-      <!-- CAROSELLO 3: PIÙ AMATI -->
+      <!-- 2. CAROSELLO: AGENDA & PROSSIMI EVENTI -->
+      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
+        <div class="flex items-center justify-between px-2 md:px-0">
+          <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
+            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Agenda & Prossimi Eventi
+          </h2>
+          <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1">In Sede</span>
+        </div>
+
+        <div class="relative group">
+          <button onclick="scorriCarosello('agendaGrid', -320)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
+
+          <div id="agendaGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
+            <p class="text-slate-400 text-xs py-4 px-2">Caricamento eventi dall'agenda...</p>
+          </div>
+
+          <button onclick="scorriCarosello('agendaGrid', 320)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
+        </div>
+      </div>
+
+      <!-- 3. CAROSELLO AUTOMATICO: NEWS DAL MONDO LUDICO -->
+      <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
+        <div class="flex items-center justify-between px-2 md:px-0">
+          <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
+            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+            News dal Mondo Ludico
+          </h2>
+          <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1">Aggiornamento Auto</span>
+        </div>
+
+        <div class="relative group" onmouseenter="fermaAutoScrollNews()" onmouseleave="avviaAutoScrollNews()">
+          <button onclick="scorriCarosello('newsGrid', -320)" class="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">‹</button>
+
+          <div id="newsGrid" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 px-1">
+            <p class="text-slate-400 text-xs py-4 px-2">Caricamento notizie dal mondo ludico...</p>
+          </div>
+
+          <button onclick="scorriCarosello('newsGrid', 320)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
+        </div>
+      </div>
+
+      <!-- 4. CAROSELLO: I PIÙ AMATI DALLA COMMUNITY -->
       <div class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4 relative">
         <div class="flex items-center justify-between px-2 md:px-0">
           <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
@@ -319,6 +329,18 @@
           <button onclick="scorriCarosello('homeFavoritesGrid', 320)" class="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 bg-orange-600 hover:bg-orange-700 text-white w-9 h-9 shadow-lg flex items-center justify-center font-bold text-lg transition-transform active:scale-95">›</button>
         </div>
       </div>
+
+      <!-- 5. SONDAGGI DELLA COMMUNITY (SOLO RISULTATI IN HOME) -->
+      <div id="sondaggiContainerHome" class="bg-white py-5 px-3 md:p-6 border-y md:border border-amber-200/60 shadow-sm space-y-4">
+        <h2 class="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2 px-2 md:px-0">
+          <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          Sondaggi della Community (Risultati)
+        </h2>
+        <div id="boxSondaggiLista" class="space-y-4 px-2 md:px-0">
+          <p class="text-slate-400 text-xs">Caricamento sondaggi in corso...</p>
+        </div>
+      </div>
+
     </div>
 
     <!-- SEZIONE 1: CATALOGO -->
@@ -987,6 +1009,8 @@
 
     let giochiData = [];
     let eventiData = [];
+    let newsData = [];
+    let newsAutoScrollTimer = null;
     let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
     let preferitiGlobaliMap = {};
     let sondaggiData = [];
@@ -1376,6 +1400,119 @@
       if (el) { el.scrollBy({ left: quantita, behavior: 'smooth' }); }
     }
 
+    function caricaNewsLudiche() {
+      const grid = document.getElementById('newsGrid');
+      if (!grid) return;
+
+      const feeds = [
+        'https://www.goblins.net/feed',
+        'https://www.io-gioco.it/feed/'
+      ];
+
+      Promise.allSettled(
+        feeds.map(url =>
+          fetch('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(url))
+            .then(r => r.json())
+        )
+      ).then(results => {
+        let articoli = [];
+        results.forEach(res => {
+          if (res.status === 'fulfilled' && res.value && res.value.status === 'ok' && Array.isArray(res.value.items)) {
+            const fonte = (res.value.feed && res.value.feed.title) ? res.value.feed.title.split(' ')[0] : 'News Ludiche';
+            res.value.items.slice(0, 6).forEach(item => {
+              let img = item.thumbnail || (item.enclosure && item.enclosure.link) || '';
+              if (!img && item.description) {
+                const matchImg = item.description.match(/<img[^>]+src="([^">]+)"/i);
+                if (matchImg) img = matchImg[1];
+              }
+              const testoPulito = (item.description || '').replace(/<[^>]*>?/gm, '').trim();
+              articoli.push({
+                titolo: item.title || 'Novità dal mondo dei giochi da tavolo',
+                link: item.link || '#',
+                data: formattaDataItaliana(item.pubDate),
+                fonte: fonte,
+                estratto: testoPulito.slice(0, 120) + (testoPulito.length > 120 ? '...' : ''),
+                foto: img || 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=600&q=80'
+              });
+            });
+          }
+        });
+
+        if (articoli.length === 0) {
+          articoli = [
+            {
+              titolo: 'Novità editoriali e nuove uscite sul catalogo GIOCALTA',
+              link: '#catalogo',
+              data: 'Aggiornato oggi',
+              fonte: 'GIOCALTA',
+              estratto: 'Scopri gli ultimi giochi da tavolo disponibili per il noleggio e le prossime serate ludiche a Caltagirone.',
+              foto: 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=600&q=80'
+            }
+          ];
+        }
+
+        newsData = articoli.slice(0, 10);
+        renderNewsLudiche();
+        avviaAutoScrollNews();
+      }).catch(() => {
+        grid.innerHTML = '<p class="text-slate-400 text-xs py-4 px-2">Notizie temporaneamente non disponibili.</p>';
+      });
+    }
+
+    function renderNewsLudiche() {
+      const grid = document.getElementById('newsGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      newsData.forEach(n => {
+        const card = document.createElement('a');
+        card.href = n.link;
+        if (n.link.startsWith('http')) {
+          card.target = '_blank';
+          card.rel = 'noopener noreferrer';
+        }
+        card.className = "bg-white border border-amber-200/80 shadow-sm w-[280px] md:w-[320px] shrink-0 flex flex-col overflow-hidden cursor-pointer group hover:shadow-md transition-all";
+        card.innerHTML = `
+          <div class="h-44 md:h-48 bg-slate-100 overflow-hidden relative shadow-inner">
+            <img src="${escapeHtml(n.foto)}" alt="${escapeHtml(n.titolo)}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=600&q=80'">
+            <span class="absolute top-2 left-2 bg-orange-600 text-white text-[10px] px-2 py-0.5 font-black uppercase shadow">${escapeHtml(n.fonte)}</span>
+          </div>
+          <div class="p-3.5 flex flex-col justify-between flex-grow gap-2">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 block">${escapeHtml(n.data)}</span>
+              <h4 class="font-extrabold text-slate-800 text-sm mt-1 line-clamp-2 group-hover:text-orange-600 transition-colors">${escapeHtml(n.titolo)}</h4>
+              <p class="text-xs text-slate-500 mt-1 line-clamp-2">${escapeHtml(n.estratto)}</p>
+            </div>
+            <span class="text-[11px] font-bold text-orange-600 pt-1">Leggi articolo ➔</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function avviaAutoScrollNews() {
+      fermaAutoScrollNews();
+      const grid = document.getElementById('newsGrid');
+      if (!grid || newsData.length <= 1) return;
+      newsAutoScrollTimer = setInterval(() => {
+        if (document.getElementById('viewHome').classList.contains('hidden')) return;
+        const maxScroll = grid.scrollWidth - grid.clientWidth;
+        if (maxScroll <= 0) return;
+        if (grid.scrollLeft >= maxScroll - 10) {
+          grid.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          grid.scrollBy({ left: 320, behavior: 'smooth' });
+        }
+      }, 4500);
+    }
+
+    function fermaAutoScrollNews() {
+      if (newsAutoScrollTimer) {
+        clearInterval(newsAutoScrollTimer);
+        newsAutoScrollTimer = null;
+      }
+    }
+
     function popolaDropdownGeneriSpecifici() {
       const selectSpec = document.getElementById('specificCategoryFilter');
       if (!selectSpec) return;
@@ -1422,6 +1559,7 @@
         renderHomeContenuti();
         caricaSondaggi();
         caricaPreferitiGlobali();
+        avviaAutoScrollNews();
         window.scrollTo(0, 0);
       } else if (nomeSezione === 'catalogo') {
         document.getElementById('viewCatalogo').classList.remove('hidden');
@@ -2307,6 +2445,8 @@
     window.addEventListener('DOMContentLoaded', function() {
       const dataInput = document.getElementById('noleggioData');
       if (dataInput) dataInput.value = new Date().toISOString().slice(0, 10);
+
+      caricaNewsLudiche();
 
       const hashIniziale = window.location.hash.replace('#', '');
       if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'registrazione', 'staff', 'info', 'contatti'].includes(hashIniziale)) {
