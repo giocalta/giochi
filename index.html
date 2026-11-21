@@ -1008,8 +1008,7 @@
     const NUMERO_WHATSAPP = '393292242750';
 
     let giochiData = [];
-    let eventiData = [];
-    let newsData = [];
+let eventiData = JSON.parse(localStorage.getItem('giocalta_cache_agenda') || '[]');
     let newsAutoScrollTimer = null;
     let preferitiIds = JSON.parse(localStorage.getItem('giocalta_preferiti') || '[]');
     let preferitiGlobaliMap = {};
