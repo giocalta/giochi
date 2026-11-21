@@ -1923,9 +1923,10 @@ fetch('https://script.google.com/macros/s/AKfycbx6iDH72KzUjakzw115F3kUnlGBfwF2A1
           mostraDettaglioEvento(ev.id, true);
         };
 
-        let bannerFoto = (ev.fotoHome || ev.fotoGalleria)
-          ? '<div class="h-48 md:h-56 bg-slate-100 overflow-hidden relative"><img src="' + escapeHtml(ev.fotoHome || ev.fotoGalleria) + '" alt="' + escapeHtml(ev.titolo) + '" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"></div>'
-          : '';
+        let urlFotoEvento = ev.fotoHome || ev.fotoGalleria;
+let bannerFoto = urlFotoEvento
+  ? '<div class="h-48 md:h-56 bg-slate-100 overflow-hidden relative"><img src="' + escapeHtml(urlFotoEvento) + '" alt="' + escapeHtml(ev.titolo) + '" loading="lazy" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" onerror="this.src=\'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=600&q=80\';"></div>'
+  : '';
 
         item.innerHTML = bannerFoto + `
           <div class="p-4 flex items-start justify-between gap-3">
