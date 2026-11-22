@@ -1033,6 +1033,26 @@ let eventiData = JSON.parse(localStorage.getItem('giocalta_cache_agenda') || '[]
     let staffSociList = [];
     let staffNoleggiList = [];
     let staffGiochiList = [];
+    let staffTentativiFalliti = 0;
+    let staffBloccatoFinoA = 0;
+    let staffUltimoAttivo = Date.now();
+    const STAFF_TIMEOUT_MS = 30 * 60 * 1000; // 30 minuti
+
+    function toccaAttivitaStaff() {
+      staffUltimoAttivo = Date.now();
+    }
+
+    function verificaSessioneStaffAttiva() {
+      if (!staffAuthenticated || !staffSessionPassword) return false;
+      if (Date.now() - staffUltimoAttivo > STAFF_TIMEOUT_MS) {
+        staffSessionPassword = '';
+        staffAuthenticated = false;
+        mostraFeedbackStaff('Sessione Staff scaduta dopo 30 minuti. Reinserisci la password.', 'err');
+        return false;
+      }
+      toccaAttivitaStaff();
+      return true;
+    }
 
     function chiamaAppsScript(payload) {
       return fetch(APPS_SCRIPT_URL, {
