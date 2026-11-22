@@ -665,11 +665,22 @@
 
         <!-- SCHEDA 2: SOCI -->
         <div id="staffPanel-soci" class="hidden bg-white p-5 md:p-6 border border-amber-200/80 shadow-sm space-y-4">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
             <h3 class="text-base font-black text-slate-900">Gestione Soci & Richieste</h3>
-            <span class="text-[11px] text-slate-500">Attiva i soci per consentire l'accesso</span>
+            <span class="text-[11px] text-slate-500">Cerca per nome, email o telefono e filtra per stato</span>
           </div>
-          <div id="staffSociLista" class="space-y-2.5 text-xs">
+          <div class="flex flex-wrap items-center gap-2">
+            <input type="text" id="staffFiltroSociInput" oninput="renderStaffSoci()" placeholder="Cerca socio..." class="px-3 py-1.5 bg-slate-50 border border-slate-200 text-xs w-full sm:w-52 focus:ring-1 focus:ring-orange-600 focus:outline-none">
+            <select id="staffFiltroStatoSocio" onchange="renderStaffSoci()" class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 text-xs font-bold focus:ring-1 focus:ring-orange-600 focus:outline-none">
+              <option value="">Tutti gli stati</option>
+              <option value="attivo">Attivi</option>
+              <option value="sospeso">Sospesi</option>
+              <option value="in attesa">In attesa</option>
+            </select>
+          </div>
+        </div>
+        <div id="staffSociLista" class="space-y-2.5 text-xs max-h-96 overflow-y-auto pr-1">
             <p class="text-slate-400">Caricamento soci...</p>
           </div>
         </div>
@@ -2784,15 +2795,29 @@ let bannerFoto = urlFotoEvento
     }
 
     function renderStaffSoci() {
-      const container = document.getElementById('staffSociLista');
-      if (!container) return;
+    const container = document.getElementById('staffSociLista');
+    if (!container) return;
 
-      if (staffSociList.length === 0) {
-        container.innerHTML = '<p class="text-slate-400">Nessun socio presente nel foglio.</p>';
-        return;
-      }
+    const filtroTesto = (document.getElementById('staffFiltroSociInput')?.value || '').trim().toLowerCase();
+    const filtroStato = (document.getElementById('staffFiltroStatoSocio')?.value || '').trim().toLowerCase();
 
-      container.innerHTML = staffSociList.map(s => {
+    const listaFiltrata = staffSociList.filter(s => {
+      const statoLower = String(s.stato || '').trim().toLowerCase();
+      const matchStato = !filtroStato || statoLower.includes(filtroStato);
+      const matchTesto = !filtroTesto ||
+        String(s.nome || '').toLowerCase().includes(filtroTesto) ||
+        String(s.email || '').toLowerCase().includes(filtroTesto) ||
+        String(s.telefono || '').toLowerCase().includes(filtroTesto) ||
+        String(s.id || '').toLowerCase().includes(filtroTesto);
+      return matchStato && matchTesto;
+    });
+
+    if (listaFiltrata.length === 0) {
+      container.innerHTML = '<p class="text-slate-400">Nessun socio corrisponde alla ricerca.</p>';
+      return;
+    }
+
+    container.innerHTML = listaFiltrata.map(s => {
         const isAttivo = String(s.stato || '').trim().toLowerCase() === 'attivo';
         return `
           <div class="p-3 border border-amber-200/80 rounded bg-amber-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
