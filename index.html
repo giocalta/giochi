@@ -2961,24 +2961,7 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
         }
       });
     }
-      chiamaAppsScript({
-        action: 'modificaSocio',
-        staffPassword: staffSessionPassword,
-        riga: Number(riga),
-        nome: nuovoNome.trim(),
-        email: nuovaEmail.trim(),
-        telefono: nuovoTelefono.trim(),
-        stato: statoScelto.trim() || 'Attivo'
-      })
-      .then(res => {
-        if (res && res.status === 'success') {
-          mostraFeedbackStaff("Dati e stato del socio aggiornati su Google Sheets.", 'ok');
-          caricaStaffOverview();
-        } else {
-          mostraFeedbackStaff((res && res.message) || "Errore durante la modifica del socio.", 'err');
-        }
-      })
-      .catch(() => mostraFeedbackStaff("Errore di rete durante la modifica del socio.", 'err'));
+    
     
     function renderStaffSoci() {
       const container = document.getElementById('staffSociLista');
