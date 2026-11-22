@@ -2793,7 +2793,70 @@ let bannerFoto = urlFotoEvento
       renderStaffNoleggi();
       renderStaffGiochiLista();
     }
+function cambiaStatoSocioStaff(riga, nuovoStato) {
+      if (!riga || riga < 2) {
+        mostraFeedbackStaff("Numero di riga socio non trovato.", 'err');
+        return;
+      }
+      chiamaAppsScript({
+        action: 'attivaSocio',
+        staffPassword: staffSessionPassword,
+        riga: Number(riga),
+        stato: nuovoStato
+      })
+      .then(res => {
+        if (res && res.status === 'success') {
+          mostraFeedbackStaff('Stato socio aggiornato in "' + nuovoStato + '".', 'ok');
+          caricaStaffOverview();
+        } else {
+          mostraFeedbackStaff((res && res.message) || "Errore nell'aggiornamento stato socio.", 'err');
+        }
+      })
+      .catch(() => mostraFeedbackStaff("Errore di rete durante l'aggiornamento stato socio.", 'err'));
+    }
 
+    function apriModificaSocioStaff(riga) {
+      const s = staffSociList.find(item => Number(item.riga || item.rowIndex || 0) === Number(riga));
+      if (!s) {
+        mostraFeedbackStaff("Socio non trovato nell'elenco.", 'err');
+        return;
+      }
+
+      const nuovoNome = prompt('Nome e Cognome socio:', s.nome || '');
+      if (nuovoNome === null) return;
+
+      const nuovaEmail = prompt('Email socio:', s.email || '');
+      if (nuovaEmail === null) return;
+
+      const nuovoTelefono = prompt('Telefono / WhatsApp socio:', s.telefono || '');
+      if (nuovoTelefono === null) return;
+
+      let statoScelto = prompt('Stato socio (scrivi Attivo, Sospeso oppure In attesa):', s.stato || 'Attivo');
+      if (statoScelto === null) return;
+      const stNorm = statoScelto.trim().toLowerCase();
+      if (stNorm === 'attivo' || stNorm === 'si') statoScelto = 'Attivo';
+      else if (stNorm === 'sospeso' || stNorm === 'no') statoScelto = 'Sospeso';
+      else if (stNorm.includes('attesa')) statoScelto = 'In attesa';
+
+      chiamaAppsScript({
+        action: 'modificaSocio',
+        staffPassword: staffSessionPassword,
+        riga: Number(riga),
+        nome: nuovoNome.trim(),
+        email: nuovaEmail.trim(),
+        telefono: nuovoTelefono.trim(),
+        stato: statoScelto.trim() || 'Attivo'
+      })
+      .then(res => {
+        if (res && res.status === 'success') {
+          mostraFeedbackStaff("Dati e stato del socio aggiornati su Google Sheets.", 'ok');
+          caricaStaffOverview();
+        } else {
+          mostraFeedbackStaff((res && res.message) || "Errore durante la modifica del socio.", 'err');
+        }
+      })
+      .catch(() => mostraFeedbackStaff("Errore di rete durante la modifica del socio.", 'err'));
+    }
     function renderStaffSoci() {
     const container = document.getElementById('staffSociLista');
     if (!container) return;
@@ -2825,9 +2888,13 @@ let bannerFoto = urlFotoEvento
               <div class="font-extrabold text-slate-900">${escapeHtml(s.nome || 'Senza nome')} <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isAttivo ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${escapeHtml(s.stato)}</span></div>
               <div class="text-[11px] text-slate-600">${escapeHtml(s.email)} ${s.telefono ? '• ' + escapeHtml(s.telefono) : ''} ${s.id ? '• ' + escapeHtml(s.id) : ''}</div>
             </div>
-            <div class="flex gap-2 shrink-0">
-              ${!isAttivo ? `<button onclick="attivaSocioStaff(${Number(s.riga)})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded text-[11px]">Approva Socio</button>` : ''}
-            </div>
+            <div class="flex flex-wrap gap-1.5 shrink-0">
+            <button type="button" onclick="apriModificaSocioStaff(${Number(s.riga || s.rowIndex || 0)})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2.5 py-1.5 rounded text-[11px]">Modifica</button>
+            ${!isAttivo
+              ? `<button type="button" onclick="cambiaStatoSocioStaff(${Number(s.riga || s.rowIndex || 0)}, 'Attivo')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded text-[11px]">Approva</button>`
+              : `<button type="button" onclick="cambiaStatoSocioStaff(${Number(s.riga || s.rowIndex || 0)}, 'Sospeso')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-2.5 py-1.5 rounded text-[11px]">Disattiva</button>`
+            }
+          </div>
           </div>
         `;
       }).join('');
