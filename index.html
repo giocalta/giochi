@@ -2708,6 +2708,13 @@ let bannerFoto = urlFotoEvento
     function aggiornaVistaStaff() {
       const loginBox = document.getElementById('boxStaffLogin');
       const dashBox = document.getElementById('boxStaffDashboard');
+
+      if (staffAuthenticated && staffSessionPassword && !verificaSessioneStaffAttiva()) {
+        loginBox.classList.remove('hidden');
+        dashBox.classList.add('hidden');
+        return;
+      }
+
       if (staffAuthenticated && staffSessionPassword) {
         loginBox.classList.add('hidden');
         dashBox.classList.remove('hidden');
@@ -2725,6 +2732,15 @@ let bannerFoto = urlFotoEvento
       const pwd = document.getElementById('staffPasswordInput').value;
       const msg = document.getElementById('staffLoginMsg');
 
+      const ora = Date.now();
+      if (ora < staffBloccatoFinoA) {
+        const secondiMancanti = Math.ceil((staffBloccatoFinoA - ora) / 1000);
+        msg.textContent = "Troppi tentativi errati. Riprova tra " + secondiMancanti + " secondi.";
+        msg.className = "text-center text-xs font-bold p-3 rounded bg-red-50 text-red-700 border border-red-200";
+        msg.classList.remove('hidden');
+        return;
+      }
+
       msg.textContent = "Verifica password staff con il server...";
       msg.className = "text-center text-xs font-bold p-3 rounded bg-blue-50 text-blue-700 border border-blue-200";
       msg.classList.remove('hidden');
@@ -2735,12 +2751,23 @@ let bannerFoto = urlFotoEvento
           if (data && data.status === 'success') {
             staffSessionPassword = pwd;
             staffAuthenticated = true;
+            staffTentativiFalliti = 0;
+            staffBloccatoFinoA = 0;
+            toccaAttivitaStaff();
             document.getElementById('staffPasswordInput').value = '';
             msg.classList.add('hidden');
             aggiornaVistaStaff();
             applicaOverviewStaff(data);
           } else {
-            msg.textContent = (data && data.message) ? data.message : "Password staff non valida.";
+            staffAuthenticated = false;
+            staffTentativiFalliti++;
+            let avvisoExtra = "";
+            if (staffTentativiFalliti >= 5) {
+              staffBloccatoFinoA = Date.now() + 60 * 1000;
+              staffTentativiFalliti = 0;
+              avvisoExtra = " Accesso bloccato per 60 secondi.";
+            }
+            msg.textContent = ((data && data.message) ? data.message : "Password staff non valida.") + avvisoExtra;
             msg.className = "text-center text-xs font-bold p-3 rounded bg-red-50 text-red-700 border border-red-200";
           }
         })
@@ -2758,6 +2785,12 @@ let bannerFoto = urlFotoEvento
     }
 
     function cambiaSchedaStaff(scheda) {
+      if (staffAuthenticated && !verificaSessioneStaffAttiva()) {
+        aggiornaVistaStaff();
+        return;
+      }
+      toccaAttivitaStaff();
+
       ['noleggi', 'soci', 'sondaggi', 'agenda-catalogo'].forEach(id => {
         const tab = document.getElementById('staffTab-' + id);
         const panel = document.getElementById('staffPanel-' + id);
