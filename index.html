@@ -2895,7 +2895,6 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
       if (stNorm === 'attivo' || stNorm === 'si') statoScelto = 'Attivo';
       else if (stNorm === 'sospeso' || stNorm === 'no') statoScelto = 'Sospeso';
       else if (stNorm.includes('attesa')) statoScelto = 'In attesa';
-
       chiamaAppsScript({
         action: 'modificaSocio',
         staffPassword: staffSessionPassword,
