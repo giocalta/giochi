@@ -2979,7 +2979,7 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
         }
       })
       .catch(() => mostraFeedbackStaff("Errore di rete durante la modifica del socio.", 'err'));
-    }
+    
     function renderStaffSoci() {
       const container = document.getElementById('staffSociLista');
       if (!container) return;
