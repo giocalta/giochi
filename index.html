@@ -2289,20 +2289,25 @@ let bannerFoto = urlFotoEvento
         ? '<a href="' + escapeHtml(gioco.tutorial) + '" target="_blank" rel="noopener noreferrer" class="w-full bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold py-3.5 px-4 flex items-center justify-center gap-2 text-sm transition-all">▶ Guarda Tutorial Su YouTube</a>'
         : '';
 
-      container.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
-          <div class="md:col-span-5 bg-slate-100 relative min-h-[300px] md:min-h-[450px]">
-            <img src="${escapeHtml(gioco.foto)}" alt="${escapeHtml(gioco.titolo)}" class="w-full h-full object-cover object-center" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
-          </div>
-          <div class="md:col-span-7 p-6 md:p-8 flex flex-col justify-between space-y-6">
-            <div>
-              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <span class="text-xs font-bold uppercase text-orange-600 bg-orange-50 px-3 py-1.5 border border-orange-100">${escapeHtml(gioco.tipo)}</span>
-                <div class="flex items-center gap-2">
-                  <button onclick="togglePreferito('${escapeHtml(gioco.id)}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3.5 py-2 flex items-center">${heartBtnSvg}</button>
-                  ${statusBadge}
-                </div>
+     container.innerHTML = `
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
+        <div class="md:col-span-5 bg-amber-50/50 p-4 flex items-center justify-center relative min-h-[280px] md:min-h-[450px] border-b md:border-b-0 md:border-r border-amber-100">
+          <img src="${escapeHtml(gioco.foto)}" alt="${escapeHtml(gioco.titolo)}" class="w-full max-h-[420px] object-contain object-center rounded drop-shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80';">
+        </div>
+        <div class="md:col-span-7 p-6 md:p-8 flex flex-col justify-between space-y-6">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-bold uppercase text-orange-600 bg-orange-50 px-3 py-1.5 border border-orange-100">${escapeHtml(gioco.tipo)}</span>
+              <div class="flex flex-wrap items-center gap-2">
+                <button onclick="condividiPaginaGioco('${escapeHtml(gioco.id)}', '${escapeHtml(gioco.titolo)}')" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-3.5 py-2 flex items-center gap-1.5 shadow-xs transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                  Condividi
+                </button>
+                <button onclick="togglePreferito('${escapeHtml(gioco.id)}', event)" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-800 text-xs font-bold px-3.5 py-2 flex items-center">${heartBtnSvg}</button>
+                ${statusBadge}
               </div>
+            </div>
+            
               <h2 class="text-2xl md:text-4xl font-black text-slate-900 mb-5 leading-tight">${escapeHtml(gioco.titolo)}</h2>
 
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center mb-6">
@@ -2436,11 +2441,19 @@ let bannerFoto = urlFotoEvento
       caricaNewsLudiche();
 
       const hashIniziale = window.location.hash.replace('#', '');
-      if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'registrazione', 'staff', 'info', 'contatti'].includes(hashIniziale)) {
-        cambiaSezione(hashIniziale);
-      } else {
-        cambiaSezione('home');
-      }
+    if (hashIniziale.startsWith('gioco=')) {
+      const idDaAprire = hashIniziale.replace('gioco=', '').trim();
+      const attendiGioco = setInterval(() => {
+        if (giochiData.length > 0) {
+          clearInterval(attendiGioco);
+          mostraDettaglioGioco(idDaAprire, true);
+        }
+      }, 200);
+    } else if (hashIniziale && ['home', 'catalogo', 'galleria', 'preferiti', 'registrazione', 'staff', 'info', 'contatti'].includes(hashIniziale)) {
+      cambiaSezione(hashIniziale);
+    } else {
+      cambiaSezione('home');
+    }
     });
 
     // ==========================================
