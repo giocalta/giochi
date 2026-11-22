@@ -2874,27 +2874,93 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
     }
 
     function apriModificaSocioStaff(riga) {
+      if (staffAuthenticated && !verificaSessioneStaffAttiva()) {
+        aggiornaVistaStaff();
+        return;
+      }
+      toccaAttivitaStaff();
+
       const s = staffSociList.find(item => Number(item.riga || item.rowIndex || 0) === Number(riga));
       if (!s) {
         mostraFeedbackStaff("Socio non trovato nell'elenco.", 'err');
         return;
       }
 
-      const nuovoNome = prompt('Nome e Cognome socio:', s.nome || '');
-      if (nuovoNome === null) return;
+      document.getElementById('editSocioRiga').value = Number(riga);
+      document.getElementById('editSocioNome').value = s.nome || '';
+      document.getElementById('editSocioEmail').value = s.email || '';
+      document.getElementById('editSocioTelefono').value = s.telefono || '';
 
-      const nuovaEmail = prompt('Email socio:', s.email || '');
-      if (nuovaEmail === null) return;
+      const statoRaw = String(s.stato || 'Attivo').trim().toLowerCase();
+      let statoVal = 'Attivo';
+      if (statoRaw === 'sospeso' || statoRaw === 'no') statoVal = 'Sospeso';
+      else if (statoRaw.includes('attesa')) statoVal = 'In attesa';
+      document.getElementById('editSocioStato').value = statoVal;
 
-      const nuovoTelefono = prompt('Telefono / WhatsApp socio:', s.telefono || '');
-      if (nuovoTelefono === null) return;
+      const modal = document.getElementById('modalModificaSocio');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.getElementById('editSocioNome').focus();
+      }
+    }
 
-      let statoScelto = prompt('Stato socio (scrivi Attivo, Sospeso oppure In attesa):', s.stato || 'Attivo');
-      if (statoScelto === null) return;
-      const stNorm = statoScelto.trim().toLowerCase();
-      if (stNorm === 'attivo' || stNorm === 'si') statoScelto = 'Attivo';
-      else if (stNorm === 'sospeso' || stNorm === 'no') statoScelto = 'Sospeso';
-      else if (stNorm.includes('attesa')) statoScelto = 'In attesa';
+    function chiudiModificaSocioStaff() {
+      const modal = document.getElementById('modalModificaSocio');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function salvaModificaSocioStaff(e) {
+      e.preventDefault();
+      if (staffAuthenticated && !verificaSessioneStaffAttiva()) {
+        chiudiModificaSocioStaff();
+        aggiornaVistaStaff();
+        return;
+      }
+      toccaAttivitaStaff();
+
+      const riga = Number(document.getElementById('editSocioRiga').value);
+      const nome = document.getElementById('editSocioNome').value.trim();
+      const email = document.getElementById('editSocioEmail').value.trim();
+      const telefono = document.getElementById('editSocioTelefono').value.trim();
+      const stato = document.getElementById('editSocioStato').value;
+
+      if (!riga || riga < 2 || !nome || !email) {
+        mostraFeedbackStaff("Compila almeno nome e email validi.", 'err');
+        return;
+      }
+
+      const btn = document.getElementById('btnSalvaModificaSocio');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Salvataggio...";
+      }
+
+      chiamaAppsScript({
+        action: 'modificaSocio',
+        staffPassword: staffSessionPassword,
+        riga: riga,
+        nome: nome,
+        email: email,
+        telefono: telefono,
+        stato: stato
+      })
+      .then(res => {
+        if (res && res.status === 'success') {
+          chiudiModificaSocioStaff();
+          mostraFeedbackStaff('Dati socio aggiornati con successo.', 'ok');
+          caricaStaffOverview();
+        } else {
+          mostraFeedbackStaff((res && res.message) || "Errore durante il salvataggio socio.", 'err');
+        }
+      })
+      .catch(() => mostraFeedbackStaff("Errore di rete durante il salvataggio socio.", 'err'))
+      .finally(() => {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Salva modifiche";
+        }
+      });
+    }
       chiamaAppsScript({
         action: 'modificaSocio',
         staffPassword: staffSessionPassword,
