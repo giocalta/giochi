@@ -3153,6 +3153,26 @@ let bannerFoto = urlFotoEvento
     const scriptAgenda = document.createElement('script');
     scriptAgenda.src = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?sheet=Agenda&tqx=responseHandler:processAgendaData';
     document.body.appendChild(scriptAgenda);
+
+    function condividiPaginaGioco(idGioco, titoloGioco) {
+      const baseUrl = window.location.href.split('#')[0];
+      const urlCondivisione = baseUrl + '#gioco=' + encodeURIComponent(idGioco);
+      const testo = 'Guarda "' + titoloGioco + '" su GIOCALTA (Noleggio Giochi da Tavolo Caltagirone):';
+
+      if (navigator.share) {
+        navigator.share({
+          title: titoloGioco + ' - GIOCALTA',
+          text: testo,
+          url: urlCondivisione
+        }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(testo + ' ' + urlCondivisione).then(() => {
+          alert('✅ Link del gioco copiato! Ora puoi incollarlo su WhatsApp o dove preferisci.');
+        });
+      } else {
+        prompt('Copia questo link per condividere il gioco:', urlCondivisione);
+      }
+    }
   </script>
 </body>
 </html>
