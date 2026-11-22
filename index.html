@@ -2832,20 +2832,25 @@ let bannerFoto = urlFotoEvento
     }
 
     function applicaOverviewStaff(data) {
-      staffSociList = data.soci || [];
-      staffNoleggiList = data.noleggi || [];
-      staffGiochiList = data.giochi || [];
+    staffSociList = data.soci || [];
+    staffNoleggiList = data.noleggi || [];
+    staffGiochiList = data.giochi || [];
 
-      const summary = document.getElementById('staffStatsSummary');
-      if (summary) {
-        summary.textContent = `Soci: ${staffSociList.length} • Noleggi: ${staffNoleggiList.length} • Sondaggi: ${data.sondaggiCount || 0} • Eventi: ${data.agendaCount || 0}`;
-      }
+    const noleggiInCorso = staffNoleggiList.filter(n => {
+      const st = String(n.stato || '').trim().toLowerCase();
+      return !st.includes('rientrat') && !st.includes('restituit') && !st.includes('chius');
+    }).length;
 
-      aggiornaDatalistStaff();
-      renderStaffSoci();
-      renderStaffNoleggi();
-      renderStaffGiochiLista();
+    const summary = document.getElementById('staffStatsSummary');
+    if (summary) {
+      summary.textContent = `Soci: ${staffSociList.length} • Noleggi in corso: ${noleggiInCorso} (Totali: ${staffNoleggiList.length}) • Sondaggi: ${data.sondaggiCount || 0} • Eventi: ${data.agendaCount || 0}`;
     }
+
+    aggiornaDatalistStaff();
+    renderStaffSoci();
+    renderStaffNoleggi();
+    renderStaffGiochiLista();
+  }
 function cambiaStatoSocioStaff(riga, nuovoStato) {
       if (!riga || riga < 2) {
         mostraFeedbackStaff("Numero di riga socio non trovato.", 'err');
@@ -2911,43 +2916,69 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
       .catch(() => mostraFeedbackStaff("Errore di rete durante la modifica del socio.", 'err'));
     }
     function renderStaffSoci() {
-    const container = document.getElementById('staffSociLista');
-    if (!container) return;
+      const container = document.getElementById('staffSociLista');
+      if (!container) return;
 
-    const filtroTesto = (document.getElementById('staffFiltroSociInput')?.value || '').trim().toLowerCase();
-    const filtroStato = (document.getElementById('staffFiltroStatoSocio')?.value || '').trim().toLowerCase();
+      const filtroTesto = (document.getElementById('staffFiltroSociInput')?.value || '').trim().toLowerCase();
+      const filtroStato = (document.getElementById('staffFiltroStatoSocio')?.value || '').trim().toLowerCase();
 
-    const listaFiltrata = staffSociList.filter(s => {
-      const statoLower = String(s.stato || '').trim().toLowerCase();
-      const matchStato = !filtroStato || statoLower.includes(filtroStato);
-      const matchTesto = !filtroTesto ||
-        String(s.nome || '').toLowerCase().includes(filtroTesto) ||
-        String(s.email || '').toLowerCase().includes(filtroTesto) ||
-        String(s.telefono || '').toLowerCase().includes(filtroTesto) ||
-        String(s.id || '').toLowerCase().includes(filtroTesto);
-      return matchStato && matchTesto;
-    });
+      const listaFiltrata = staffSociList.filter(s => {
+        const statoLower = String(s.stato || '').trim().toLowerCase();
+        const matchStato = !filtroStato || statoLower.includes(filtroStato);
+        const matchTesto = !filtroTesto ||
+          String(s.nome || '').toLowerCase().includes(filtroTesto) ||
+          String(s.email || '').toLowerCase().includes(filtroTesto) ||
+          String(s.telefono || '').toLowerCase().includes(filtroTesto) ||
+          String(s.id || '').toLowerCase().includes(filtroTesto);
+        return matchStato && matchTesto;
+      });
 
-    if (listaFiltrata.length === 0) {
-      container.innerHTML = '<p class="text-slate-400">Nessun socio corrisponde alla ricerca.</p>';
-      return;
-    }
+      if (listaFiltrata.length === 0) {
+        container.innerHTML = '<p class="text-slate-400">Nessun socio corrisponde alla ricerca.</p>';
+        return;
+      }
 
-    container.innerHTML = listaFiltrata.map(s => {
+      container.innerHTML = listaFiltrata.map(s => {
         const isAttivo = String(s.stato || '').trim().toLowerCase() === 'attivo';
+        const emailSocio = String(s.email || '').trim().toLowerCase();
+        const nomeSocio = String(s.nome || '').trim().toLowerCase();
+        const idSocio = String(s.id || '').trim().toLowerCase();
+
+        const noleggiSocio = staffNoleggiList.filter(n => {
+          const nEmail = String(n.email || n.socioEmail || '').trim().toLowerCase();
+          const nSocio = String(n.socio || n.nomeSocio || n.nome || '').trim().toLowerCase();
+          return (emailSocio && (nEmail === emailSocio || nSocio === emailSocio)) ||
+                 (nomeSocio && nSocio === nomeSocio) ||
+                 (idSocio && nSocio === idSocio);
+        });
+
+        const totNoleggi = noleggiSocio.length;
+        const attiviNoleggi = noleggiSocio.filter(n => {
+          const st = String(n.stato || '').trim().toLowerCase();
+          return !st.includes('rientrat') && !st.includes('restituit') && !st.includes('chius');
+        }).length;
+
+        const badgeNoleggi = totNoleggi > 0
+          ? `<span class="text-[10px] px-2 py-0.5 rounded font-bold bg-slate-100 text-slate-700 border border-slate-200">${attiviNoleggi > 0 ? `${attiviNoleggi} in corso • ` : ''}${totNoleggi} ${totNoleggi === 1 ? 'noleggio' : 'noleggi'}</span>`
+          : `<span class="text-[10px] px-2 py-0.5 rounded font-medium bg-slate-50 text-slate-400">0 noleggi</span>`;
+
         return `
           <div class="p-3 border border-amber-200/80 rounded bg-amber-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <div class="font-extrabold text-slate-900">${escapeHtml(s.nome || 'Senza nome')} <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isAttivo ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${escapeHtml(s.stato)}</span></div>
-              <div class="text-[11px] text-slate-600">${escapeHtml(s.email)} ${s.telefono ? '• ' + escapeHtml(s.telefono) : ''} ${s.id ? '• ' + escapeHtml(s.id) : ''}</div>
+              <div class="font-extrabold text-slate-900 flex flex-wrap items-center gap-1.5">
+                <span>${escapeHtml(s.nome || 'Senza nome')}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isAttivo ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${escapeHtml(s.stato)}</span>
+                ${badgeNoleggi}
+              </div>
+              <div class="text-[11px] text-slate-600 mt-0.5">${escapeHtml(s.email)} ${s.telefono ? '• ' + escapeHtml(s.telefono) : ''} ${s.id ? '• ' + escapeHtml(s.id) : ''}</div>
             </div>
             <div class="flex flex-wrap gap-1.5 shrink-0">
-            <button type="button" onclick="apriModificaSocioStaff(${Number(s.riga || s.rowIndex || 0)})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2.5 py-1.5 rounded text-[11px]">Modifica</button>
-            ${!isAttivo
-              ? `<button type="button" onclick="cambiaStatoSocioStaff(${Number(s.riga || s.rowIndex || 0)}, 'Attivo')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded text-[11px]">Approva</button>`
-              : `<button type="button" onclick="cambiaStatoSocioStaff(${Number(s.riga || s.rowIndex || 0)}, 'Sospeso')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-2.5 py-1.5 rounded text-[11px]">Disattiva</button>`
-            }
-          </div>
+              <button type="button" onclick="apriModificaSocioStaff(${Number(s.riga || s.rowIndex || 0)})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2.5 py-1.5 rounded text-[11px]">Modifica</button>
+              ${!isAttivo
+                ? `<button type="button" onclick="cambiaStatoSocioStaff(${Number(s.riga || s.rowIndex || 0)}, 'Attivo')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded text-[11px]">Approva</button>`
+                : `<button type="button" onclick="cambiaStatoSocioStaff(${Number(s.riga || s.rowIndex || 0)}, 'Sospeso')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-2.5 py-1.5 rounded text-[11px]">Disattiva</button>`
+              }
+            </div>
           </div>
         `;
       }).join('');
