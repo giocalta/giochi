@@ -3074,16 +3074,23 @@ function creaLinkWhatsAppNoleggio(telefonoRaw, nomeSocio, titoloGioco, dataRient
 
       container.innerHTML = staffNoleggiList.map(n => {
         const isRestituito = String(n.stato || '').trim().toLowerCase() === 'restituito';
-const telefonoSocio = n.telefono || n.socioTelefono || (typeof staffSociList !== 'undefined'
-          ? (staffSociList.find(s => String(s.nome || '').trim().toLowerCase() === String(n.socio || '').trim().toLowerCase())?.telefono || '')
-          : '');
+let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp || '';
+        if (!telefonoSocio && typeof staffSociList !== 'undefined' && Array.isArray(staffSociList)) {
+          const rifSocio = String(n.socio || '').trim().toLowerCase();
+          const socioMatch = staffSociList.find(s =>
+            String(s.nome || '').trim().toLowerCase() === rifSocio ||
+            String(s.email || '').trim().toLowerCase() === rifSocio
+          );
+          if (socioMatch) {
+            telefonoSocio = socioMatch.telefono || socioMatch.cellulare || socioMatch.whatsapp || socioMatch.tel || '';
+          }
+        }
         const waUrl = !isRestituito
           ? creaLinkWhatsAppNoleggio(telefonoSocio, n.socio, n.gioco, n.dataRientro || n.scadenza || '')
           : '';
         const waBtnHtml = waUrl
           ? `<a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded text-[11px] inline-block">WhatsApp</a>`
           : '';
-
         return `
           <div class="p-3 border border-slate-200 rounded bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
