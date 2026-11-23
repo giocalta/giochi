@@ -657,6 +657,12 @@
 
           <div class="border-t border-slate-100 pt-5 space-y-3">
             <h4 class="text-sm font-black text-slate-900">Elenco Noleggi (Restituzione)</h4>
+            <div class="flex items-center justify-between gap-2 mb-2">
+  <span class="text-[11px] text-slate-500 font-semibold" id="staffNoleggiContatore"></span>
+  <button type="button" id="btnFiltroSoloNoleggiati" onclick="toggleFiltroSoloNoleggiati()" class="px-3 py-1.5 rounded-lg border border-orange-300 bg-orange-50 hover:bg-orange-100 text-orange-800 font-bold text-[11px]">
+    Mostra: Tutti
+  </button>
+</div>
             <div id="staffNoleggiLista" class="space-y-2 text-xs">
               <p class="text-slate-400">Caricamento noleggi...</p>
             </div>
@@ -3063,16 +3069,42 @@ function creaLinkWhatsAppNoleggio(telefonoRaw, nomeSocio, titoloGioco, dataRient
         ? ` previsto per il ${String(dataRientro).trim()}` : '';  const testo = `Ciao ${nomePulito}, ti inviamo un promemoria dallo staff di GIOCALTA per il rientro di "${giocoPulito}"${scadenzaTesto}. Grazie!`;
       return `https://wa.me/${cifre}?text=${encodeURIComponent(testo)}`;
     }
+    let mostraSoloNoleggiati = false;
+
+    function toggleFiltroSoloNoleggiati() {
+      mostraSoloNoleggiati = !mostraSoloNoleggiati;
+      const btn = document.getElementById('btnFiltroSoloNoleggiati');
+      if (btn) {
+        btn.textContent = mostraSoloNoleggiati ? 'Mostra: Solo in corso' : 'Mostra: Tutti';
+        btn.className = mostraSoloNoleggiati
+          ? 'px-3 py-1.5 rounded-lg bg-orange-600 hover:bg-orange-700 text-white font-bold text-[11px]'
+          : 'px-3 py-1.5 rounded-lg border border-orange-300 bg-orange-50 hover:bg-orange-100 text-orange-800 font-bold text-[11px]';
+      }
+      renderStaffNoleggi();
+    }
     function renderStaffNoleggi() {
       const container = document.getElementById('staffNoleggiLista');
       if (!container) return;
 
-      if (staffNoleggiList.length === 0) {
-        container.innerHTML = '<p class="text-slate-400">Nessun noleggio registrato.</p>';
+     const listaFiltrata = mostraSoloNoleggiati
+        ? staffNoleggiList.filter(item => String(item.stato || '').trim().toLowerCase() !== 'restituito')
+        : staffNoleggiList;
+
+      const contatore = document.getElementById('staffNoleggiContatore');
+      if (contatore) {
+        contatore.textContent = mostraSoloNoleggiati
+          ? `In corso: ${listaFiltrata.length} su ${staffNoleggiList.length}`
+          : `Totale noleggi: ${staffNoleggiList.length}`;
+      }
+
+      if (listaFiltrata.length === 0) {
+        container.innerHTML = mostraSoloNoleggiati
+          ? '<p class="text-slate-400">Nessun noleggio attualmente in corso.</p>'
+          : '<p class="text-slate-400">Nessun noleggio registrato.</p>';
         return;
       }
 
-      container.innerHTML = staffNoleggiList.map(n => {
+      container.innerHTML = listaFiltrata.map(n => {
         const isRestituito = String(n.stato || '').trim().toLowerCase() === 'restituito';
 let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp || '';
         if (!telefonoSocio && typeof staffSociList !== 'undefined' && Array.isArray(staffSociList)) {
