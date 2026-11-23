@@ -3049,7 +3049,20 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
       })
       .catch(() => mostraFeedbackStaff("Errore di rete durante l'attivazione socio.", 'err'));
     }
+function creaLinkWhatsAppNoleggio(telefonoRaw, nomeSocio, titoloGioco, dataRientro) {
+      let cifre = String(telefonoRaw || '').replace(/\D+/g, '');
+      if (!cifre) return '';
+      if (cifre.startsWith('00')) cifre = cifre.slice(2);
+      if (!cifre.startsWith('39') && cifre.length >= 9 && cifre.length <= 10) {
+        cifre = '39' + cifre;
+      }
 
+      const nomePulito = String(nomeSocio || 'Socio').trim();
+      const giocoPulito = String(titoloGioco || 'il gioco noleggiato').trim();
+      const scadenzaTesto = dataRientro
+        ? ` previsto per il ${String(dataRientro).trim()}` : '';  const testo = `Ciao ${nomePulito}, ti inviamo un promemoria dallo staff di GIOCALTA per il rientro di "${giocoPulito}"${scadenzaTesto}. Grazie!`;
+      return `https://wa.me/${cifre}?text=${encodeURIComponent(testo)}`;
+    }
     function renderStaffNoleggi() {
       const container = document.getElementById('staffNoleggiLista');
       if (!container) return;
@@ -3061,6 +3074,16 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
 
       container.innerHTML = staffNoleggiList.map(n => {
         const isRestituito = String(n.stato || '').trim().toLowerCase() === 'restituito';
+const telefonoSocio = n.telefono || n.socioTelefono || (typeof staffSociList !== 'undefined'
+          ? (staffSociList.find(s => String(s.nome || '').trim().toLowerCase() === String(n.socio || '').trim().toLowerCase())?.telefono || '')
+          : '');
+        const waUrl = !isRestituito
+          ? creaLinkWhatsAppNoleggio(telefonoSocio, n.socio, n.gioco, n.dataRientro || n.scadenza || '')
+          : '';
+        const waBtnHtml = waUrl
+          ? `<a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded text-[11px] inline-block">WhatsApp</a>`
+          : '';
+
         return `
           <div class="p-3 border border-slate-200 rounded bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -3068,6 +3091,7 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
               <div class="text-[11px] text-slate-600">Socio: <strong>${escapeHtml(n.socio)}</strong> • Data: ${escapeHtml(formattaDataItaliana(n.data) || '-')}</div>
             </div>
             <div class="shrink-0">
+            ${waBtnHtml}
               ${!isRestituito ? `<button onclick="chiudiNoleggioStaff(${Number(n.riga)}, '${encodeURIComponent(n.gioco)}')" class="bg-slate-900 hover:bg-slate-950 text-white font-bold px-3 py-1.5 rounded text-[11px]">Chiudi / Restituito</button>` : ''}
             </div>
           </div>
