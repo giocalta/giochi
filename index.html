@@ -2293,7 +2293,85 @@ let bannerFoto = urlFotoEvento
         grid.appendChild(div);
       });
     }
+function condividiGiocoGiocalta(idGioco, event) {
+      if (event) event.stopPropagation();
+      const gioco = giochiData.find(g => g.id === idGioco);
+      const titoloGioco = gioco ? gioco.titolo : 'GIOCALTA';
+      const linkCondivisione = window.location.origin + window.location.pathname + '#catalogo';
+      const testo = `Scopri "${titoloGioco}" su GIOCALTA`;
 
+      if (navigator.share) {
+        navigator.share({
+          title: 'GIOCALTA - ' + titoloGioco,
+          text: testo,
+          url: linkCondivisione
+        }).catch(function(err) {
+          if (err && err.name !== 'AbortError') {
+            apriPannelloSocialGiocalta(titoloGioco, testo + ' ' + linkCondivisione, linkCondivisione);
+          }
+        });
+      } else {
+        apriPannelloSocialGiocalta(titoloGioco, testo + ' ' + linkCondivisione, linkCondivisione);
+      }
+    }
+
+    function apriPannelloSocialGiocalta(titolo, testoCompleto, link) {
+      const waUrl = 'https://wa.me/?text=' + encodeURIComponent(testoCompleto);
+      const fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(link);
+      const tgUrl = 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(titolo);
+
+      let box = document.getElementById('giocaltaSharePanel');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = 'giocaltaSharePanel';
+        box.className = 'fixed bottom-4 right-4 z-50 bg-white border border-amber-300 shadow-2xl rounded-xl p-3.5 text-xs space-y-2.5 w-64';
+        document.body.appendChild(box);
+      }
+
+      box.innerHTML = `
+        <div class="flex items-center justify-between font-black text-slate-900 border-b border-slate-100 pb-1.5">
+          <span>Condividi "${escapeHtml(titolo)}"</span>
+          <button type="button" onclick="document.getElementById('giocaltaSharePanel').remove()" class="text-slate-400 hover:text-slate-800 px-1 font-bold">✕</button>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-2 rounded text-center">WhatsApp</a>
+          <a href="${fbUrl}" target="_blank" rel="noopener noreferrer" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded text-center">Facebook</a>
+          <a href="${tgUrl}" target="_blank" rel="noopener noreferrer" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-3 py-2 rounded text-center">Telegram</a>
+          <button type="button" onclick="copiaLinkGiocalta('${encodeURIComponent(link)}')" class="bg-slate-900 hover:bg-slate-950 text-white font-bold px-3 py-2 rounded text-center">Copia link</button>
+        </div>
+      `;
+    }
+
+    function copiaLinkGiocalta(linkCodificato) {
+      const url = decodeURIComponent(linkCodificato);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          alert('Link copiato negli appunti!');
+        });
+      }
+    }
+
+    (function attivaPulsanteCondividiDettaglio_() {
+      const originale = mostraDettaglioGioco;
+      mostraDettaglioGioco = function(idGioco, scrollInCima) {
+        originale(idGioco, scrollInCima);
+        const container = document.getElementById('dettaglioGiocoContainer');
+        const gioco = giochiData.find(g => g.id === idGioco);
+        if (!container || !gioco) return;
+        const blocchi = container.querySelectorAll('.space-y-3.pt-5.border-t.border-slate-100');
+        const footerAzioni = blocchi[blocchi.length - 1];
+        if (!footerAzioni || footerAzioni.querySelector('[data-btn-condividi-giocalta="1"]')) return;
+
+        const btnCondividi = document.createElement('button');
+        btnCondividi.type = 'button';
+        btnCondividi.setAttribute('data-btn-condividi-giocalta', '1');
+        btnCondividi.className = 'w-full bg-amber-50 hover:bg-amber-100 text-slate-800 border border-amber-200 font-bold py-3.5 px-4 flex items-center justify-center gap-2 text-sm transition-all';
+        btnCondividi.innerHTML = '📤 Condividi';
+        btnCondividi.onclick = function(ev) { condividiGiocoGiocalta(gioco.id, ev); };
+        footerAzioni.appendChild(btnCondividi);
+      };
+    })();
+    
     function mostraDettaglioGioco(idGioco, scrollInCima) {
       const gioco = giochiData.find(g => g.id === idGioco);
       if (!gioco) return;
