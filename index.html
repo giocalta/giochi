@@ -3627,5 +3627,24 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
     </form>
   </div>
 </div>
+<script>
+(function centralizzaUrlGiocalta_() {
+  const URL_SITO_ATTIVO = window.location.origin + window.location.pathname.replace(/index\.html$/i, '');
+  window.GIOCALTA_BASE_URL = URL_SITO_ATTIVO.endsWith('/') ? URL_SITO_ATTIVO : URL_SITO_ATTIVO + '/';
+
+  let ogUrl = document.querySelector('meta[property="og:url"]');
+  if (!ogUrl) {
+    ogUrl = document.createElement('meta');
+    ogUrl.setAttribute('property', 'og:url');
+    document.head.appendChild(ogUrl);
+  }
+  ogUrl.setAttribute('content', window.GIOCALTA_BASE_URL);
+
+  window.getLinkSezioneGiocalta = function(sezione) {
+    const hash = sezione ? '#' + String(sezione).replace(/^#/, '') : '';
+    return window.GIOCALTA_BASE_URL + hash;
+  };
+})();
+</script>
 </body>
 </html>
