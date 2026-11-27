@@ -3628,18 +3628,32 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   </div>
 </div>
 <script>
-(function centralizzaUrlGiocalta_() {
-  const URL_SITO_ATTIVO = window.location.origin + window.location.pathname.replace(/index\.html$/i, '');
-  window.GIOCALTA_BASE_URL = URL_SITO_ATTIVO.endsWith('/') ? URL_SITO_ATTIVO : URL_SITO_ATTIVO + '/';
-
-  let ogUrl = document.querySelector('meta[property="og:url"]');
-  if (!ogUrl) {
-    ogUrl = document.createElement('meta');
-    ogUrl.setAttribute('property', 'og:url');
-    document.head.appendChild(ogUrl);
+(function sistemaNewsEUrlGiocalta_() {
+  if (typeof window.newsData === 'undefined') {
+    window.newsData = [];
   }
-  ogUrl.setAttribute('content', window.GIOCALTA_BASE_URL);
 
+  window.avviaAutoScrollNews = function() {
+    if (typeof window.fermaAutoScrollNews === 'function') {
+      window.fermaAutoScrollNews();
+    }
+    const grid = document.getElementById('newsGrid');
+    if (!grid || !Array.isArray(window.newsData) || window.newsData.length <= 1) return;
+    window.newsAutoScrollTimer = setInterval(function() {
+      const viewHome = document.getElementById('viewHome');
+      if (!viewHome || viewHome.classList.contains('hidden')) return;
+      const maxScroll = grid.scrollWidth - grid.clientWidth;
+      if (maxScroll <= 0) return;
+      if (grid.scrollLeft >= maxScroll - 10) {
+        grid.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        grid.scrollBy({ left: 320, behavior: 'smooth' });
+      }
+    }, 4500);
+  };
+
+  const base = window.location.origin + window.location.pathname.replace(/index\.html$/i, '');
+  window.GIOCALTA_BASE_URL = base.endsWith('/') ? base : base + '/';
   window.getLinkSezioneGiocalta = function(sezione) {
     const hash = sezione ? '#' + String(sezione).replace(/^#/, '') : '';
     return window.GIOCALTA_BASE_URL + hash;
