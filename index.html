@@ -3660,5 +3660,153 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   };
 })();
 </script>
+
+  <script>
+(function tuttoCompletoGiocalta_() {
+  if (typeof window.newsData === 'undefined') {
+    window.newsData = [];
+  }
+
+  window.avviaAutoScrollNews = function() {
+    if (typeof window.fermaAutoScrollNews === 'function') {
+      window.fermaAutoScrollNews();
+    }
+    const grid = document.getElementById('newsGrid');
+    if (!grid || !Array.isArray(window.newsData) || window.newsData.length <= 1) return;
+    window.newsAutoScrollTimer = setInterval(function() {
+      const viewHome = document.getElementById('viewHome');
+      if (!viewHome || viewHome.classList.contains('hidden')) return;
+      const maxScroll = grid.scrollWidth - grid.clientWidth;
+      if (maxScroll <= 0) return;
+      if (grid.scrollLeft >= maxScroll - 10) {
+        grid.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        grid.scrollBy({ left: 320, behavior: 'smooth' });
+      }
+    }, 4500);
+  };
+
+  const base = window.location.origin + window.location.pathname.replace(/index\.html$/i, '');
+  window.GIOCALTA_BASE_URL = base.endsWith('/') ? base : base + '/';
+  window.getLinkSezioneGiocalta = function(sezione) {
+    const hash = sezione ? '#' + String(sezione).replace(/^#/, '') : '';
+    return window.GIOCALTA_BASE_URL + hash;
+  };
+
+  function getGiocoCorrente_() {
+    const viewGioco = document.getElementById('viewGioco');
+    if (viewGioco && !viewGioco.classList.contains('hidden')) {
+      const h2 = viewGioco.querySelector('h2');
+      if (h2 && Array.isArray(window.giochiData)) {
+        const trovato = window.giochiData.find(g => g.titolo.trim() === h2.textContent.trim());
+        if (trovato) return trovato;
+      }
+    }
+    return { id: 'giocalta', titolo: 'GIOCALTA' };
+  }
+
+  window.copiaLinkGiocalta = function(linkCodificato) {
+    const url = decodeURIComponent(linkCodificato);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() {
+        alert('Link copiato negli appunti!');
+      });
+    }
+  };
+
+  window.condividiAppSocialGiocalta = function(nomeSocial, urlSocial, testoEnc, linkEnc) {
+    const testoCompleto = decodeURIComponent(testoEnc);
+    const link = decodeURIComponent(linkEnc);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(testoCompleto).catch(function() {});
+    }
+    alert('Testo e link copiati! Aprirà ' + nomeSocial + ': incolla dove vuoi condividere.');
+    window.open(urlSocial, '_blank', 'noopener,noreferrer');
+  };
+
+  window.apriPannelloSocialGiocalta = function(titolo, testoCompleto, link) {
+    const waUrl = 'https://wa.me/?text=' + encodeURIComponent(testoCompleto);
+    const fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(link);
+    const tgUrl = 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(titolo);
+    const xUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(testoCompleto);
+    const liUrl = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(link);
+    const mailUrl = 'mailto:?subject=' + encodeURIComponent(titolo) + '&body=' + encodeURIComponent(testoCompleto);
+    const tEnc = encodeURIComponent(testoCompleto);
+    const lEnc = encodeURIComponent(link);
+
+    let box = document.getElementById('giocaltaSharePanel');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'giocaltaSharePanel';
+      box.className = 'fixed bottom-4 right-4 z-50 bg-white border border-amber-300 shadow-2xl rounded-xl p-3.5 text-xs space-y-2.5 w-64';
+      document.body.appendChild(box);
+    }
+
+    box.innerHTML = `
+      <div class="flex items-center justify-between font-black text-slate-900 border-b border-slate-100 pb-1.5">
+        <span>Condividi "${String(titolo || 'GIOCALTA').replace(/</g, '&lt;')}"</span>
+        <button type="button" onclick="document.getElementById('giocaltaSharePanel').remove()" class="text-slate-400 hover:text-slate-800 px-1 font-bold">✕</button>
+      </div>
+      <div class="grid grid-cols-2 gap-1.5">
+        <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-2 rounded text-center">WhatsApp</a>
+        <a href="${fbUrl}" target="_blank" rel="noopener noreferrer" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2.5 py-2 rounded text-center">Facebook</a>
+        <a href="${tgUrl}" target="_blank" rel="noopener noreferrer" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-2.5 py-2 rounded text-center">Telegram</a>
+        <a href="${xUrl}" target="_blank" rel="noopener noreferrer" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-2.5 py-2 rounded text-center">X (Twitter)</a>
+        <a href="${liUrl}" target="_blank" rel="noopener noreferrer" class="bg-blue-800 hover:bg-blue-900 text-white font-bold px-2.5 py-2 rounded text-center">LinkedIn</a>
+        <a href="${mailUrl}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-2.5 py-2 rounded text-center">Email</a>
+        <button type="button" onclick="condividiAppSocialGiocalta('Instagram', 'https://www.instagram.com/', '${tEnc}', '${lEnc}')" class="bg-pink-600 hover:bg-pink-700 text-white font-bold px-2.5 py-2 rounded text-center">Instagram</button>
+        <button type="button" onclick="condividiAppSocialGiocalta('TikTok', 'https://www.tiktok.com/', '${tEnc}', '${lEnc}')" class="bg-neutral-950 hover:bg-neutral-800 text-white font-bold px-2.5 py-2 rounded text-center">TikTok</button>
+      </div>
+      <button type="button" onclick="copiaLinkGiocalta('${lEnc}')" class="w-full bg-slate-950 hover:bg-black text-white font-bold px-3 py-2 rounded text-center">Copia link</button>
+    `;
+  };
+
+  window.condividiGiocoGiocalta = function(idGioco, event) {
+    if (event) event.stopPropagation();
+    const gioco = (Array.isArray(window.giochiData) && window.giochiData.find(g => g.id === idGioco)) || getGiocoCorrente_();
+    const titoloGioco = gioco.titolo || 'GIOCALTA';
+    const linkCondivisione = window.getLinkSezioneGiocalta('catalogo');
+    const testo = 'Scopri "' + titoloGioco + '" su GIOCALTA';
+
+    if (navigator.share) {
+      navigator.share({
+        title: 'GIOCALTA - ' + titoloGioco,
+        text: testo,
+        url: linkCondivisione
+      }).catch(function(err) {
+        if (!err || err.name !== 'AbortError') {
+          window.apriPannelloSocialGiocalta(titoloGioco, testo + ' ' + linkCondivisione, linkCondivisione);
+        }
+      });
+    } else {
+      window.apriPannelloSocialGiocalta(titoloGioco, testo + ' ' + linkCondivisione, linkCondivisione);
+    }
+  };
+
+  function assicuraPulsanteCondividi_() {
+    const container = document.getElementById('dettaglioGiocoContainer');
+    if (!container) return;
+    const blocchi = container.querySelectorAll('.space-y-3.pt-5.border-t.border-slate-100');
+    const footerAzioni = blocchi[blocchi.length - 1];
+    if (!footerAzioni || footerAzioni.querySelector('[data-btn-condividi-giocalta="1"]')) return;
+
+    const gioco = getGiocoCorrente_();
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('data-btn-condividi-giocalta', '1');
+    btn.className = 'w-full bg-amber-50 hover:bg-amber-100 text-slate-800 border border-amber-200 font-bold py-3.5 px-4 flex items-center justify-center gap-2 text-sm transition-all';
+    btn.innerHTML = '📤 Condividi';
+    btn.onclick = function(ev) { window.condividiGiocoGiocalta(gioco.id, ev); };
+    footerAzioni.appendChild(btn);
+  }
+
+  const observer = new MutationObserver(assicuraPulsanteCondividi_);
+  document.addEventListener('DOMContentLoaded', function() {
+    assicuraPulsanteCondividi_();
+    const target = document.getElementById('dettaglioGiocoContainer') || document.body;
+    observer.observe(target, { childList: true, subtree: true });
+  });
+})();
+</script>
 </body>
 </html>
