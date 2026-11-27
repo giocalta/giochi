@@ -3808,5 +3808,69 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   });
 })();
 </script>
+  <script>
+(function adeguaLinguaggioAssociativoGiocalta_() {
+  document.title = 'GIOCALTA — Ludoteca e Prestito Giochi da Tavolo per i Soci | Caltagirone';
+
+  const sostituzioni = [
+    [/\bNoleggio Giochi da Tavolo\b/gi, 'Ludoteca e Prestito Giochi da Tavolo per i Soci'],
+    [/\bnoleggio giochi da tavolo\b/gi, 'prestito giochi da tavolo riservato ai soci'],
+    [/\bNoleggio\b/g, 'Prestito ludico'],
+    [/\bnoleggio\b/g, 'prestito ludico'],
+    [/\bClienti\b/g, 'Soci'],
+    [/\bclienti\b/g, 'soci'],
+    [/\bCliente\b/g, 'Socio'],
+    [/\bcliente\b/g, 'socio'],
+    [/\bArea Clienti\b/gi, 'Area Soci'],
+    [/\bNuovo Cliente\b/gi, 'Nuovo Socio']
+  ];
+
+  function aggiornaTestoNodo_(nodo) {
+    if (!nodo || nodo.nodeType !== Node.TEXT_NODE) return;
+    const padre = nodo.parentElement;
+    if (!padre) return;
+    const tag = padre.tagName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA' || tag === 'INPUT') return;
+
+    let testo = nodo.nodeValue;
+    let modificato = false;
+    for (let i = 0; i < sostituzioni.length; i++) {
+      const nuovo = testo.replace(sostituzioni[i][0], sostituzioni[i][1]);
+      if (nuovo !== testo) {
+        testo = nuovo;
+        modificato = true;
+      }
+    }
+    if (modificato) {
+      nodo.nodeValue = testo;
+    }
+  }
+
+  function scansionaAlbero_(radice) {
+    if (!radice) return;
+    const walker = document.createTreeWalker(radice, NodeFilter.SHOW_TEXT, null);
+    let corrente;
+    while ((corrente = walker.nextNode())) {
+      aggiornaTestoNodo_(corrente);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    scansionaAlbero_(document.body);
+    const observer = new MutationObserver(function(mutazioni) {
+      mutazioni.forEach(function(m) {
+        m.addedNodes.forEach(function(n) {
+          if (n.nodeType === Node.TEXT_NODE) {
+            aggiornaTestoNodo_(n);
+          } else if (n.nodeType === Node.ELEMENT_NODE) {
+            scansionaAlbero_(n);
+          }
+        });
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+})();
+</script>
 </body>
 </html>
