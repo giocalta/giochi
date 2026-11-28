@@ -3930,5 +3930,50 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   }
 })();
 </script>
+  <script>
+(function bloccaAutofillRicercaGiocalta_() {
+  function configuraCampi_() {
+    // 1. Segnala esplicitamente i campi di accesso (Area Soci / Staff) al gestore password
+    document.querySelectorAll('input[type="password"]').forEach(function(pwd) {
+      if (!pwd.getAttribute('autocomplete')) {
+        pwd.setAttribute('autocomplete', 'current-password');
+      }
+      const form = pwd.closest('form') || pwd.parentElement;
+      if (form) {
+        const emailInp = form.querySelector('input[type="email"], input[placeholder*="mail" i]');
+        if (emailInp && !emailInp.getAttribute('autocomplete')) {
+          emailInp.setAttribute('autocomplete', 'email');
+        }
+      }
+    });
+
+    // 2. Protegge solo la barra di ricerca del catalogo dal riempimento automatico dell'email
+    document.querySelectorAll('input[type="text"], input[type="search"]').forEach(function(inp) {
+      if (inp.type === 'password' || inp.type === 'email') return;
+      const ph = (inp.placeholder || '').toLowerCase();
+      const id = (inp.id || '').toLowerCase();
+      if (ph.includes('cerca') || ph.includes('gioco') || ph.includes('titolo') || id.includes('search') || id.includes('cerca')) {
+        inp.setAttribute('autocomplete', 'off');
+        if (!inp.dataset.giocaltaSearchNameSet) {
+          inp.dataset.giocaltaSearchNameSet = '1';
+          inp.setAttribute('name', 'giocalta_ricerca_giochi_' + Math.random().toString(36).slice(2, 7));
+        }
+        if (inp.value && inp.value.includes('@')) {
+          inp.value = '';
+          inp.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', configuraCampi_);
+  } else {
+    configuraCampi_();
+  }
+  setTimeout(configuraCampi_, 250);
+  setTimeout(configuraCampi_, 800);
+})();
+</script>
 </body>
 </html>
