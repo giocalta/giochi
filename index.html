@@ -3640,7 +3640,7 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
     </form>
   </div>
 </div>
-  
+  <script>
 (function sistemaNewsEUrlGiocalta_() {
   if (typeof window.newsData === 'undefined') {
     window.newsData = [];
@@ -4337,6 +4337,7 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   };
 
   function inizializzaTutto_() {
+    window.aggiornaBoxStatoIscrizioneGiocalta = aggiornaBoxStatoIscrizione_;
     aggiornaSelectStaff_();
     inserisciPrivacyInRegistrazione_();
     aggiornaBoxStatoIscrizione_();
