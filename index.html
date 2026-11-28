@@ -3930,49 +3930,61 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   }
 })();
 </script>
-  <script>
-(function bloccaAutofillRicercaGiocalta_() {
-  function configuraCampi_() {
-    // 1. Segnala esplicitamente i campi di accesso (Area Soci / Staff) al gestore password
-    document.querySelectorAll('input[type="password"]').forEach(function(pwd) {
-      if (!pwd.getAttribute('autocomplete')) {
-        pwd.setAttribute('autocomplete', 'current-password');
-      }
-      const form = pwd.closest('form') || pwd.parentElement;
-      if (form) {
-        const emailInp = form.querySelector('input[type="email"], input[placeholder*="mail" i]');
-        if (emailInp && !emailInp.getAttribute('autocomplete')) {
-          emailInp.setAttribute('autocomplete', 'email');
-        }
-      }
-    });
+<script>
+(function bloccaAutofillRicercaGiocaltaDefinitivo_() {
+  function isBarraRicerca_(inp) {
+    if (!inp || inp.tagName !== 'INPUT') return false;
+    if (inp.type === 'password' || inp.type === 'email' || inp.type === 'hidden' || inp.type === 'checkbox' || inp.type === 'radio') return false;
+    const ph = (inp.placeholder || '').toLowerCase();
+    const id = (inp.id || '').toLowerCase();
+    const aria = (inp.getAttribute('aria-label') || '').toLowerCase();
+    return ph.includes('cerca') || ph.includes('gioco') || ph.includes('titolo') || ph.includes('filtra') ||
+           id.includes('search') || id.includes('cerca') || aria.includes('cerca');
+  }
 
-    // 2. Protegge solo la barra di ricerca del catalogo dal riempimento automatico dell'email
-    document.querySelectorAll('input[type="text"], input[type="search"]').forEach(function(inp) {
-      if (inp.type === 'password' || inp.type === 'email') return;
-      const ph = (inp.placeholder || '').toLowerCase();
-      const id = (inp.id || '').toLowerCase();
-      if (ph.includes('cerca') || ph.includes('gioco') || ph.includes('titolo') || id.includes('search') || id.includes('cerca')) {
-        inp.setAttribute('autocomplete', 'off');
-        if (!inp.dataset.giocaltaSearchNameSet) {
-          inp.dataset.giocaltaSearchNameSet = '1';
-          inp.setAttribute('name', 'giocalta_ricerca_giochi_' + Math.random().toString(36).slice(2, 7));
-        }
-        if (inp.value && inp.value.includes('@')) {
-          inp.value = '';
-          inp.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-      }
-    });
+  function proteggiInput_(inp) {
+    if (!isBarraRicerca_(inp)) return;
+
+    inp.setAttribute('autocomplete', 'new-password');
+    inp.setAttribute('autocorrect', 'off');
+    inp.setAttribute('spellcheck', 'false');
+
+    // Blocca il riempimento automatico al caricamento mantenendo readonly finché l'utente non clicca
+    if (!inp.dataset.giocaltaReadonlyGuard) {
+      inp.dataset.giocaltaReadonlyGuard = '1';
+      inp.setAttribute('readonly', 'readonly');
+
+      const sblocca = function() {
+        inp.removeAttribute('readonly');
+      };
+      inp.addEventListener('pointerdown', sblocca);
+      inp.addEventListener('focus', sblocca);
+    }
+
+    // Se il browser aveva già infilato un'email (contiene '@'), la cancella subito
+    if (inp.value && inp.value.includes('@')) {
+      inp.value = '';
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+      inp.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  function scansiona_() {
+    document.querySelectorAll('input').forEach(proteggiInput_);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', configuraCampi_);
+    document.addEventListener('DOMContentLoaded', scansiona_);
   } else {
-    configuraCampi_();
+    scansiona_();
   }
-  setTimeout(configuraCampi_, 250);
-  setTimeout(configuraCampi_, 800);
+
+  // Controllo continuo per i primi 3 secondi e su ogni modifica della pagina
+  const timer = setInterval(scansiona_, 150);
+  setTimeout(function() { clearInterval(timer); }, 3500);
+
+  const obs = new MutationObserver(scansiona_);
+  obs.observe(document.documentElement, { childList: true, subtree: true });
 })();
 </script>
 </body>
