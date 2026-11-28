@@ -3992,7 +3992,8 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
     const ph = (inp.placeholder || '').toLowerCase();
     const id = (inp.id || '').toLowerCase();
     const aria = (inp.getAttribute('aria-label') || '').toLowerCase();
-    return ph.includes('cerca') || ph.includes('gioco') || ph.includes('titolo') || ph.includes('filtra') ||
+    return id === 'searchinput' ||
+           ph.includes('cerca') || ph.includes('gioco') || ph.includes('titolo') || ph.includes('filtra') ||
            id.includes('search') || id.includes('cerca') || aria.includes('cerca');
   }
 
@@ -4003,23 +4004,31 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
       try { inp.type = 'search'; } catch (_) {}
     }
     inp.setAttribute('autocomplete', 'off');
+    inp.setAttribute('aria-autocomplete', 'none');
     inp.setAttribute('autocorrect', 'off');
     inp.setAttribute('autocapitalize', 'off');
     inp.setAttribute('spellcheck', 'false');
     inp.setAttribute('inputmode', 'search');
-    inp.setAttribute('name', 'q_catalogo_giocalta');
+    inp.setAttribute('name', 'filtro_catalogo_giocalta');
     inp.setAttribute('data-lpignore', 'true');
+    inp.setAttribute('data-1p-ignore', 'true');
     inp.setAttribute('data-form-type', 'other');
 
     if (!inp.dataset.giocaltaReadonlyGuard) {
       inp.dataset.giocaltaReadonlyGuard = '1';
       inp.setAttribute('readonly', 'readonly');
 
-      const sblocca = function() {
+      const sbloccaConRitardo = function() {
+        setTimeout(function() {
+          inp.removeAttribute('readonly');
+        }, 50);
+      };
+      const sbloccaSubito = function() {
         inp.removeAttribute('readonly');
       };
-      inp.addEventListener('pointerdown', sblocca);
-      inp.addEventListener('focus', sblocca);
+
+      inp.addEventListener('click', sbloccaConRitardo);
+      inp.addEventListener('keydown', sbloccaSubito, true);
     }
 
     if (inp.value && inp.value.includes('@')) {
@@ -4039,8 +4048,8 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
     scansiona_();
   }
 
-  const timer = setInterval(scansiona_, 150);
-  setTimeout(function() { clearInterval(timer); }, 3500);
+  const timer = setInterval(scansiona_, 200);
+  setTimeout(function() { clearInterval(timer); }, 4000);
 
   const obs = new MutationObserver(scansiona_);
   obs.observe(document.documentElement, { childList: true, subtree: true });
