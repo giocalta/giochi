@@ -3994,11 +3994,18 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   function proteggiInput_(inp) {
     if (!isBarraRicerca_(inp)) return;
 
-    inp.setAttribute('autocomplete', 'new-password');
+    if (inp.type !== 'search') {
+      try { inp.type = 'search'; } catch (_) {}
+    }
+    inp.setAttribute('autocomplete', 'off');
     inp.setAttribute('autocorrect', 'off');
+    inp.setAttribute('autocapitalize', 'off');
     inp.setAttribute('spellcheck', 'false');
+    inp.setAttribute('inputmode', 'search');
+    inp.setAttribute('name', 'q_catalogo_giocalta');
+    inp.setAttribute('data-lpignore', 'true');
+    inp.setAttribute('data-form-type', 'other');
 
-    // Blocca il riempimento automatico al caricamento mantenendo readonly finché l'utente non clicca
     if (!inp.dataset.giocaltaReadonlyGuard) {
       inp.dataset.giocaltaReadonlyGuard = '1';
       inp.setAttribute('readonly', 'readonly');
@@ -4010,7 +4017,6 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
       inp.addEventListener('focus', sblocca);
     }
 
-    // Se il browser aveva già infilato un'email (contiene '@'), la cancella subito
     if (inp.value && inp.value.includes('@')) {
       inp.value = '';
       inp.dispatchEvent(new Event('input', { bubbles: true }));
@@ -4028,7 +4034,6 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
     scansiona_();
   }
 
-  // Controllo continuo per i primi 3 secondi e su ogni modifica della pagina
   const timer = setInterval(scansiona_, 150);
   setTimeout(function() { clearInterval(timer); }, 3500);
 
