@@ -2835,7 +2835,7 @@ function condividiGiocoGiocalta(idGioco, event) {
     }
 
     // ==========================================
-    // PANNELLO AMMINISTRATIVO (#staff)
+   // PANNELLO AMMINISTRATIVO (#staff)
     // ==========================================
     function mostraFeedbackStaff(messaggio, tipo = 'ok') {
       const box = document.getElementById('staffGlobalFeedback');
@@ -3035,7 +3035,8 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
 
       const statoRaw = String(s.stato || 'Attivo').trim().toLowerCase();
       let statoVal = 'Attivo';
-      if (statoRaw === 'sospeso' || statoRaw === 'no') statoVal = 'Sospeso';
+      if (statoRaw === 'registrato' || statoRaw === 'socio' || statoRaw === 'tesserato') statoVal = 'Registrato';
+      else if (statoRaw === 'sospeso' || statoRaw === 'no') statoVal = 'Sospeso';
       else if (statoRaw.includes('attesa')) statoVal = 'In attesa';
       document.getElementById('editSocioStato').value = statoVal;
 
@@ -3129,7 +3130,12 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
       }
 
       container.innerHTML = listaFiltrata.map(s => {
-        const isAttivo = String(s.stato || '').trim().toLowerCase() === 'attivo';
+        const statoLower = String(s.stato || '').trim().toLowerCase();
+        const isRegistrato = statoLower === 'registrato' || statoLower === 'socio' || statoLower === 'tesserato';
+        const isAttivo = statoLower === 'attivo' || isRegistrato;
+        const badgeStatoClass = isRegistrato
+          ? 'bg-emerald-600 text-white'
+          : (statoLower === 'attivo' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800');
         const emailSocio = String(s.email || '').trim().toLowerCase();
         const nomeSocio = String(s.nome || '').trim().toLowerCase();
         const idSocio = String(s.id || '').trim().toLowerCase();
@@ -3157,7 +3163,7 @@ function cambiaStatoSocioStaff(riga, nuovoStato) {
             <div>
               <div class="font-extrabold text-slate-900 flex flex-wrap items-center gap-1.5">
                 <span>${escapeHtml(s.nome || 'Senza nome')}</span>
-                <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isAttivo ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${escapeHtml(s.stato)}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded font-bold ${badgeStatoClass}">${escapeHtml(s.stato)}</span>
                 ${badgeNoleggi}
               </div>
               <div class="text-[11px] text-slate-600 mt-0.5">${escapeHtml(s.email)} ${s.telefono ? '• ' + escapeHtml(s.telefono) : ''} ${s.id ? '• ' + escapeHtml(s.id) : ''}</div>
@@ -4028,9 +4034,9 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   // =========================================================================
   function rilevaStatoSocioAttuale_() {
     if (window.socioCorrenteGiocalta && typeof window.socioCorrenteGiocalta === 'object') {
-  const stDiretto = String(window.socioCorrenteGiocalta.stato || window.socioCorrenteGiocalta.status || '').trim().toLowerCase();
-  if (stDiretto) return stDiretto;
-}
+      const stDiretto = String(window.socioCorrenteGiocalta.stato || window.socioCorrenteGiocalta.status || '').trim().toLowerCase();
+      if (stDiretto) return stDiretto;
+    }
     const candidatiGlobali = [
       window.socioLoggato,
       window.currentUser,
