@@ -4244,7 +4244,7 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
     if (modal) modal.classList.add('hidden');
   };
 
-  window.inviaDomandaSocioEmail = function(e) {
+ window.inviaDomandaSocioEmail = function(e) {
     e.preventDefault();
     const cf = document.getElementById('iscrCf').value.trim().toUpperCase();
     const fb = document.getElementById('iscrFeedback');
@@ -4255,6 +4255,84 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
       fb.classList.remove('hidden');
       return;
     }
+
+    const dati = {
+      nome: document.getElementById('iscrNome').value.trim(),
+      cf: cf,
+      dataNascita: document.getElementById('iscrDataNascita').value,
+      luogoNascita: document.getElementById('iscrLuogoNascita').value.trim(),
+      indirizzo: document.getElementById('iscrIndirizzo').value.trim(),
+      citta: document.getElementById('iscrCitta').value.trim(),
+      email: document.getElementById('iscrEmail').value.trim(),
+      telefono: document.getElementById('iscrTelefono').value.trim(),
+      dataInvio: new Date().toLocaleString('it-IT')
+    };
+
+    const emailAccount = (document.getElementById('profiloEmail')?.textContent || dati.email).trim();
+    const oggetto = 'DOMANDA DI AMMISSIONE A SOCIO GIOCALTA - ' + dati.nome.toUpperCase();
+    const corpo = [
+      'ASSOCIAZIONE DI PROMOZIONE SOCIALE "GIOCALTA"',
+      'Sede: Via San Domenico Savio - 95041 Caltagirone (CT)',
+      '==================================================',
+      'DOMANDA DI AMMISSIONE A SOCIO E SOTTOSCRIZIONE ELETTRONICA',
+      'Data e ora invio: ' + dati.dataInvio,
+      'Account Area Soci verificato: ' + emailAccount,
+      '==================================================',
+      '',
+      'DATI ANAGRAFICI DEL RICHIEDENTE:',
+      '- Nome e Cognome: ' + dati.nome,
+      '- Codice Fiscale: ' + dati.cf,
+      '- Data di nascita: ' + dati.dataNascita,
+      '- Comune di nascita: ' + dati.luogoNascita,
+      '- Residenza: ' + dati.indirizzo + ' - ' + dati.citta,
+      '- Email di contatto: ' + dati.email,
+      '- Telefono / WhatsApp: ' + dati.telefono,
+      '',
+      'DICHIARAZIONI E SOTTOSCRIZIONE:',
+      'Il/La sottoscritto/a chiede di essere ammesso/a in qualità di Socio/a dell\'associazione GIOCALTA e dichiara:',
+      '[X] Di aver preso visione dello Statuto e del Regolamento interno (incluse le norme sul prestito e la custodia dei giochi) e di accettarli integralmente.',
+      '[X] Di aver letto l\'Informativa Privacy e di acconsentire al trattamento dei propri dati personali ai sensi del Reg. UE 2016/679 (GDPR) per l\'iscrizione nel Libro Soci e le attività istituzionali.',
+      '[X] Che l\'invio della presente domanda dal proprio indirizzo email personale vale come sottoscrizione elettronica della richiesta di adesione.',
+      '',
+      '==================================================',
+      'SPAZIO RISERVATO AL CONSIGLIO DIRETTIVO GIOCALTA:',
+      '- Esito delibera: [ ] Ammesso   [ ] Non ammesso',
+      '- Data delibera Direttivo: ____/____/202__',
+      '- Numero progressivo Libro Soci / Tessera: ____________'
+    ].join('\n');
+
+    // Prova ad aprire l'app email predefinita (funziona subito su telefono o PC con Outlook/Mail)
+    window.location.href = 'mailto:' + encodeURIComponent(EMAIL_ASSOCIAZIONE) +
+      '?subject=' + encodeURIComponent(oggetto) +
+      '&body=' + encodeURIComponent(corpo);
+
+    // Mostra anche il fallback per chi usa Webmail da PC (Virgilio, Libero, Gmail, ecc.)
+    fb.className = 'p-3 rounded text-left bg-emerald-50 text-slate-800 border border-emerald-300 space-y-2';
+    fb.innerHTML = `
+      <p class="font-bold text-emerald-800">✅ Modulo pronto! Se sei su PC e usi la Webmail (es. Virgilio, Libero, Gmail):</p>
+      <div class="bg-white p-2.5 border border-emerald-200 rounded text-[11px] space-y-1">
+        <p><strong>1. Invia a:</strong> <span class="font-mono select-all text-orange-700 font-bold">${EMAIL_ASSOCIAZIONE}</span></p>
+        <p><strong>2. Oggetto:</strong> <span class="select-all">${oggetto}</span></p>
+      </div>
+      <button type="button" id="btnCopiaTestoDomanda" class="w-full bg-slate-900 hover:bg-slate-950 text-white font-bold py-2 px-3 rounded text-xs transition-colors">
+        📋 Copia tutto il testo della domanda (poi incollalo nella tua email)
+      </button>
+    `;
+    fb.classList.remove('hidden');
+
+    const btnCopia = document.getElementById('btnCopiaTestoDomanda');
+    if (btnCopia) {
+      btnCopia.onclick = function() {
+        const testoCompleto = 'A: ' + EMAIL_ASSOCIAZIONE + '\nOggetto: ' + oggetto + '\n\n' + corpo;
+        navigator.clipboard.writeText(testoCompleto).then(() => {
+          btnCopia.textContent = '✓ Copiato! Ora vai su Virgilio Mail / Webmail e fai Incolla';
+          btnCopia.className = 'w-full bg-emerald-600 text-white font-bold py-2 px-3 rounded text-xs';
+        }).catch(() => {
+          prompt('Copia manualmente il testo qui sotto (Ctrl+C):', corpo);
+        });
+      };
+    }
+  };
 
     const dati = {
       nome: document.getElementById('iscrNome').value.trim(),
