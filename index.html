@@ -82,12 +82,11 @@
         <div class="bg-white p-1.5 md:p-2 shadow-sm border border-amber-200/80 relative">
           <div class="flex items-center gap-1.5 md:gap-2">
             <div class="relative flex-grow min-w-0">
-              <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              <input type="search" id="searchInput" name="q_catalogo_giocalta" placeholder="Cerca gioco..."
-                     autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                     data-lpignore="true" data-form-type="other" readonly
-                     onfocus="this.removeAttribute('readonly');" onpointerdown="this.removeAttribute('readonly');"
-                     class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white text-xs md:text-sm transition-all font-medium">
+              <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <div id="searchBoxVisibile" contenteditable="true" role="searchbox" aria-label="Cerca gioco"
+                   data-placeholder="Cerca gioco..."
+                   class="w-full pl-8 pr-2.5 py-1.5 md:py-2 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white text-xs md:text-sm transition-all font-medium min-h-[34px] md:min-h-[38px] whitespace-nowrap overflow-hidden empty:before:content-[attr(data-placeholder)] empty:before:text-slate-400 cursor-text"></div>
+              <input type="hidden" id="searchInput" value="">
             </div>
             <button type="button" onclick="toggleFiltriModale()" id="btnToggleFiltri" class="bg-slate-900 hover:bg-slate-950 text-white font-bold text-xs px-4 py-1.5 md:py-2 transition-all flex items-center gap-1.5 shrink-0 shadow-sm">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.172a1 1 0 01-.553.894l-4 2A1 1 0 017 18.28v-5.172a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z"></path></svg>
@@ -3985,74 +3984,47 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
 })();
 </script>
 <script>
-(function bloccaAutofillRicercaGiocaltaDefinitivo_() {
-  function isBarraRicerca_(inp) {
-    if (!inp || inp.tagName !== 'INPUT') return false;
-    if (inp.type === 'password' || inp.type === 'email' || inp.type === 'hidden' || inp.type === 'checkbox' || inp.type === 'radio') return false;
-    const ph = (inp.placeholder || '').toLowerCase();
-    const id = (inp.id || '').toLowerCase();
-    const aria = (inp.getAttribute('aria-label') || '').toLowerCase();
-    return id === 'searchinput' ||
-           ph.includes('cerca') || ph.includes('gioco') || ph.includes('titolo') || ph.includes('filtra') ||
-           id.includes('search') || id.includes('cerca') || aria.includes('cerca');
-  }
+(function collegaBarraRicercaSenzaAutofill_() {
+  function initSearchBox_() {
+    const box = document.getElementById('searchBoxVisibile');
+    const hiddenInput = document.getElementById('searchInput');
+    if (!box || !hiddenInput || box.dataset.collegato === '1') return;
+    box.dataset.collegato = '1';
 
-  function proteggiInput_(inp) {
-    if (!isBarraRicerca_(inp)) return;
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        box.blur();
+      }
+    });
 
-    if (inp.type !== 'search') {
-      try { inp.type = 'search'; } catch (_) {}
-    }
-    inp.setAttribute('autocomplete', 'off');
-    inp.setAttribute('aria-autocomplete', 'none');
-    inp.setAttribute('autocorrect', 'off');
-    inp.setAttribute('autocapitalize', 'off');
-    inp.setAttribute('spellcheck', 'false');
-    inp.setAttribute('inputmode', 'search');
-    inp.setAttribute('name', 'filtro_catalogo_giocalta');
-    inp.setAttribute('data-lpignore', 'true');
-    inp.setAttribute('data-1p-ignore', 'true');
-    inp.setAttribute('data-form-type', 'other');
+    box.addEventListener('input', function() {
+      const testo = (box.textContent || '').replace(/\n/g, ' ');
+      if (box.textContent !== testo) {
+        box.textContent = testo;
+      }
+      hiddenInput.value = testo;
+      hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+      if (typeof filtraGiochi === 'function') filtraGiochi();
+      else if (typeof applicaFiltri === 'function') applicaFiltri();
+      else if (typeof renderCatalogo === 'function') renderCatalogo();
+    });
 
-    if (!inp.dataset.giocaltaReadonlyGuard) {
-      inp.dataset.giocaltaReadonlyGuard = '1';
-      inp.setAttribute('readonly', 'readonly');
-
-      const sbloccaConRitardo = function() {
-        setTimeout(function() {
-          inp.removeAttribute('readonly');
-        }, 50);
+    const origAzzera = window.azzeraFiltri;
+    if (typeof origAzzera === 'function') {
+      window.azzeraFiltri = function() {
+        box.textContent = '';
+        hiddenInput.value = '';
+        return origAzzera.apply(this, arguments);
       };
-      const sbloccaSubito = function() {
-        inp.removeAttribute('readonly');
-      };
-
-      inp.addEventListener('click', sbloccaConRitardo);
-      inp.addEventListener('keydown', sbloccaSubito, true);
     }
-
-    if (inp.value && inp.value.includes('@')) {
-      inp.value = '';
-      inp.dispatchEvent(new Event('input', { bubbles: true }));
-      inp.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-  }
-
-  function scansiona_() {
-    document.querySelectorAll('input').forEach(proteggiInput_);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', scansiona_);
+    document.addEventListener('DOMContentLoaded', initSearchBox_);
   } else {
-    scansiona_();
+    initSearchBox_();
   }
-
-  const timer = setInterval(scansiona_, 200);
-  setTimeout(function() { clearInterval(timer); }, 4000);
-
-  const obs = new MutationObserver(scansiona_);
-  obs.observe(document.documentElement, { childList: true, subtree: true });
 })();
 </script>
  <script>
