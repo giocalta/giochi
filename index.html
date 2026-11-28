@@ -3993,5 +3993,341 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   obs.observe(document.documentElement, { childList: true, subtree: true });
 })();
 </script>
+  <script>
+(function giocaltaPacchettoCompletoSociEPrivacy_() {
+  const EMAIL_ASSOCIAZIONE = 'info@giocalta.it'; // <-- Sostituisci con l'email ufficiale di GIOCALTA
+
+  // =========================================================================
+  // 1. AGGIUNGE AUTOMATICAMENTE "REGISTRATO" NEL FILTRO DEL PANNELLO STAFF
+  // =========================================================================
+  function aggiornaSelectStaff_() {
+    const sel = document.getElementById('staffFiltroStatoSocio');
+    if (!sel) return;
+    if (!sel.querySelector('option[value="registrato"]')) {
+      const optReg = document.createElement('option');
+      optReg.value = 'registrato';
+      optReg.textContent = 'Registrati (Soci)';
+      const optTutti = sel.querySelector('option[value=""]');
+      if (optTutti && optTutti.nextSibling) {
+        sel.insertBefore(optReg, optTutti.nextSibling);
+      } else {
+        sel.appendChild(optReg);
+      }
+    }
+  }
+
+  // =========================================================================
+  // 2. RILEVA LO STATO DEL SOCIO LOGGATO ("registrato" vs "attivo" / "in attesa")
+  // =========================================================================
+  function rilevaStatoSocioAttuale_() {
+    const candidatiGlobali = [
+      window.socioLoggato,
+      window.currentUser,
+      window.utenteLoggato,
+      window.datiSocio
+    ];
+    for (const obj of candidatiGlobali) {
+      if (obj && typeof obj === 'object') {
+        const st = String(obj.stato || obj.status || obj.ruolo || '').trim().toLowerCase();
+        if (st) return st;
+      }
+    }
+
+    const storages = [window.localStorage, window.sessionStorage];
+    for (const store of storages) {
+      try {
+        for (let i = 0; i < store.length; i++) {
+          const k = store.key(i) || '';
+          const val = store.getItem(k) || '';
+          if (!val) continue;
+          if (val.startsWith('{')) {
+            const parsed = JSON.parse(val);
+            if (parsed && typeof parsed === 'object') {
+              const st = String(parsed.stato || parsed.status || '').trim().toLowerCase();
+              if (st && (parsed.email || parsed.nome || /socio|user|auth|giocalta/i.test(k))) {
+                return st;
+              }
+            }
+          } else if (/stato.*socio|socio.*stato/i.test(k)) {
+            return val.trim().toLowerCase();
+          }
+        }
+      } catch (_) {}
+    }
+    return '';
+  }
+
+  // =========================================================================
+  // 3. AGGIUNGE LA CASELLA OBBLIGATORIA PRIVACY NEL MODULO "REGISTRATI"
+  // =========================================================================
+  function inserisciPrivacyInRegistrazione_() {
+    const btnInviaReg = document.getElementById('btnInviaReg');
+    const formReg = document.getElementById('formRegistrazione');
+    if (!btnInviaReg || !formReg) return;
+    if (document.getElementById('regPrivacyAccetto')) return;
+
+    const boxPrivacy = document.createElement('div');
+    boxPrivacy.className = 'flex items-start gap-2.5 bg-slate-50 p-3 border border-slate-200 rounded';
+    boxPrivacy.innerHTML = `
+      <input type="checkbox" id="regPrivacyAccetto" required class="mt-0.5 w-4 h-4 accent-orange-600 rounded cursor-pointer shrink-0">
+      <label for="regPrivacyAccetto" class="text-xs text-slate-700 leading-snug cursor-pointer select-none">
+        Ho letto l'<button type="button" onclick="if(window.apriInformativaGiocalta) apriInformativaGiocalta('privacy')" class="underline font-bold text-orange-700 hover:text-orange-900">Informativa Privacy</button> e acconsento al trattamento dei miei dati personali per la gestione della richiesta di iscrizione a GIOCALTA. *
+      </label>
+    `;
+
+    btnInviaReg.parentNode.insertBefore(boxPrivacy, btnInviaReg);
+
+    btnInviaReg.addEventListener('click', function(e) {
+      const chk = document.getElementById('regPrivacyAccetto');
+      if (chk && !chk.checked) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        boxPrivacy.classList.add('ring-2', 'ring-rose-500', 'bg-rose-50');
+        chk.focus();
+        alert('Per inviare la richiesta di iscrizione è necessario accettare l’Informativa Privacy.');
+      } else {
+        boxPrivacy.classList.remove('ring-2', 'ring-rose-500', 'bg-rose-50');
+      }
+    }, true);
+  }
+
+  // =========================================================================
+  // 4. AGGIUNGE / AGGIORNA STATO ISCRIZIONE E MODULO NELL'AREA PERSONALE
+  // =========================================================================
+  function aggiornaBoxStatoIscrizione_() {
+    const areaPersonale = document.getElementById('boxAreaPersonale');
+    const noleggiCont = document.getElementById('mieiNoleggiContainer');
+    if (!areaPersonale || !noleggiCont) return;
+
+    let bloccoTasto = document.getElementById('boxDomandaLibroSoci');
+    if (!bloccoTasto) {
+      bloccoTasto = document.createElement('div');
+      bloccoTasto.id = 'boxDomandaLibroSoci';
+      const sezioneNoleggi = noleggiCont.parentElement;
+      sezioneNoleggi.parentNode.insertBefore(bloccoTasto, sezioneNoleggi);
+    }
+
+    const stato = rilevaStatoSocioAttuale_();
+    // La spunta verde compare SOLO quando lo stato è "registrato" (o "socio" / "tesserato")
+    const isSocioRegistrato = stato === 'registrato' || stato === 'socio' || stato === 'tesserato';
+
+    if (isSocioRegistrato) {
+      bloccoTasto.className = 'bg-emerald-50 p-4 border border-emerald-300 rounded flex items-center justify-between gap-3';
+      bloccoTasto.innerHTML = `
+        <div class="flex items-center gap-2.5">
+          <span class="text-lg leading-none">✅</span>
+          <div>
+            <p class="text-xs md:text-sm font-black text-emerald-700">Sei socio dell'associazione GIOCALTA</p>
+            <p class="text-[11px] text-emerald-700/80 mt-0.5">Iscrizione registrata nel Libro Soci: puoi prenotare i giochi dal catalogo e votare i sondaggi.</p>
+          </div>
+        </div>
+      `;
+    } else {
+      bloccoTasto.className = 'bg-gradient-to-r from-orange-50 to-amber-50 p-4 border border-orange-200 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+      bloccoTasto.innerHTML = `
+        <div>
+          <span class="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-amber-800 bg-amber-200/80 px-2 py-0.5 rounded">
+            ⏳ In attesa di iscrizione all'associazione
+          </span>
+          <h3 class="text-xs font-extrabold text-slate-900 mt-1.5">Domanda Ufficiale Libro Soci GIOCALTA</h3>
+          <p class="text-xs text-slate-600 mt-0.5">Compila i tuoi dati anagrafici e invia la domanda sottoscritta via email per completare l'adesione.</p>
+        </div>
+        <button type="button" onclick="apriModuloCompletaIscrizione()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2.5 rounded shadow-sm shrink-0 transition-all">
+          Completa Iscrizione
+        </button>
+      `;
+    }
+
+    // Crea la finestra modale con il foglio completo da compilare
+    if (!document.getElementById('modalCompletaIscrizione')) {
+      const modale = document.createElement('div');
+      modale.id = 'modalCompletaIscrizione';
+      modale.className = 'hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto';
+      modale.innerHTML = `
+        <div class="bg-white border border-amber-200 shadow-xl max-w-lg w-full p-6 space-y-4 my-8">
+          <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-wider text-orange-700 bg-orange-100 px-2 py-0.5 rounded">Modulo Ammissione Socio</span>
+              <h3 class="text-lg font-black text-slate-900 mt-1">Completa Iscrizione a GIOCALTA</h3>
+              <p class="text-[11px] text-slate-500">I dati verranno inviati dal tuo indirizzo email con valore di sottoscrizione elettronica.</p>
+            </div>
+            <button type="button" onclick="chiudiModuloCompletaIscrizione()" class="text-slate-400 hover:text-slate-700 font-black text-lg leading-none px-2">✕</button>
+          </div>
+
+          <form id="formCompletaIscrizione" onsubmit="inviaDomandaSocioEmail(event)" class="space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Nome e Cognome *</label>
+                <input type="text" id="iscrNome" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-orange-600 focus:outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Codice Fiscale *</label>
+                <input type="text" id="iscrCf" required maxlength="16" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')" placeholder="16 caratteri" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 font-mono uppercase focus:ring-2 focus:ring-orange-600 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Data di nascita *</label>
+                <input type="date" id="iscrDataNascita" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-orange-600 focus:outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Comune di nascita *</label>
+                <input type="text" id="iscrLuogoNascita" required placeholder="Es. Caltagirone (CT)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-orange-600 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="sm:col-span-2">
+                <label class="block font-bold text-slate-700 mb-1">Indirizzo di residenza *</label>
+                <input type="text" id="iscrIndirizzo" required placeholder="Via/Piazza e numero civico" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-orange-600 focus:outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Comune residenza *</label>
+                <input type="text" id="iscrCitta" required placeholder="Es. Caltagirone" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-orange-600 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Email *</label>
+                <input type="email" id="iscrEmail" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-orange-600 focus:outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Telefono / WhatsApp *</label>
+                <input type="tel" id="iscrTelefono" required placeholder="Es. 333 1234567" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-orange-600 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 border border-slate-200 rounded text-slate-700">
+              <label class="flex items-start gap-2 cursor-pointer">
+                <input type="checkbox" id="iscrStatuto" required class="mt-0.5 w-4 h-4 accent-orange-600 shrink-0">
+                <span>Chiedo di essere ammesso come socio di <strong>GIOCALTA</strong> e dichiaro di conoscere e accettare lo Statuto e il Regolamento interno (incluse le norme sul prestito e la custodia dei giochi). *</span>
+              </label>
+              <label class="flex items-start gap-2 cursor-pointer">
+                <input type="checkbox" id="iscrPrivacy" required class="mt-0.5 w-4 h-4 accent-orange-600 shrink-0">
+                <span>Ho letto l'<button type="button" onclick="if(window.apriInformativaGiocalta) apriInformativaGiocalta('privacy')" class="underline font-bold text-orange-700">Informativa Privacy</button> e acconsento al trattamento dei dati personali per l'iscrizione nel Libro Soci (GDPR). *</span>
+              </label>
+            </div>
+
+            <div id="iscrFeedback" class="hidden p-2.5 rounded text-center font-bold"></div>
+
+            <div class="flex items-center justify-end gap-2 pt-2">
+              <button type="button" onclick="chiudiModuloCompletaIscrizione()" class="px-4 py-2 border border-slate-200 text-slate-600 font-bold hover:bg-slate-50">Annulla</button>
+              <button type="submit" id="btnInviaDomandaSocio" class="bg-orange-600 hover:bg-orange-700 text-white font-bold px-5 py-2 shadow">Invia Domanda via Email</button>
+            </div>
+          </form>
+        </div>
+      `;
+      document.body.appendChild(modale);
+    }
+  }
+
+  window.apriModuloCompletaIscrizione = function() {
+    aggiornaBoxStatoIscrizione_();
+    const modal = document.getElementById('modalCompletaIscrizione');
+    if (!modal) return;
+
+    const nomeEl = document.getElementById('iscrNome');
+    const emailEl = document.getElementById('iscrEmail');
+    const nomeSocio = (document.getElementById('socioNomeLabel')?.textContent || '').trim();
+    const emailSocio = (document.getElementById('profiloEmail')?.textContent || '').trim();
+
+    if (nomeEl && !nomeEl.value && nomeSocio && nomeSocio !== 'Socio') nomeEl.value = nomeSocio;
+    if (emailEl && !emailEl.value && emailSocio) emailEl.value = emailSocio;
+
+    modal.classList.remove('hidden');
+  };
+
+  window.chiudiModuloCompletaIscrizione = function() {
+    const modal = document.getElementById('modalCompletaIscrizione');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.inviaDomandaSocioEmail = function(e) {
+    e.preventDefault();
+    const cf = document.getElementById('iscrCf').value.trim().toUpperCase();
+    const fb = document.getElementById('iscrFeedback');
+
+    if (cf.length !== 16) {
+      fb.textContent = 'Inserisci un Codice Fiscale valido di 16 caratteri.';
+      fb.className = 'p-2.5 rounded text-center font-bold bg-rose-50 text-rose-700 border border-rose-200';
+      fb.classList.remove('hidden');
+      return;
+    }
+
+    const dati = {
+      nome: document.getElementById('iscrNome').value.trim(),
+      cf: cf,
+      dataNascita: document.getElementById('iscrDataNascita').value,
+      luogoNascita: document.getElementById('iscrLuogoNascita').value.trim(),
+      indirizzo: document.getElementById('iscrIndirizzo').value.trim(),
+      citta: document.getElementById('iscrCitta').value.trim(),
+      email: document.getElementById('iscrEmail').value.trim(),
+      telefono: document.getElementById('iscrTelefono').value.trim(),
+      dataInvio: new Date().toLocaleString('it-IT')
+    };
+
+    const emailAccount = (document.getElementById('profiloEmail')?.textContent || dati.email).trim();
+    const oggetto = 'DOMANDA DI AMMISSIONE A SOCIO GIOCALTA - ' + dati.nome.toUpperCase();
+    const corpo = [
+      'ASSOCIAZIONE DI PROMOZIONE SOCIALE "GIOCALTA"',
+      'Sede: Via San Domenico Savio - 95041 Caltagirone (CT)',
+      '==================================================',
+      'DOMANDA DI AMMISSIONE A SOCIO E SOTTOSCRIZIONE ELETTRONICA',
+      'Data e ora invio: ' + dati.dataInvio,
+      'Account Area Soci verificato: ' + emailAccount,
+      '==================================================',
+      '',
+      'DATI ANAGRAFICI DEL RICHIEDENTE:',
+      '- Nome e Cognome: ' + dati.nome,
+      '- Codice Fiscale: ' + dati.cf,
+      '- Data di nascita: ' + dati.dataNascita,
+      '- Comune di nascita: ' + dati.luogoNascita,
+      '- Residenza: ' + dati.indirizzo + ' - ' + dati.citta,
+      '- Email di contatto: ' + dati.email,
+      '- Telefono / WhatsApp: ' + dati.telefono,
+      '',
+      'DICHIARAZIONI E SOTTOSCRIZIONE:',
+      'Il/La sottoscritto/a chiede di essere ammesso/a in qualità di Socio/a dell\'associazione GIOCALTA e dichiara:',
+      '[X] Di aver preso visione dello Statuto e del Regolamento interno (incluse le norme sul prestito e la custodia dei giochi) e di accettarli integralmente.',
+      '[X] Di aver letto l\'Informativa Privacy e di acconsentire al trattamento dei propri dati personali ai sensi del Reg. UE 2016/679 (GDPR) per l\'iscrizione nel Libro Soci e le attività istituzionali.',
+      '[X] Che l\'invio della presente domanda dal proprio indirizzo email personale vale come sottoscrizione elettronica della richiesta di adesione.',
+      '',
+      '==================================================',
+      'SPAZIO RISERVATO AL CONSIGLIO DIRETTIVO GIOCALTA:',
+      '- Esito delibera: [ ] Ammesso   [ ] Non ammesso',
+      '- Data delibera Direttivo: ____/____/202__',
+      '- Numero progressivo Libro Soci / Tessera: ____________'
+    ].join('\n');
+
+    window.location.href = 'mailto:' + encodeURIComponent(EMAIL_ASSOCIAZIONE) +
+      '?subject=' + encodeURIComponent(oggetto) +
+      '&body=' + encodeURIComponent(corpo);
+
+    fb.textContent = 'Modulo pronto! Conferma l’invio nella tua app Email per trasmettere la domanda firmata allo Staff.';
+    fb.className = 'p-2.5 rounded text-center font-bold bg-emerald-50 text-emerald-700 border border-emerald-200';
+    fb.classList.remove('hidden');
+  };
+
+  function inizializzaTutto_() {
+    aggiornaSelectStaff_();
+    inserisciPrivacyInRegistrazione_();
+    aggiornaBoxStatoIscrizione_();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inizializzaTutto_);
+  } else {
+    inizializzaTutto_();
+  }
+
+  const areaPersonale = document.getElementById('boxAreaPersonale');
+  if (areaPersonale) {
+    const obsArea = new MutationObserver(aggiornaBoxStatoIscrizione_);
+    obsArea.observe(areaPersonale, { attributes: true, attributeFilter: ['class'] });
+  }
+})();
+</script>
 </body>
 </html>
