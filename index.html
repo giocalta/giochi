@@ -3887,57 +3887,55 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   }
 
   function estraiMinutiCard_(card) {
-    const spans = card.querySelectorAll('span, div, p');
-    for (let i = 0; i < spans.length; i++) {
-      const t = spans[i].textContent.trim();
-      const matchMisto = t.match(/\b\d+\s*[-–]\s*\d+\s+(\d{1,3})\b/);
-      if (matchMisto) return parseInt(matchMisto[1], 10);
-      const matchMin = t.match(/^(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?\s*(?:min)?$/i);
-      if (matchMin && spans[i].innerHTML.match(/clock|orologio|time|⏱|🕒|svg/i)) {
-        return matchMin[2] ? Math.round((parseInt(matchMin[1], 10) + parseInt(matchMin[2], 10)) / 2) : parseInt(matchMin[1], 10);
-      }
+    // 1. Cerca l'icona FontAwesome dell'orologio (fa-clock) e legge il testo del suo contenitore
+    const clockIcon = card.querySelector('[class*="clock"], [class*="time"], [class*="hourglass"]');
+    if (clockIcon && clockIcon.parentElement) {
+      const txt = clockIcon.parentElement.textContent.trim();
+      const range = txt.match(/(\d{1,3})\s*[-–]\s*(\d{1,3})/);
+      if (range) return Math.round((parseInt(range[1], 10) + parseInt(range[2], 10)) / 2);
+      const num = txt.match(/(\d{1,3})/);
+      if (num) return parseInt(num[1], 10);
     }
-    const h3 = card.querySelector('h3, h4');
-    if (h3 && Array.isArray(window.giochiData)) {
-      const g = window.giochiData.find(item => item.titolo && item.titolo.trim().toLowerCase() === h3.textContent.trim().toLowerCase());
-      if (g) {
-        const val = String(g.durata || g.tempo || '').match(/(\d{1,3})/);
-        if (val) return parseInt(val[1], 10);
-      }
-    }
+
+    // 2. Fallback: cerca nell'intera card un pattern tipo "90 min" oppure il secondo dato dopo i giocatori (es. "2-6 90")
+    const fullText = card.textContent.replace(/\s+/g, ' ');
+    const matchEsplicito = fullText.match(/\b(\d{1,3})\s*min\b/i);
+    if (matchEsplicito) return parseInt(matchEsplicito[1], 10);
+
+    const matchDopoGiocatori = fullText.match(/\b\d+\s*[-–]\s*\d+\s+(\d{1,3})\b/);
+    if (matchDopoGiocatori) return parseInt(matchDopoGiocatori[1], 10);
+
     return null;
   }
 
-  function applicaIntervalloEsatto61_120_() {
-    const griglia = document.getElementById('catalogoGrid') || document.querySelector('#viewCatalogo .grid');
-    if (!griglia) return;
-    const cards = Array.from(griglia.children);
-    cards.forEach(function(card) {
+  function applicaIntervallo61_120_() {
+    const select = trovaSelectTempo_();
+    if (!select || select.value !== '1-2-ore-esatto') return;
+
+    // Trova le card del catalogo (qualunque contenitore grid che contenga "Dettagli")
+    const possibiliCard = document.querySelectorAll('#catalogoGrid > div, #viewCatalogo .grid > div');
+    possibiliCard.forEach(function(card) {
+      if (!card.textContent || !card.textContent.includes('Dettagli')) return;
       const minuti = estraiMinutiCard_(card);
       const inFascia = minuti !== null && minuti >= 61 && minuti <= 120;
-      card.style.display = inFascia ? '' : 'none';
+      card.style.setProperty('display', inFascia ? '' : 'none', 'important');
       card.dataset.nascostoDaFiltro12 = inFascia ? '0' : '1';
     });
   }
 
   function ripristinaCard_() {
-    const griglia = document.getElementById('catalogoGrid') || document.querySelector('#viewCatalogo .grid');
-    if (!griglia) return;
-    Array.from(griglia.children).forEach(function(card) {
-      if (card.dataset.nascostoDaFiltro12 === '1') {
-        card.style.display = '';
-        delete card.dataset.nascostoDaFiltro12;
-      }
+    document.querySelectorAll('[data-nascosto-da-filtro12]').forEach(function(card) {
+      card.style.removeProperty('display');
+      delete card.dataset.nascostoDaFiltro12;
     });
   }
 
-  function configuraSelect_() {
+  function agganciaControlli_() {
     const select = trovaSelectTempo_();
     if (!select) return;
 
-    let opt = select.querySelector('option[value="1-2-ore-esatto"]');
-    if (!opt) {
-      opt = document.createElement('option');
+    if (!select.querySelector('option[value="1-2-ore-esatto"]')) {
+      const opt = document.createElement('option');
       opt.value = '1-2-ore-esatto';
       opt.textContent = '1–2 ore';
       const opzioni = Array.from(select.options);
@@ -3949,30 +3947,37 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
       }
     }
 
-    if (!select.dataset.giocaltaFascia12Ready) {
-      select.dataset.giocaltaFascia12Ready = '1';
+    if (!select.dataset.giocaltaFascia12Hook) {
+      select.dataset.giocaltaFascia12Hook = '1';
       select.addEventListener('change', function() {
         if (select.value === '1-2-ore-esatto') {
-          setTimeout(applicaIntervalloEsatto61_120_, 50);
+          setTimeout(applicaIntervallo61_120_, 60);
         } else {
           ripristinaCard_();
         }
       });
     }
+
+    // Aggancia anche il pulsante "Applica"
+    const bottoni = document.querySelectorAll('button');
+    bottoni.forEach(function(btn) {
+      if (btn.textContent.trim().toLowerCase() === 'applica' && !btn.dataset.giocaltaApplicaHook) {
+        btn.dataset.giocaltaApplicaHook = '1';
+        btn.addEventListener('click', function() {
+          if (select.value === '1-2-ore-esatto') {
+            setTimeout(applicaIntervallo61_120_, 80);
+          } else {
+            ripristinaCard_();
+          }
+        });
+      }
+    });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', configuraSelect_);
-  } else {
-    configuraSelect_();
-  }
-
+  document.addEventListener('DOMContentLoaded', agganciaControlli_);
   const observer = new MutationObserver(function() {
-    configuraSelect_();
-    const select = trovaSelectTempo_();
-    if (select && select.value === '1-2-ore-esatto') {
-      applicaIntervalloEsatto61_120_();
-    }
+    agganciaControlli_();
+    applicaIntervallo61_120_();
   });
   observer.observe(document.body, { childList: true, subtree: true });
 })();
