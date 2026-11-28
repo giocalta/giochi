@@ -3872,9 +3872,8 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   });
 })();
 </script>
-  <script>
-
-(function aggiungiFiltroDurataMediaGiocalta_() {
+<script>
+(function filtroEsatto1_2OreGiocalta_() {
   function trovaSelectTempo_() {
     const selects = document.querySelectorAll('select');
     for (let i = 0; i < selects.length; i++) {
@@ -3888,7 +3887,6 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   }
 
   function estraiMinutiCard_(card) {
-    // Cerca prima il numero accanto all'icona orologio / durata o testo tipo "2-6  90"
     const spans = card.querySelectorAll('span, div, p');
     for (let i = 0; i < spans.length; i++) {
       const t = spans[i].textContent.trim();
@@ -3899,7 +3897,6 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
         return matchMin[2] ? Math.round((parseInt(matchMin[1], 10) + parseInt(matchMin[2], 10)) / 2) : parseInt(matchMin[1], 10);
       }
     }
-    // Fallback su titoli noti in giochiData se presente
     const h3 = card.querySelector('h3, h4');
     if (h3 && Array.isArray(window.giochiData)) {
       const g = window.giochiData.find(item => item.titolo && item.titolo.trim().toLowerCase() === h3.textContent.trim().toLowerCase());
@@ -3911,37 +3908,37 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
     return null;
   }
 
-  function applicaFiltro1_2Ore_(attivo) {
+  function applicaIntervalloEsatto61_120_() {
     const griglia = document.getElementById('catalogoGrid') || document.querySelector('#viewCatalogo .grid');
     if (!griglia) return;
-    const cards = griglia.children;
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-      if (!attivo) {
-        if (card.dataset.nascostoDaFiltro12 === '1') {
-          card.style.display = '';
-          delete card.dataset.nascostoDaFiltro12;
-        }
-        continue;
-      }
+    const cards = Array.from(griglia.children);
+    cards.forEach(function(card) {
       const minuti = estraiMinutiCard_(card);
-      if (minuti !== null && minuti >= 61 && minuti <= 120) {
-        card.style.display = '';
-        delete card.dataset.nascostoDaFiltro12;
-      } else {
-        card.style.display = 'none';
-        card.dataset.nascostoDaFiltro12 = '1';
-      }
-    }
+      const inFascia = minuti !== null && minuti >= 61 && minuti <= 120;
+      card.style.display = inFascia ? '' : 'none';
+      card.dataset.nascostoDaFiltro12 = inFascia ? '0' : '1';
+    });
   }
 
-  function montaOpzioneTempo_() {
+  function ripristinaCard_() {
+    const griglia = document.getElementById('catalogoGrid') || document.querySelector('#viewCatalogo .grid');
+    if (!griglia) return;
+    Array.from(griglia.children).forEach(function(card) {
+      if (card.dataset.nascostoDaFiltro12 === '1') {
+        card.style.display = '';
+        delete card.dataset.nascostoDaFiltro12;
+      }
+    });
+  }
+
+  function configuraSelect_() {
     const select = trovaSelectTempo_();
     if (!select) return;
 
-    if (!select.querySelector('option[value="61-120"]')) {
-      const opt = document.createElement('option');
-      opt.value = '61-120';
+    let opt = select.querySelector('option[value="1-2-ore-esatto"]');
+    if (!opt) {
+      opt = document.createElement('option');
+      opt.value = '1-2-ore-esatto';
       opt.textContent = '1–2 ore';
       const opzioni = Array.from(select.options);
       const idxPiu2Ore = opzioni.findIndex(o => /più di 2 ore/i.test(o.text));
@@ -3952,28 +3949,29 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
       }
     }
 
-    if (!select.dataset.giocaltaFiltro12Hooked) {
-      select.dataset.giocaltaFiltro12Hooked = '1';
+    if (!select.dataset.giocaltaFascia12Ready) {
+      select.dataset.giocaltaFascia12Ready = '1';
       select.addEventListener('change', function() {
-        const is12 = select.value === '61-120';
-        setTimeout(function() {
-          applicaFiltro1_2Ore_(is12);
-        }, 40);
+        if (select.value === '1-2-ore-esatto') {
+          setTimeout(applicaIntervalloEsatto61_120_, 50);
+        } else {
+          ripristinaCard_();
+        }
       });
     }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', montaOpzioneTempo_);
+    document.addEventListener('DOMContentLoaded', configuraSelect_);
   } else {
-    montaOpzioneTempo_();
+    configuraSelect_();
   }
 
   const observer = new MutationObserver(function() {
-    montaOpzioneTempo_();
+    configuraSelect_();
     const select = trovaSelectTempo_();
-    if (select && select.value === '61-120') {
-      applicaFiltro1_2Ore_(true);
+    if (select && select.value === '1-2-ore-esatto') {
+      applicaIntervalloEsatto61_120_();
     }
   });
   observer.observe(document.body, { childList: true, subtree: true });
