@@ -2661,7 +2661,7 @@ function condividiGiocoGiocalta(idGioco, event) {
       }
     }
 
-    function verificaStatoSessioneSocio() {
+  function verificaStatoSessioneSocio() {
       const socioLoggato = localStorage.getItem('giocalta_socio_corrente');
       const boxAuth = document.getElementById('boxAuthContenitore');
       const boxAreaPers = document.getElementById('boxAreaPersonale');
@@ -2669,12 +2669,10 @@ function condividiGiocoGiocalta(idGioco, event) {
 
       if (socioLoggato) {
         let socio = JSON.parse(socioLoggato);
-        if (socioLoggato) {
-  let socio = JSON.parse(socioLoggato);
-  window.socioCorrenteGiocalta = socio;
-  if (typeof window.aggiornaBoxStatoIscrizioneGiocalta === 'function') {
-    window.aggiornaBoxStatoIscrizioneGiocalta();
-  }
+        window.socioCorrenteGiocalta = socio;
+        if (typeof window.aggiornaBoxStatoIscrizioneGiocalta === 'function') {
+          window.aggiornaBoxStatoIscrizioneGiocalta();
+        }
         boxAuth.classList.add('hidden');
         boxAreaPers.classList.remove('hidden');
         document.getElementById('socioNomeLabel').textContent = socio.nome || 'Socio';
