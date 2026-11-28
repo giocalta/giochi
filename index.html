@@ -3873,119 +3873,61 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
 })();
 </script>
 <script>
-(function filtroEsatto1_2OreGiocalta_() {
-  function trovaSelectTempo_() {
-    const selects = document.querySelectorAll('select');
-    for (let i = 0; i < selects.length; i++) {
-      const s = selects[i];
-      const testo = Array.from(s.options).map(o => o.text.toLowerCase()).join(' | ');
-      if (testo.includes('max 30') || testo.includes('max 1 ora') || testo.includes('più di 2 ore')) {
-        return s;
-      }
-    }
-    return null;
-  }
+(function pulisciFiltroECollegaInformativeGiocalta_() {
+  const optExtra = document.querySelector('select option[value="1-2-ore-esatto"]');
+  if (optExtra) optExtra.remove();
 
-  function trovaCardCatalogo_() {
-    const viewCatalogo = document.getElementById('viewCatalogo') || document.body;
-    const candidati = Array.from(viewCatalogo.querySelectorAll('div, article'));
-    return candidati.filter(function(el) {
-      if (el.children.length < 2) return false;
-      const haDettagli = /dettagli/i.test(el.textContent);
-      const nonContieneAltriBlocchiConDettagli = Array.from(el.children).every(function(figlio) {
-        return !/dettagli/i.test(figlio.textContent);
-      });
-      return haDettagli && nonContieneAltriBlocchiConDettagli;
-    });
-  }
+  window.apriInformativaGiocalta = function(tipo) {
+    const isCookie = tipo === 'cookie';
+    const titolo = isCookie ? 'Cookie Policy — GIOCALTA' : 'Privacy Policy — GIOCALTA';
+    const testo = isCookie
+      ? 'GIOCALTA utilizza esclusivamente tecnologie tecniche e locali necessarie al funzionamento del catalogo, delle preferenze di navigazione e dei sondaggi della community, senza profilazione pubblicitaria invasiva. I link esterni (come WhatsApp, social network o servizi collegati) aprono piattaforme terze soggette alle rispettive informative.'
+      : 'GIOCALTA tratta i dati forniti dagli utenti e dai soci (es. richieste di prestito ludico, iscrizione, preferenze o partecipazione a sondaggi) unicamente per gestire le attività ludiche e associative a Caltagirone nel rispetto del Regolamento UE 2016/679 (GDPR). Non vengono ceduti dati a terzi per finalità commerciali.';
 
-  function estraiMinuti_(card) {
-    const testo = (card.innerText || card.textContent || '').replace(/\s+/g, ' ').trim();
-    const minMatch = testo.match(/\b(\d{1,3})\s*(?:min| minuti)?\b(?=\s*(?:dettagli|$|\|))/i);
-    if (minMatch) return parseInt(minMatch[1], 10);
-
-    const tuttiNumeri = Array.from(testo.matchAll(/\b(\d{1,3})\b/g)).map(m => parseInt(m[1], 10));
-    // Esclude numeri tipici del range giocatori (es. 2, 6, 4) se ci sono numeri di durata (>= 10)
-    const durateProbabili = tuttiNumeri.filter(n => n >= 10 && n <= 400);
-    if (durateProbabili.length > 0) {
-      return durateProbabili[durateProbabili.length - 1];
-    }
-    return null;
-  }
-
-  function applicaFiltro_() {
-    const select = trovaSelectTempo_();
-    if (!select) return;
-
-    const cards = trovaCardCatalogo_();
-    if (select.value !== '1-2-ore-esatto') {
-      cards.forEach(function(card) {
-        if (card.dataset.giocaltaNascosta === '1') {
-          card.style.removeProperty('display');
-          delete card.dataset.giocaltaNascosta;
-        }
-      });
-      return;
+    let modal = document.getElementById('giocaltaLegalModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'giocaltaLegalModal';
+      modal.className = 'fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4';
+      document.body.appendChild(modal);
     }
 
-    cards.forEach(function(card) {
-      const minuti = estraiMinuti_(card);
-      const inFascia = minuti !== null && minuti >= 61 && minuti <= 120;
-      if (inFascia) {
-        card.style.removeProperty('display');
-        delete card.dataset.giocaltaNascosta;
-      } else {
-        card.style.setProperty('display', 'none', 'important');
-        card.dataset.giocaltaNascosta = '1';
-      }
-    });
-  }
+    modal.innerHTML = `
+      <div class="bg-white border border-amber-200 rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4 text-slate-800">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+          <h3 class="font-black text-base text-slate-900">${titolo}</h3>
+          <button type="button" onclick="document.getElementById('giocaltaLegalModal').remove()" class="text-slate-400 hover:text-slate-800 font-bold px-2 py-1">✕</button>
+        </div>
+        <p class="text-sm leading-relaxed text-slate-600">${testo}</p>
+        <div class="pt-2 flex justify-end">
+          <button type="button" onclick="document.getElementById('giocaltaLegalModal').remove()" class="bg-slate-900 hover:bg-black text-white text-xs font-bold px-4 py-2 rounded-lg">Chiudi</button>
+        </div>
+      </div>
+    `;
+    modal.classList.remove('hidden');
+  };
 
-  function aggancia_() {
-    const select = trovaSelectTempo_();
-    if (!select) return;
+  function agganciaLinkFooter_() {
+    const footers = document.querySelectorAll('footer');
+    const target = footers[footers.length - 1];
+    if (!target || target.querySelector('[data-giocalta-legal-links="1"]')) return;
 
-    if (!select.querySelector('option[value="1-2-ore-esatto"]')) {
-      const opt = document.createElement('option');
-      opt.value = '1-2-ore-esatto';
-      opt.textContent = '1–2 ore';
-      const opzioni = Array.from(select.options);
-      const idx = opzioni.findIndex(o => /più di 2 ore/i.test(o.text));
-      if (idx >= 0) {
-        select.insertBefore(opt, opzioni[idx]);
-      } else {
-        select.appendChild(opt);
-      }
-    }
-
-    if (!select.dataset.giocalta12Bound) {
-      select.dataset.giocalta12Bound = '1';
-      select.addEventListener('change', function() {
-        setTimeout(applicaFiltro_, 50);
-      });
-    }
-
-    document.querySelectorAll('button').forEach(function(btn) {
-      if (/^applica$/i.test(btn.textContent.trim()) && !btn.dataset.giocaltaApplicaBound) {
-        btn.dataset.giocaltaApplicaBound = '1';
-        btn.addEventListener('click', function() {
-          setTimeout(applicaFiltro_, 80);
-        });
-      }
-    });
+    const barra = document.createElement('div');
+    barra.setAttribute('data-giocalta-legal-links', '1');
+    barra.className = 'py-3 px-4 text-center text-xs flex flex-wrap items-center justify-center gap-4 border-t border-slate-800/40';
+    barra.innerHTML = `
+      <span>GIOCALTA — Caltagirone (CT)</span>
+      <button type="button" onclick="apriInformativaGiocalta('privacy')" class="underline hover:opacity-80">Privacy Policy</button>
+      <button type="button" onclick="apriInformativaGiocalta('cookie')" class="underline hover:opacity-80">Cookie Policy</button>
+    `;
+    target.appendChild(barra);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', aggancia_);
+    document.addEventListener('DOMContentLoaded', agganciaLinkFooter_);
   } else {
-    aggancia_();
+    agganciaLinkFooter_();
   }
-
-  const obs = new MutationObserver(function() {
-    aggancia_();
-    applicaFiltro_();
-  });
-  obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
 </body>
