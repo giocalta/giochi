@@ -2669,6 +2669,12 @@ function condividiGiocoGiocalta(idGioco, event) {
 
       if (socioLoggato) {
         let socio = JSON.parse(socioLoggato);
+        if (socioLoggato) {
+  let socio = JSON.parse(socioLoggato);
+  window.socioCorrenteGiocalta = socio;
+  if (typeof window.aggiornaBoxStatoIscrizioneGiocalta === 'function') {
+    window.aggiornaBoxStatoIscrizioneGiocalta();
+  }
         boxAuth.classList.add('hidden');
         boxAreaPers.classList.remove('hidden');
         document.getElementById('socioNomeLabel').textContent = socio.nome || 'Socio';
@@ -4021,6 +4027,10 @@ let telefonoSocio = n.telefono || n.socioTelefono || n.cellulare || n.whatsapp |
   // 2. RILEVA LO STATO DEL SOCIO LOGGATO ("registrato" vs "attivo" / "in attesa")
   // =========================================================================
   function rilevaStatoSocioAttuale_() {
+    if (window.socioCorrenteGiocalta && typeof window.socioCorrenteGiocalta === 'object') {
+  const stDiretto = String(window.socioCorrenteGiocalta.stato || window.socioCorrenteGiocalta.status || '').trim().toLowerCase();
+  if (stDiretto) return stDiretto;
+}
     const candidatiGlobali = [
       window.socioLoggato,
       window.currentUser,
