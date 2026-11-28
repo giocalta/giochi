@@ -2661,7 +2661,7 @@ function condividiGiocoGiocalta(idGioco, event) {
       }
     }
 
-  function verificaStatoSessioneSocio() {
+ function verificaStatoSessioneSocio() {
       const socioLoggato = localStorage.getItem('giocalta_socio_corrente');
       const boxAuth = document.getElementById('boxAuthContenitore');
       const boxAreaPers = document.getElementById('boxAreaPersonale');
@@ -2683,6 +2683,30 @@ function condividiGiocoGiocalta(idGioco, event) {
         renderPreferitiAreaPersonale();
         caricaNoleggiSocio();
         caricaSondaggiAreaPersonale();
+
+        if (socio.email) {
+          fetch(APPS_SCRIPT_URL + '?action=getSoci')
+            .then(res => res.json())
+            .then(data => {
+              if (!Array.isArray(data) || data.length <= 1) return;
+              for (let i = 1; i < data.length; i++) {
+                const rowEmail = String(data[i][2] || '').trim().toLowerCase();
+                if (rowEmail === String(socio.email).trim().toLowerCase()) {
+                  const statoAggiornato = String(data[i][6] || '').trim();
+                  if (statoAggiornato && statoAggiornato !== socio.stato) {
+                    socio.stato = statoAggiornato;
+                    localStorage.setItem('giocalta_socio_corrente', JSON.stringify(socio));
+                    window.socioCorrenteGiocalta = socio;
+                    if (typeof window.aggiornaBoxStatoIscrizioneGiocalta === 'function') {
+                      window.aggiornaBoxStatoIscrizioneGiocalta();
+                    }
+                  }
+                  break;
+                }
+              }
+            })
+            .catch(() => {});
+        }
       } else {
         boxAuth.classList.remove('hidden');
         boxAreaPers.classList.add('hidden');
@@ -2712,12 +2736,13 @@ function condividiGiocoGiocalta(idGioco, event) {
               let rowEmail = String(data[i][2] || '').trim();
               let rowPass = String(data[i][4] || '').trim();
               if (rowEmail.toLowerCase() === email.toLowerCase() && rowPass === pass) {
-                statoSocio = String(data[i][6] || '').trim().toLowerCase();
+                statoSocio = String(data[i][6] || '').trim();
                 trovato = {
                   id: data[i][0],
                   nome: data[i][1],
                   email: rowEmail,
-                  password: rowPass
+                  password: rowPass,
+                  stato: statoSocio
                 };
                 break;
               }
@@ -2725,13 +2750,21 @@ function condividiGiocoGiocalta(idGioco, event) {
           }
 
           if (trovato) {
-            if (statoSocio !== 'attivo') {
+            const statoLower = statoSocio.toLowerCase();
+            const accessoConsentito =
+              statoLower === 'attivo' ||
+              statoLower === 'registrato' ||
+              statoLower === 'socio' ||
+              statoLower === 'tesserato';
+
+            if (!accessoConsentito) {
               msgBox.textContent = "⏳ Il tuo account è ancora in attesa di approvazione da parte dello staff di GIOCALTA.";
               msgBox.className = "text-center text-xs font-bold p-3 bg-amber-50 text-amber-800 border border-amber-300";
               return;
             }
 
             localStorage.setItem('giocalta_socio_corrente', JSON.stringify(trovato));
+            window.socioCorrenteGiocalta = trovato;
             msgBox.textContent = "Login effettuato con successo!";
             msgBox.className = "text-center text-xs font-bold p-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
             setTimeout(() => { verificaStatoSessioneSocio(); }, 800);
@@ -2831,7 +2864,6 @@ function condividiGiocoGiocalta(idGioco, event) {
           msgBox.className = "text-center text-xs font-bold p-3 bg-red-50 text-red-700 border border-red-200";
         });
     }
-
     // ==========================================
    // PANNELLO AMMINISTRATIVO (#staff)
     // ==========================================
